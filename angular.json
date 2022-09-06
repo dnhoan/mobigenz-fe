@@ -107,5 +107,8 @@
       }
     }
   },
-  "defaultProject": "mobigenz-fe"
+  "defaultProject": "mobigenz-fe",
+  "cli": {
+    "analytics": false
+  }
 }
