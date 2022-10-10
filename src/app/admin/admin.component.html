@@ -1,0 +1,50 @@
+<button nz-button nzType="primary">Primary Button</button>
+<nz-layout style="height: 100%">
+  <nz-sider
+    style="height: 100%"
+    nzCollapsible
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+  >
+    <div class="logo">
+      <a routerLink="/home"><h2 class="p-2">VISA</h2></a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li nz-submenu nzTitle="Quản lý" nzIcon="user">
+        <ul>
+          <li nz-menu-item><a routerLink="/">Home</a></li>
+          <li nz-menu-item><a routerLink="/admin/roles">Vai trò</a></li>
+          <li nz-menu-item><a routerLink="/admin/users">Người dùng</a></li>
+          <li nz-menu-item><a routerLink="/admin/categories">Danh mục</a></li>
+          <li nz-menu-item><a routerLink="/admin/products">Sản phẩm</a></li>
+          <li nz-menu-item><a routerLink="/admin/orders">Đơn hàng</a></li>
+        </ul>
+      </li>
+      Y
+    </ul>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li nz-submenu nzTitle="Tài khoản" nzIcon="user">
+        <ul>
+          <li nz-menu-item><a routerLink="/">Cá nhân</a></li>
+          <li nz-menu-item><a (click)="logout()">Đăng xuất</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <i
+        class="trigger"
+        nz-icon
+        [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+        (click)="isCollapsed = !isCollapsed"
+      ></i>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+    <!-- <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer> -->
+  </nz-layout>
+</nz-layout>
