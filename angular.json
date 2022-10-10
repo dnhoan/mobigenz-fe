@@ -109,6 +109,9 @@
   },
   "defaultProject": "mobigenz-fe",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "cache": {
+      "enabled": false
+    }
   }
 }
