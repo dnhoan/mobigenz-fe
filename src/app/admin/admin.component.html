@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <nz-layout style="height: 100%">
   <nz-sider
     style="height: 100%;"
@@ -8,9 +9,15 @@
     <div class="logo">
       <a routerLink="/home"><h2 class="p-2" style="color: gray;">MobileGenZ</h2></a>
     </div>
+=======
+<nz-layout>
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+    <div class="logo"></div>
+>>>>>>> f504311112fcf973d4c81301270bb330f9a5f4f4
     <ul nz-menu nzTheme="dark" nzMode="inline">
-      <li nz-submenu nzTitle="Quản lý" nzIcon="user">
+      <li nz-submenu nzTitle="User" nzIcon="user">
         <ul>
+<<<<<<< HEAD
           <li nz-menu-item><a routerLink="/">Home</a></li>
           <li nz-menu-item><a routerLink="/admin/roles">Vai trò</a></li>
           <li nz-menu-item><a routerLink="/admin/users">Người dùng</a></li>
@@ -27,22 +34,41 @@
         <ul>
           <li nz-menu-item><a routerLink="/admin/profile">Cá nhân</a></li>
           <li nz-menu-item><a (click)="logout()">Đăng xuất</a></li>
+=======
+          <li nz-menu-item><a routerLink="products">Quản lý sản phâm</a></li>
+          <li nz-menu-item>Bill</li>
+          <li nz-menu-item>Alex</li>
         </ul>
+      </li>
+      <li nz-submenu nzTitle="Team" nzIcon="team">
+        <ul>
+          <li nz-menu-item>Team 1</li>
+          <li nz-menu-item>Team 2</li>
+>>>>>>> f504311112fcf973d4c81301270bb330f9a5f4f4
+        </ul>
+      </li>
+      <li nz-menu-item>
+        <span nz-icon nzType="file"></span>
+        <span>File</span>
       </li>
     </ul>
   </nz-sider>
   <nz-layout>
     <nz-header>
-      <i
+      <span
         class="trigger"
         nz-icon
         [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
         (click)="isCollapsed = !isCollapsed"
-      ></i>
+      ></span>
     </nz-header>
     <nz-content>
       <router-outlet></router-outlet>
     </nz-content>
+<<<<<<< HEAD
 <!-- <nz-footer>MobileGenz ©2022 Pro</nz-footer> -->
+=======
+    <nz-footer></nz-footer>
+>>>>>>> f504311112fcf973d4c81301270bb330f9a5f4f4
   </nz-layout>
 </nz-layout>
