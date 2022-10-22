@@ -1,4 +1,10 @@
+import { SpecificationDto } from './SpecificationDto';
+
 export interface SpecificationGroupDto {
-    specification_group_name: string,
-    status: number
+  id: number;
+  specificationGroupName: string;
+  specificationDtos: SpecificationDto[];
+  ctime?: string;
+  mtime?: string;
+  status?: number;
 }

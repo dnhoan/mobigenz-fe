@@ -10,3 +10,23 @@
     <input nz-input placeholder="Basic usage" />
   </ng-container>
 </nz-drawer>
+<nz-table #basicTable [nzData]="products">
+  <thead>
+    <tr>
+      <th>Anh</th>
+      <th>Name</th>
+      <th>Manufacturer</th>
+      <th>Product line</th>
+      <th>Create</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of basicTable.data">
+      <td>Image</td>
+      <td>{{ product.productName }}</td>
+      <td>{{ product.manufacturerDto.manufacturerName }}</td>
+      <td>{{ product.productLineDto.productLineName }}</td>
+      <td>{{ product.ctime | date: "hh:mm dd/MM/yyyy" }}</td>
+    </tr>
+  </tbody>
+</nz-table>
