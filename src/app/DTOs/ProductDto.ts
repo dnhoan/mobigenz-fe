@@ -10,6 +10,7 @@ export interface ProductDto {
   id: number;
   productName: string;
   description: string;
+  image?: string;
   images?: string[];
   manufacturerDto: ManufacturerDto;
   productLineDto: ProductLineDto;
