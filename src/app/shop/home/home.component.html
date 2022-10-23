@@ -1,0 +1,60 @@
+<!-- Danh sach san pham -->
+<div class="row m-0" style="
+    background-image: url('https://i.pinimg.com/originals/30/e6/eb/30e6ebe31e04a6fd9dc87d36ae9b5dd4.jpg');
+    height: 100%; width: 100%;">
+
+    <article class="col-12 col-md-9 bg-primary bg-gradient bg-opacity-25 pt-3 pb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4 pt-2" *ngFor="let product of products">
+                    <div class="card">
+                        <div class="card-header text-center fw-bold">{{ product.name }}</div>
+                        <div class="card-body">
+                            <img src="{{ product.image }}" class="card-img-top" alt="ProductPict"
+                                style="height: 240px;">
+                            <br><span>Giá tiền: {{ product.price }} Đ</span>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a class="btn btn-outline-success" href="">Mua hàng {{ product.id }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-0 pt-3">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="">1</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </article>
+
+    <!-- Sidebar -->
+        <aside class="col-12 col-md-3 bg-primary bg-gradient bg-opacity-25">
+            <div class="card p-3 mb-4 mt-4">
+                <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header p-0">
+                    <a href="#danh_muc" class="btn btn-secondary col-12 text-start fw-bold text-uppercase m-0" type="a"
+                        data-bs-toggle="collapse" data-bs-target="#list1" aria-expanded="false" aria-controls="list1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                            class="bi bi-list-ul" viewBox="0 0 18 18">
+                            <path fill-rule="evenodd"
+                                d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                        </svg>Danh mục</a>
+                </div>
+                <!-- <div class="list-group collapse in show" id="list1">
+                    <c:forEach items="${ categories }" var="category">
+                        <a href="/project_for_finals/category/${ category.id }"
+                            class="list-group-item list-group-item-action">${ category.name }</a>
+                    </c:forEach>
+                </div> -->
+            </div>
+
+        </aside>
+</div>
