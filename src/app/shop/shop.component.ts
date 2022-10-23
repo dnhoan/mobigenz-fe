@@ -12,4 +12,5 @@ export class ShopComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  q = 1;
 }
