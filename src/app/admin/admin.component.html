@@ -1,41 +1,11 @@
-<<<<<<< HEAD
-<nz-layout style="height: 100%">
-  <nz-sider
-    style="height: 100%;"
-    nzCollapsible
-    [(nzCollapsed)]="isCollapsed"
-    [nzTrigger]="null"
-  >
-    <div class="logo">
-      <a routerLink="/home"><h2 class="p-2" style="color: gray;">MobileGenZ</h2></a>
-    </div>
-=======
 <nz-layout>
   <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
     <div class="logo"></div>
->>>>>>> f504311112fcf973d4c81301270bb330f9a5f4f4
     <ul nz-menu nzTheme="dark" nzMode="inline">
       <li nz-submenu nzTitle="User" nzIcon="user">
         <ul>
-<<<<<<< HEAD
-          <li nz-menu-item><a routerLink="/">Home</a></li>
-          <li nz-menu-item><a routerLink="/admin/roles">Vai trò</a></li>
-          <li nz-menu-item><a routerLink="/admin/users">Người dùng</a></li>
-          <li nz-menu-item><a routerLink="/admin/customer">Khách hàng</a></li>
-          <li nz-menu-item><a routerLink="/admin/categories">Danh mục</a></li>
-          <li nz-menu-item><a routerLink="/admin/employee">Nhân viên</a></li>
-          <li nz-menu-item><a routerLink="/admin/products">Sản phẩm</a></li>
-          <li nz-menu-item><a routerLink="/admin/orders">Đơn hàng</a></li>
-        </ul>
-      </li>
-    </ul>
-    <ul nz-menu nzTheme="dark" nzMode="inline">
-      <li nz-submenu nzTitle="Tài khoản" nzIcon="user">
-        <ul>
-          <li nz-menu-item><a routerLink="/admin/profile">Cá nhân</a></li>
-          <li nz-menu-item><a (click)="logout()">Đăng xuất</a></li>
-=======
           <li nz-menu-item><a routerLink="products">Quản lý sản phâm</a></li>
+          <li nz-menu-item><a routerLink="customer">Quản lý khách hàng</a></li>
           <li nz-menu-item>Bill</li>
           <li nz-menu-item>Alex</li>
         </ul>
@@ -44,7 +14,6 @@
         <ul>
           <li nz-menu-item>Team 1</li>
           <li nz-menu-item>Team 2</li>
->>>>>>> f504311112fcf973d4c81301270bb330f9a5f4f4
         </ul>
       </li>
       <li nz-menu-item>
@@ -65,10 +34,6 @@
     <nz-content>
       <router-outlet></router-outlet>
     </nz-content>
-<<<<<<< HEAD
-<!-- <nz-footer>MobileGenz ©2022 Pro</nz-footer> -->
-=======
     <nz-footer></nz-footer>
->>>>>>> f504311112fcf973d4c81301270bb330f9a5f4f4
   </nz-layout>
 </nz-layout>
