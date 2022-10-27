@@ -1,0 +1,66 @@
+<h1>Quản lý khách hàng</h1>
+
+<form class="formAdd" novalidate [formGroup]="formAdd">
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Tên khách hàng:</label>
+      <input class="form-control" type="text" formControlName="customerName">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Số ĐT: </label>
+      <input class="form-control" type="text" formControlName="phoneNumber">
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Ngày sinh: </label>
+      <input class="form-control" type="date" formControlName="birthday">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Giới tính: </label><br>
+      <nz-radio-group formControlName="gender">
+        <div class="rdo_gender">
+          <label nz-radio nzValue="0">Nam</label>
+          <label nz-radio nzValue="1">Nữ</label>
+        </div>
+      </nz-radio-group>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Loại khách hàng: </label><br>
+      <select class="form-control" formControlName="customerType">
+        <option [selected]="formAdd.value.customerType == 1" value="1">Công ty</option>
+        <option value="0">Cá nhân</option>
+      </select>
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Trạng thái: </label>
+      <select class="form-control" formControlName="status">
+        <option [selected]="formAdd.value.status == 1" value="1">Active</option>
+        <option value="0">InActive</option>
+      </select>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>CTime: </label>
+      <input class="form-control" type="date" formControlName="ctime">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>MTime: </label>
+      <input class="form-control" type="date" formControlName="mtime">
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="22">
+    </div>
+    <div nz-col nzSpan="2">
+      <a class="btnAdd" nz-button nzType="primary" (click)="saveCustomer(this.formAdd.value)">Thêm</a>
+    </div>
+  </div>
+</form>

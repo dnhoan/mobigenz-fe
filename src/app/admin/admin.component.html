@@ -5,6 +5,7 @@
       <li nz-submenu nzTitle="User" nzIcon="user">
         <ul>
           <li nz-menu-item><a routerLink="products">Quản lý sản phâm</a></li>
+          <li nz-menu-item><a routerLink="customer">Quản lý khách hàng</a></li>
           <li nz-menu-item>Bill</li>
           <li nz-menu-item>Alex</li>
         </ul>
@@ -31,9 +32,7 @@
       ></span>
     </nz-header>
     <nz-content>
-      <div class="inner-content">
-        <router-outlet></router-outlet>
-      </div>
+      <router-outlet></router-outlet>
     </nz-content>
     <nz-footer></nz-footer>
   </nz-layout>

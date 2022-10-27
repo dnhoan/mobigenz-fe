@@ -1,0 +1,46 @@
+<h1>Danh sách khách hàng</h1>
+<div nz-row>
+  <div nz-col nzSpan="20">
+  </div>
+  <div nz-col nzSpan="4">
+    <button class="btnAdd" routerLink="addCustomer" nz-button nzType="primary">Thêm Mới</button>
+  </div>
+</div>
+
+<nz-table>
+  <thead>
+    <tr>
+      <th>Tên khách hàng</th>
+      <th>SĐT</th>
+      <th>Ngày sinh</th>
+      <th>Email</th>
+      <th>Giới tính</th>
+      <th>Loại khách hàng</th>
+      <th>Trạng thái</th>
+      <th colSpan="2">
+        Thao tác
+      </th>
+    </tr>
+  </thead>
+  <tbody *ngIf="datas">
+    <tr *ngFor="let item of datas">
+      <td>{{item.customerName}}</td>
+      <td>{{item.phoneNumber}}</td>
+      <td>{{item.birthday}}</td>
+      <td>{{item.account?.email}}</td>
+      <td *ngIf="item.gender">Nam</td>
+      <td *ngIf="!item.gender">Nữ</td>
+      <td *ngIf="item.customerType">Công ty</td>
+      <td *ngIf="!item.customerType">Cá nhân</td>
+      <td *ngIf="item.status">Active</td>
+      <td *ngIf="!item.status">InActive</td>
+      <td>
+        <span nz-icon nzType="edit" routerLink="editCustomer" nzTheme="outline"></span>
+        <span nz-icon nzType="delete" nzTheme="outline"></span>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+<div class="footer">
+  <nz-pagination [nzPageIndex]="3" [nzTotal]="500" nzShowSizeChanger [nzPageSize]="10"></nz-pagination>
+</div>
