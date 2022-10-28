@@ -1,3 +1,4 @@
+import { UpdateCustomerComponent } from './customer/update-customer/update-customer.component';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { CustomerComponent } from './customer/customer.component';
 import { NgModule } from '@angular/core';
@@ -23,8 +24,8 @@ const routes: Routes = [
         component: AddCustomerComponent,
       },
       {
-        path: 'customer/editCustomer',
-        component: AddCustomerComponent,
+        path: 'customer/editCustomer/:id',
+        component: UpdateCustomerComponent,
       }
     ],
   },

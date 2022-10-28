@@ -10,6 +10,7 @@
 <nz-table>
   <thead>
     <tr>
+      <th>Mã khách hàng</th>
       <th>Tên khách hàng</th>
       <th>SĐT</th>
       <th>Ngày sinh</th>
@@ -22,8 +23,9 @@
       </th>
     </tr>
   </thead>
-  <tbody *ngIf="datas">
+  <tbody>
     <tr *ngFor="let item of datas">
+      <td>{{item.id}}</td>
       <td>{{item.customerName}}</td>
       <td>{{item.phoneNumber}}</td>
       <td>{{item.birthday}}</td>
@@ -34,13 +36,13 @@
       <td *ngIf="!item.customerType">Cá nhân</td>
       <td *ngIf="item.status">Active</td>
       <td *ngIf="!item.status">InActive</td>
-      <td>
-        <span nz-icon nzType="edit" routerLink="editCustomer" nzTheme="outline"></span>
-        <span nz-icon nzType="delete" nzTheme="outline"></span>
+      <td style="text-align: center;">
+        <span class="btnUpdate" nz-icon nzType="edit" (click)="getInfoCustomer(item.id)" nzTheme="outline"></span>
+        <span class="btnDelete" nz-icon nzType="delete" (click)="deleteCustomer(item.id)" nzTheme="outline"></span>
       </td>
     </tr>
   </tbody>
 </nz-table>
 <div class="footer">
-  <nz-pagination [nzPageIndex]="3" [nzTotal]="500" nzShowSizeChanger [nzPageSize]="10"></nz-pagination>
+  <nz-pagination [nzPageIndex]="1" [nzTotal]="50" nzShowSizeChanger [nzPageSize]="5"></nz-pagination>
 </div>

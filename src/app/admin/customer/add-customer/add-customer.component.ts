@@ -1,7 +1,8 @@
+import { Customer } from './../customer.model';
 import { CustomerService } from './../customer.service';
 import { Component, OnInit } from '@angular/core';
-import { Customer } from '../customer.model';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-customer',
@@ -13,8 +14,11 @@ export class AddCustomerComponent implements OnInit {
   formAdd!: FormGroup;
 
 
+
   constructor(
     private fb: FormBuilder,
+    private readonly router: Router,
+    private activedRoute: ActivatedRoute,
     private customerService: CustomerService) { }
 
   ngOnInit(): void {
@@ -30,11 +34,20 @@ export class AddCustomerComponent implements OnInit {
       mtime: ['', Validators.required],
       status: ['', Validators.required],
     });
+
+
   }
+
   saveCustomer(customer: Customer) {
     this.customerService.addCustomer(customer).subscribe((res: any) =>
-      console.log(res)
+      console.log(res),
     );
+    this.router.navigate(['/admin/customer']);
+  }
+
+  getInfoCustomer(id: any) {
+    const url = 'admin/customer/editCustomer/' + id;
+    this.router.navigate([url]);
   }
 
 }
