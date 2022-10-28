@@ -20,11 +20,21 @@ export class CustomerService {
   }
 
   getCustomerById(id: any): Observable<any> {
-    return this.http.get<any>(this.apiCustomer + "customer/" + id);
+    return this.http.get<any>(this.apiCustomer + "customers/" + id);
   }
 
-  updateCustomer(id: any, customer: Customer) {
+  public updateCustomer(customer: Customer): Observable<any> {
+    return this.http.put<any>(this.apiCustomer + "customers/", customer);
+  }
 
+  public deleteCustomer(id: any): Observable<any> {
+    return this.http.delete<any>(`${this.apiCustomer}`+ "customers/" + id);
+  }
+
+  public getPageTransfer(indexPage: any,
+    descAsc: any, dto: any): Observable<any> {
+    return this.http.put<any>(this.apiCustomer + '/sortByKey?page=' + indexPage +
+      '&descAsc=' + descAsc, dto);
   }
 
 }

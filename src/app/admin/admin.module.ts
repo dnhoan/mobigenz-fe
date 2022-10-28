@@ -13,10 +13,11 @@ import { SharedModule } from '../shared/shared.module';
 import { ProductsComponent } from './products/products.component';
 import { AccountComponent } from './account/account.component';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
+import { UpdateCustomerComponent } from './customer/update-customer/update-customer.component';
 
 
 @NgModule({
-  declarations: [AdminComponent, ProductsComponent, CustomerComponent, AccountComponent, AddCustomerComponent],
+  declarations: [AdminComponent, ProductsComponent, CustomerComponent, AccountComponent, AddCustomerComponent, UpdateCustomerComponent],
   imports: [CommonModule, AdminRoutingModule, SharedModule, ReactiveFormsModule, NzGridModule, NzSpaceModule ],
 })
 export class AdminModule { }
