@@ -1,5 +1,9 @@
 export interface OptionValueDto {
-  option_value_name: string;
-  note: string;
-  status: number;
+  id: number;
+  optionValueName: string;
+  optionName: string;
+  note?: string;
+  ctime?: string;
+  mtime?: string;
+  status?: number;
 }
