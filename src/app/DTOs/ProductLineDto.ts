@@ -1,5 +1,5 @@
 export interface ProductLineDto {
-  id: number;
+  id?: number;
   productLineName: string;
   ctime?: string;
   mtime?: string;

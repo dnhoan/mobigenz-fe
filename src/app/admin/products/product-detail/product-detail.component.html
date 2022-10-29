@@ -1,0 +1,395 @@
+<button nz-button nzType="primary" (click)="save()">Save</button>
+<ng-container *ngIf="product">
+  <div>
+    <div>
+      <h3>Tên sản phẩm</h3>
+      <input
+        id="productName"
+        nz-input
+        placeholder="Ten san pham"
+        [(ngModel)]="product.productName"
+      />
+    </div>
+    <nz-divider></nz-divider>
+    <div>
+      <h3>Mô tả sản phẩm</h3>
+      <textarea
+        nz-input
+        placeholder="Controlled autosize"
+        [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+        [(ngModel)]="product.description"
+      ></textarea>
+    </div>
+    <nz-divider></nz-divider>
+    <div style="display: flex; justify-content: space-between">
+      <div *ngIf="manufacturers">
+        <h3>Hãng sản xuất</h3>
+        <nz-select
+          id="manufacturer"
+          nzShowSearch
+          [nzDropdownRender]="renderManufacturers"
+          nzPlaceHolder="Chọn nhà sản xuất"
+          [ngModel]="product!.manufacturerDto!.id!"
+          (ngModelChange)="onChangeManufacturer($event)"
+        >
+          <nz-option
+            *ngFor="let manufacturer of manufacturers"
+            [nzLabel]="manufacturer.manufacturerName"
+            [nzValue]="manufacturer.id"
+          ></nz-option>
+        </nz-select>
+        <ng-template #renderManufacturers>
+          <nz-divider></nz-divider>
+          <div class="container">
+            <input type="text" nz-input #inputElement />
+            <a class="add-item" (click)="addManufacturer(inputElement)">
+              <span nz-icon nzType="plus"></span>
+              Thêm hãng
+            </a>
+          </div>
+        </ng-template>
+      </div>
+      <div>
+        <h3>Dòng sản phẩm</h3>
+        <nz-select
+          id="productLine"
+          nzShowSearch
+          [nzDropdownRender]="renderProductLine"
+          nzPlaceHolder="Chọn dòng sản phẩm"
+          [ngModel]="product.productLineDto.id"
+          (ngModelChange)="onChangeProductLine($event)"
+        >
+          <nz-option
+            *ngFor="let line of product.manufacturerDto.productLineDtos"
+            [nzLabel]="line.productLineName"
+            [nzValue]="line.id"
+          ></nz-option>
+        </nz-select>
+        <ng-template #renderProductLine>
+          <nz-divider></nz-divider>
+          <div class="container">
+            <input type="text" nz-input #inputElement />
+            <a class="add-item" (click)="addProductLine(inputElement)">
+              <span nz-icon nzType="plus"></span>
+              Thêm dòng sản phẩm
+            </a>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <nz-divider></nz-divider>
+    <div class="uploadImage">
+      <div class="clearfix">
+        <h3>Ảnh</h3>
+        <div class="upload-btn-wrapper">
+          <button nz-button>Tải ảnh lên</button>
+          <input type="file" name="myfile" (change)="changeImage($event)" />
+        </div>
+        <br />
+        <div style="display: flex; justify-content: start">
+          <ng-container *ngFor="let img of product.images">
+            <div
+              style="
+                margin: 5px;
+                padding: 2px;
+                border: #c35757;
+                border-style: dashed;
+                border-width: 2px;
+              "
+            >
+              <img nz-image width="50px" height="50px" [nzSrc]="img" alt="" />
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <nz-divider></nz-divider>
+    <div>
+      <h3>Phân loại sản phẩm</h3>
+      <ng-container *ngIf="optionProducts">
+        <ng-container
+          *ngFor="let optionProduct of optionProducts; index as i_option"
+        >
+          <div *ngIf="options">
+            <nz-input-group
+              [nzAddOnBefore]="addOnBeforeTemplate"
+              [nzAddOnAfter]="addOnAfterTemplate"
+            >
+              <nz-select
+                nzShowSearch
+                [nzDropdownRender]="renderOption"
+                nzPlaceHolder="select option"
+                [(ngModel)]="optionProduct.currentOption"
+                (ngModelChange)="onChangeOption($event, i_option)"
+              >
+                <nz-option
+                  *ngFor="let option of options"
+                  [nzLabel]="option.optionName"
+                  [nzValue]="option"
+                ></nz-option>
+              </nz-select>
+              <ng-template #renderOption>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <input type="text" nz-input #inputElement />
+                  <a class="add-item" (click)="createOption(inputElement)">
+                    <span nz-icon nzType="plus"></span>
+                    Add Option
+                  </a>
+                </div>
+              </ng-template>
+            </nz-input-group>
+            <ng-template #addOnBeforeTemplate>
+              <p>Phan loai san pham {{ i_option + 1 }}</p>
+            </ng-template>
+            <ng-template #addOnAfterTemplate>
+              <p>Xoa</p>
+            </ng-template>
+            <div>
+              <ng-container
+                *ngFor="
+                  let optionValue of optionProduct!.optionValues;
+                  index as i_option_value
+                "
+              >
+                <div>
+                  <nz-input-group
+                    [nzAddOnBefore]="addOnBeforeTemplate"
+                    [nzAddOnAfter]="addOnAfterTemplate"
+                  >
+                    <nz-select
+                      nzShowSearch
+                      [nzDropdownRender]="renderOptionValue"
+                      nzPlaceHolder="select Product sa line"
+                      [ngModel]="optionValue"
+                      (ngModelChange)="
+                        onChangeOptionValue($event, i_option, i_option_value)
+                      "
+                    >
+                      <nz-option
+                        *ngFor="
+                          let optionValueDto of optionProduct!.currentOption!
+                            .optionValueDtos
+                        "
+                        [nzLabel]="optionValueDto.optionValueName"
+                        [nzValue]="optionValueDto"
+                      ></nz-option>
+                    </nz-select>
+                    <ng-template #renderOptionValue>
+                      <nz-divider></nz-divider>
+                      <div class="container">
+                        <input type="text" nz-input #inputElement />
+                        <a
+                          class="add-item"
+                          (click)="addProductLine(inputElement)"
+                        >
+                          <span nz-icon nzType="plus"></span>
+                          Add Option Value
+                        </a>
+                      </div>
+                    </ng-template>
+                  </nz-input-group>
+                  <ng-template #addOnBeforeTemplate>
+                    <p>Gia tri phan loai {{ i_option_value + 1 }}</p>
+                  </ng-template>
+                  <ng-template #addOnAfterTemplate>
+                    <p>Xoa</p>
+                  </ng-template>
+                </div>
+              </ng-container>
+              <button
+                *ngIf="
+                  optionProduct.currentOption &&
+                  optionProduct!.optionValues.length <
+                    optionProduct!.currentOption!.optionValueDtos.length
+                "
+                nz-button
+                nzType="dashed"
+                (click)="addOptionValue(i_option)"
+              >
+                Them gia tri phan loai
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <button
+        *ngIf="optionProducts.length < 2"
+        nz-button
+        nzType="dashed"
+        (click)="addOption()"
+      >
+        Thêm phân loại
+      </button>
+    </div>
+    <div>
+      <nz-table #basicTable [nzData]="productDetails">
+        <thead>
+          <tr>
+            <th>Ảnh</th>
+            <th>Tên phân loại</th>
+            <th>Giá nhập</th>
+            <th>Giá bán</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of basicTable.data">
+            <td>ANH</td>
+            <td>{{ data.sku }}</td>
+            <td>
+              <nz-input-number
+                [(ngModel)]="data.priceOrigin"
+                [nzMin]="0"
+                [nzStep]="1"
+              ></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number
+                [(ngModel)]="data.priceSell"
+                [nzMin]="0"
+                [nzStep]="1"
+              ></nz-input-number>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <nz-divider></nz-divider>
+    <div>
+      <h3>Thuộc tính sản phẩm</h3>
+      <ng-container *ngIf="specificationGroupProducts">
+        <ng-container
+          *ngFor="
+            let specificationGroupProduct of specificationGroupProducts;
+            index as i_specification_group
+          "
+        >
+          <div *ngIf="specificationGroupProduct">
+            <nz-input-group
+              [nzAddOnBefore]="addOnBeforeTemplate"
+              [nzAddOnAfter]="addOnAfterTemplate"
+            >
+              <nz-select
+                nzShowSearch
+                [nzDropdownRender]="renderSpecificationGroup"
+                nzPlaceHolder="select option"
+                [(ngModel)]="
+                  specificationGroupProduct.currentSpecificationGroup
+                "
+                (ngModelChange)="
+                  onChangeSpecificationGroupProduct(
+                    $event,
+                    i_specification_group
+                  )
+                "
+              >
+                <nz-option
+                  *ngFor="let specificationGroup of specificationGroups"
+                  [nzLabel]="specificationGroup.specificationGroupName"
+                  [nzValue]="specificationGroup"
+                ></nz-option>
+              </nz-select>
+              <ng-template #renderSpecificationGroup>
+                <nz-divider></nz-divider>
+                <div class="container">
+                  <input type="text" nz-input #inputElement />
+                  <a class="add-item" (click)="createOption(inputElement)">
+                    <span nz-icon nzType="plus"></span>
+                    Thêm nhóm thuộc tính
+                  </a>
+                </div>
+              </ng-template>
+            </nz-input-group>
+            <ng-template #addOnBeforeTemplate>
+              <p>Nhóm thuộc tính sản phẩm {{ i_specification_group + 1 }}</p>
+            </ng-template>
+            <ng-template #addOnAfterTemplate>
+              <p>Xóa</p>
+            </ng-template>
+            <div *ngIf="specificationGroupProduct.currentSpecificationGroup">
+              <ng-container
+                *ngFor="
+                  let specification of specificationGroupProduct.specifications;
+                  index as i_specification
+                "
+              >
+                <div>
+                  <nz-input-group
+                    [nzAddOnBefore]="addOnBeforeTemplate"
+                    [nzAddOnAfter]="addOnAfterTemplate"
+                  >
+                    <nz-select
+                      nzShowSearch
+                      [nzDropdownRender]="renderSpecification"
+                      nzPlaceHolder="select Product sa line"
+                      [ngModel]="specification"
+                      (ngModelChange)="
+                        onChangeSpecification(
+                          $event,
+                          i_specification_group,
+                          i_specification
+                        )
+                      "
+                    >
+                      <nz-option
+                        *ngFor="
+                          let specificationDto of specificationGroupProduct.currentSpecificationGroup!
+                            .specificationDtos
+                        "
+                        [nzLabel]="specificationDto.specificationName"
+                        [nzValue]="specificationDto"
+                      ></nz-option>
+                    </nz-select>
+                    <ng-template #renderSpecification>
+                      <nz-divider></nz-divider>
+                      <div class="container">
+                        <input type="text" nz-input #inputElement />
+                        <a
+                          class="add-item"
+                          (click)="addProductLine(inputElement)"
+                        >
+                          <span nz-icon nzType="plus"></span>
+                          Add Option Value
+                        </a>
+                      </div>
+                    </ng-template>
+                  </nz-input-group>
+                  <textarea
+                    *ngIf="specification.specificationName"
+                    nz-input
+                    [placeholder]="
+                      'Nhập thuộc tính ' + specification.specificationName
+                    "
+                    [(ngModel)]="specification.value"
+                    nzAutosize
+                  ></textarea>
+                  <ng-template #addOnBeforeTemplate>
+                    <p>Thuộc tính {{ i_specification + 1 }}</p>
+                  </ng-template>
+                  <ng-template #addOnAfterTemplate>
+                    <p>Xóa</p>
+                  </ng-template>
+                </div>
+              </ng-container>
+              <!-- *ngIf="
+                optionProduct.currentOption &&
+                optionProduct!.optionValues.length <
+                  optionProduct!.currentOption!.optionValueDtos.length
+              " -->
+              <button
+                nz-button
+                nzType="dashed"
+                (click)="addSpecificationProduct(i_specification_group)"
+              >
+                Thêm thuộc tính
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <button nz-button nzType="dashed" (click)="addSpecificationGroup()">
+        Thêm nhóm thuộc tính
+      </button>
+    </div>
+  </div>
+</ng-container>
