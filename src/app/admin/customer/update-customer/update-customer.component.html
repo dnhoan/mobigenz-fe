@@ -1,0 +1,75 @@
+<h1>Update Customer</h1>
+
+<form *ngIf="customer" class="formUpdate" novalidate [formGroup]="formEdit">
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Tên khách hàng:</label>
+      <input class="form-control" type="text" formControlName="customerName">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Số ĐT: </label>
+      <input class="form-control" type="text" formControlName="phoneNumber">
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Ngày sinh: </label>
+      <input class="form-control" type="date" formControlName="birthday">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Giới tính: </label><br>
+      <div class="mt-2">
+        <input class="form-check-input me-lg-2" formControlName="gender" value="1" id="gender" [value]="1" type="radio">
+        <label>Nam</label>
+        <input class="form-check-input ms-lg-5" formControlName="gender" value="0" id="gender" [value]="0" type="radio">
+        <label class="ms-lg-2" >Nữ</label>
+      </div>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Loại khách hàng:</label><br>
+      <select class="form-control" formControlName="customerType">
+        <option [selected]="formEdit.value.customerType == 1" [value]="1">Công ty</option>
+        <option [value]="0">Cá nhân</option>
+      </select>
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>CMND/CCCD: </label>
+      <input class="form-control" type="text" formControlName="citizenIdentifyCart">
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>CTime: </label>
+      <input class="form-control" type="date" formControlName="ctime">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>MTime: </label>
+      <input class="form-control" type="date" formControlName="mtime">
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="24">
+      <label>Trạng thái:</label>
+      <select class="form-control" formControlName="status">
+        <option [selected]="formEdit.value.status == 1" value="1">Active</option>
+        <option value="0">InActive</option>
+      </select>
+    </div>
+    <div nz-col nzSpan="2"></div>
+  </div>
+
+  <div nz-row>
+    <div nz-col nzSpan="19">
+    </div>
+    <div nz-col nzSpan="5">
+      <a class="btnAdd" nz-button nzType="primary" (click)="update()">Update</a>
+      <a class="btnAdd" nz-button nzType="primary" (click)="initForm()">Reset</a>
+    </div>
+  </div>
+</form>

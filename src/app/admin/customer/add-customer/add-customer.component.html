@@ -1,0 +1,77 @@
+<h1>Add Customer</h1>
+
+<form class="formAdd" novalidate [formGroup]="formAdd">
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Tên khách hàng:</label>
+      <input class="form-control" type="text" formControlName="customerName">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Phone Number: </label>
+      <input class="form-control" type="text" formControlName="phoneNumber">
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Birthday: </label>
+      <input class="form-control" type="date" formControlName="birthday">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Gender: </label><br>
+      <nz-radio-group formControlName="gender">
+        <div class="rdo_gender">
+          <label nz-radio nzValue="0">Male</label>
+          <label nz-radio nzValue="1">Female</label>
+        </div>
+      </nz-radio-group>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Customer Type: </label><br>
+      <select class="form-control" formControlName="customerType">
+        <option [selected]="formAdd.value.customerType == 0" value="1">Công ty</option>
+        <option value="0">Cá nhân</option>
+      </select>
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Status: </label>
+      <select class="form-control" formControlName="status">
+        <option [selected]="formAdd.value.status == 0" value="1">Active</option>
+        <option value="0">InActive</option>
+      </select>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>Citizen Identify Cart: </label>
+      <input class="form-control" type="date" formControlName="citizenIdentifyCart">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>Avatar: </label><br>
+      <input class="avt" type="file" formControlName="image">
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="11">
+      <label>CTime: </label>
+      <input class="form-control" type="date" formControlName="ctime">
+    </div>
+    <div nz-col nzSpan="2"></div>
+    <div nz-col nzSpan="11">
+      <label>MTime: </label>
+      <input class="form-control" type="date" formControlName="mtime">
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="22">
+    </div>
+    <div nz-col nzSpan="2">
+      <a class="btnAdd" nz-button nzType="primary" (click)="saveCustomer(this.formAdd.value)">Save</a>
+    </div>
+  </div>
+</form>
