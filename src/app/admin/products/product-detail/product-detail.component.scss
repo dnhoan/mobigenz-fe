@@ -40,3 +40,16 @@ nz-select {
     top: 0;
     opacity: 0;
   }
+
+  .dynamic-delete-button {
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    font-size: 24px;
+    color: #999;
+    transition: all 0.3s;
+  }
+
+  .dynamic-delete-button:hover {
+    color: rgb(237, 28, 28);
+  }

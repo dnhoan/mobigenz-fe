@@ -4,7 +4,7 @@ export interface SpecificationDto {
   id: number;
   specificationName: string;
   value?: string;
-  productSpecificationDtos: ProductSpecificationDto[];
+  productSpecificationDtos?: ProductSpecificationDto;
   ctime?: string;
   mtime?: string;
   status?: number;

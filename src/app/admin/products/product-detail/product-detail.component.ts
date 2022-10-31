@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import {
+  addEntities,
   deleteEntities,
   selectAllEntities,
   selectEntities,
@@ -24,16 +25,6 @@ import { environment } from 'src/environments/environment';
 import { ProductDtoUI, productsStore } from '../products.repository';
 import { ProductDetailService } from './product-detail.service';
 
-export interface OptionProduct {
-  currentOption?: OptionDto;
-  optionValues: any[];
-}
-
-export interface SpecificationProduct {
-  currentSpecificationGroup?: SpecificationGroupDto;
-  specifications: any[];
-}
-
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
@@ -46,10 +37,7 @@ export class ProductDetailComponent implements OnInit {
   manufacturers: ManufacturerDto[] = [];
   options: OptionDto[] = [];
   productLines: ProductLineDto[] = [];
-  specificationGroupProducts: SpecificationProduct[] = [];
   specificationGroups: SpecificationGroupDto[] = [];
-  optionProducts: OptionProduct[] = [];
-  productDetails: ProductDetailDto[] = [];
   baseUrl = `${environment.baseUrl}/admin`;
   constructor(
     private productDetailService: ProductDetailService,
@@ -82,25 +70,69 @@ export class ProductDetailComponent implements OnInit {
   }
 
   addOption() {
-    this.optionProducts.push({
-      currentOption: undefined,
-      optionValues: [],
+    this.product.optionDtos.push({
+      id: '',
+      optionName: '',
+      optionValueDtos: [],
     });
   }
-  addOptionValue(index: number) {
-    this.optionProducts[index].optionValues.push({ optionName: '' });
+  onChangeOption(id: number, i_option: number) {
+    let option = this.options.find((opt) => opt.id == id) as OptionDto;
+    this.product.optionDtos[i_option] = {
+      id: option.id,
+      optionName: option.optionName,
+      optionValueDtos: [],
+    };
+    console.log(this.product);
+
+    this.mapSku();
+  }
+  removeOptionProduct(i_option: number) {
+    this.product.optionDtos.splice(i_option, 1);
+    this.mapSku();
+  }
+  addOptionValue(i_option: number) {
+    this.product.optionDtos[i_option].optionValueDtos.push({
+      id: '',
+      optionValueName: '',
+    });
+  }
+  onChangeOptionValue(
+    option_value_id: any,
+    i_option: number,
+    i_option_value: number,
+    option_id: number
+  ) {
+    this.options
+      .find((option) => option.id == option_id)
+      ?.optionValueDtos.forEach((optionValue) => {
+        if (optionValue.id == option_value_id) {
+          this.product.optionDtos[i_option].optionValueDtos[i_option_value] =
+            optionValue;
+        }
+      });
+    this.mapSku();
+  }
+  removeOptionValueProduct(i_option: number, i_option_value: number) {
+    this.product.optionDtos[i_option].optionValueDtos.splice(i_option_value, 1);
+    this.mapSku();
   }
   addSpecificationGroup() {
-    this.specificationGroupProducts.push({
-      currentSpecificationGroup: undefined,
-      specifications: [],
+    this.product.specificationGroupDtos.push({
+      id: '',
+      specificationGroupName: '',
+      specificationDtos: [],
     });
+    console.log(this.product);
   }
   addSpecificationProduct(index: number) {
-    this.specificationGroupProducts[index].specifications.push({
+    this.product.specificationGroupDtos[index].specificationDtos.push({
+      id: '',
       specificationName: '',
       value: '',
+      specificationDtos: [],
     });
+    console.log(this.product);
   }
 
   changeImage(event: any) {
@@ -127,93 +159,107 @@ export class ProductDetailComponent implements OnInit {
       });
   }
 
-  onChangeOption(option: OptionDto, i_option: number) {
-    if (option) {
-      this.optionProducts[i_option].currentOption = option;
-      this.optionProducts[i_option].optionValues = [];
-    } else {
-      this.optionProducts.splice(i_option, 1);
-    }
-    this.mapSku();
-  }
-  onChangeOptionValue(
-    optionValueDto: any,
-    i_option: number,
-    i_option_value: number
-  ) {
-    this.optionProducts[i_option].optionValues[i_option_value] = optionValueDto;
-    this.mapSku();
-  }
   onChangeSpecificationGroupProduct(
-    specificationGroup: SpecificationGroupDto,
+    specification_group_id: SpecificationGroupDto,
     i_specification_group: number
   ) {
-    if (specificationGroup) {
-      this.specificationGroupProducts[
-        i_specification_group
-      ].currentSpecificationGroup = specificationGroup;
-      this.specificationGroupProducts[i_specification_group].specifications =
-        [];
-    } else {
-      this.optionProducts.splice(i_specification_group, 1);
-    }
+    let specificationGroup = this.specificationGroups.find(
+      (specificationGroup: any) =>
+        specificationGroup.id == specification_group_id
+    ) as SpecificationGroupDto;
+    this.product.specificationGroupDtos[i_specification_group] = {
+      id: specificationGroup.id,
+      specificationName: specificationGroup.specificationGroupName,
+      specificationDtos: [],
+    };
+    console.log(this.product);
   }
-  onChangeSpecification(
-    specification: any,
+  removeSpecificationGroup(i_specification_group: number) {
+    this.product.specificationGroupDtos.splice(i_specification_group, 1);
+  }
+  removeSpecificationProduct(
     i_specification_group: number,
     i_specification: number
   ) {
-    this.specificationGroupProducts[i_specification_group].specifications[
-      i_specification
-    ] = specification;
+    this.product.specificationGroupDtos[
+      i_specification_group
+    ].specificationDtos.splice(i_specification, 1);
+  }
+  onChangeSpecification(
+    specification_id: any,
+    specification_group_id: number,
+    i_specification_group: number,
+    i_specification: number
+  ) {
+    let specificationGroup = this.specificationGroups.find(
+      (specificationGroup: any) =>
+        specificationGroup.id == specification_group_id
+    ) as SpecificationGroupDto;
+    specificationGroup.specificationDtos.forEach((specification) => {
+      if (specification.id == specification_id) {
+        this.product.specificationGroupDtos[
+          i_specification_group
+        ].specificationDtos[i_specification] = {
+          id: specification.id,
+          specificationName: specification.specificationName,
+          value: '',
+        };
+      }
+    });
   }
   mapSku() {
-    this.productDetails = [];
+    this.product.productDetailDtos = [];
     let sku1: any[] = [];
     let sku2: any[] = [];
-    this.optionProducts[0].optionValues.forEach((optionValue) => {
-      sku1.push(optionValue);
-      this.productDetails.push({
-        priceOrigin: 0,
-        priceSell: 0,
-        sku: optionValue.optionValueName,
-        image: '',
-        productVariantCombinationDtos: [
-          {
-            optionDto: this.optionProducts[0].currentOption,
-            optionValueDto: optionValue,
-          },
-        ] as ProductVariantCombinationDto[],
-      });
-    });
-    if (
-      this.optionProducts.length == 2 &&
-      this.optionProducts[1].optionValues.length
-    ) {
-      this.productDetails = [];
-      sku1.forEach((sku) => {
-        this.optionProducts[1].optionValues.forEach((optionValue) => {
-          sku2.push([sku, optionValue]);
-          this.productDetails.push({
-            priceOrigin: 0,
-            priceSell: 0,
-            sku: sku.optionValueName + ', ' + optionValue.optionValueName,
-            image: '',
-            productVariantCombinationDtos: [
-              {
-                optionDto: this.optionProducts[0].currentOption,
-                optionValueDto: sku,
-              },
-              {
-                optionDto: this.optionProducts[1].currentOption,
-                optionValueDto: optionValue,
-              },
-            ] as ProductVariantCombinationDto[],
-          });
+    if (this.product.optionDtos.length)
+      this.product.optionDtos[0].optionValueDtos.forEach((optionValue: any) => {
+        sku1.push(optionValue);
+        this.product.productDetailDtos.push({
+          priceOrigin: 0,
+          priceSell: 0,
+          sku: optionValue.optionValueName,
+          image: '',
+          productVariantCombinationDtos: [
+            {
+              optionDto: this.product.optionDtos[0],
+              optionValueDto: optionValue,
+            },
+          ] as ProductVariantCombinationDto[],
         });
       });
+    if (
+      this.product.optionDtos.length == 2 &&
+      this.product.optionDtos[1].optionValueDtos &&
+      this.product.optionDtos[1].optionValueDtos.length
+    ) {
+      this.product.productDetailDtos = [];
+      sku1.forEach((sku) => {
+        this.product.optionDtos[1].optionValueDtos.forEach(
+          (optionValue: any) => {
+            sku2.push([sku, optionValue]);
+            this.product.productDetailDtos.push({
+              priceOrigin: 0,
+              priceSell: 0,
+              sku: sku.optionValueName + ', ' + optionValue.optionValueName,
+              image: '',
+              productVariantCombinationDtos: [
+                {
+                  optionDto: this.product.optionDtos[0],
+                  optionValueDto: sku,
+                },
+                {
+                  optionDto: this.product.optionDtos[1],
+                  optionValueDto: optionValue,
+                },
+              ] as ProductVariantCombinationDto[],
+            });
+          }
+        );
+      });
     }
-    console.log(this.productDetails);
+    console.log(this.product);
+
+    console.log(this.product.productDetailDtos);
   }
   onChangeManufacturer(manufacture_id: any) {
     this.product.manufacturerDto = this.manufacturers.find(
@@ -228,27 +274,9 @@ export class ProductDetailComponent implements OnInit {
       );
   }
   save() {
-    this.optionProducts.forEach((optionProduct) => {
-      this.product.optionDtos.push(optionProduct.currentOption);
-    });
-    this.product.productDetailDtos = this.productDetails.map(
-      (productDetail) => {
-        return {
-          ...productDetail,
-          productVariantCombinationDtos:
-            productDetail.productVariantCombinationDtos,
-        };
-      }
-    );
-    this.product.specificationGroupDtos = this.specificationGroupProducts.map(
-      (specificationGroupProduct) => {
-        specificationGroupProduct.currentSpecificationGroup!.specificationDtos =
-          specificationGroupProduct.specifications as SpecificationDto[];
-        return {
-          ...specificationGroupProduct.currentSpecificationGroup,
-        };
-      }
-    );
+    // this.product.optionDtos.forEach((optionProduct: any) => {
+    //   this.product.optionDtos.push(optionProduct.currentOption);
+    // });
     delete this.product['id'];
     console.log(this.product);
 
@@ -256,6 +284,7 @@ export class ProductDetailComponent implements OnInit {
       .createProduct(this.product)
       .subscribe((product) => {
         this.product = product;
+        productsStore.update(addEntities(product));
       });
   }
   createOption(event: any) {}

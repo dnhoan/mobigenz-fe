@@ -15,6 +15,9 @@ import { ProductDetailComponent } from './products/product-detail/product-detail
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { UpdateCustomerComponent } from './customer/update-customer/update-customer.component';
 import { AccountComponent } from './account/account.component';
+import { FilterOptionValuePipe } from './products/product-detail/pipes/filter-option-value.pipe';
+import { GetLengthArrayPipe } from './products/product-detail/pipes/get-length-array.pipe';
+import { FilterSpecificationPipe } from './products/product-detail/pipes/filter-specification.pipe';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,9 @@ import { AccountComponent } from './account/account.component';
     AccountComponent,
     AddCustomerComponent,
     UpdateCustomerComponent,
+    FilterOptionValuePipe,
+    FilterSpecificationPipe,
+    GetLengthArrayPipe,
   ],
   imports: [
     CommonModule,
@@ -34,5 +40,6 @@ import { AccountComponent } from './account/account.component';
     NzGridModule,
     NzSpaceModule,
   ],
+  exports: [FilterOptionValuePipe, FilterSpecificationPipe, GetLengthArrayPipe],
 })
 export class AdminModule {}
