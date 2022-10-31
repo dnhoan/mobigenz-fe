@@ -4,11 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { Customer, CustomerDTO } from './customer.model';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.scss']
+  styleUrls: ['./customer.component.scss'],
 })
 export class CustomerComponent implements OnInit {
   formCus!: FormGroup;
@@ -27,14 +26,13 @@ export class CustomerComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private customerService: CustomerService,
-    private fb: FormBuilder,
-  ) { }
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.getAllCustomer();
     this.initFormSearch();
   }
-
 
   // submitForm(): void {
   //   console.log('submit', this.formCus.value);
@@ -47,7 +45,13 @@ export class CustomerComponent implements OnInit {
 
     this.formCus = this.fb.group({
       customerName: ['', [Validators.required, Validators.maxLength(50)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})')]],
+      phoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
+        ],
+      ],
       birthday: ['', [Validators.required, Validators.maxLength(50)]],
       gender: [1, [Validators.required]],
       email: ['', Validators.required],
@@ -64,19 +68,17 @@ export class CustomerComponent implements OnInit {
   //   this.isVisible = true;
   // }
 
-
   handleOk(): void {
-
-    console.log(this.customer)
+    console.log(this.customer);
     this.addValueCustomer();
     this.saveCustomer(this.customer);
     this.isVisible = false;
   }
 
   saveCustomer(customer: Customer) {
-    this.customerService.addCustomer(customer).subscribe((res: any) =>
-    this.getAllCustomer());
-
+    this.customerService
+      .addCustomer(customer)
+      .subscribe((res: any) => this.getAllCustomer());
   }
 
   handleCancel(): void {
@@ -91,9 +93,9 @@ export class CustomerComponent implements OnInit {
 
   getInfoCustomer(id: any) {
     this.showModal();
-    const customerByID = this.datas.find(value => {
+    const customerByID = this.datas.find((value) => {
       return value.id == id;
-    })
+    });
     if (customerByID) {
       this.customer = customerByID;
     }
@@ -114,9 +116,8 @@ export class CustomerComponent implements OnInit {
       email: '',
       customerType: '',
       citizenIdentifyCart: '',
-      status: ''
+      status: '',
     });
-
   }
 
   initFormSearch() {
@@ -124,13 +125,11 @@ export class CustomerComponent implements OnInit {
       customerName: '',
       phoneNumber: '',
       email: '',
-      cccd: ''
+      cccd: '',
     });
   }
 
-
   fillValueForm() {
-
     this.formCus.patchValue({
       id: this.customer.id,
       customerName: this.customer.customerName,
@@ -145,21 +144,18 @@ export class CustomerComponent implements OnInit {
     });
   }
 
-
   update() {
     this.addValueCustomer();
     console.log(this.addValueCustomer());
     console.log(this.customer);
-    this.customerService.updateCustomer(this.customer).subscribe(
-      res => {
-        alert("Cập nhật thành công")
-        this.router.navigate(['/admin/customer']).then(r => console.log(r));
-      });
+    this.customerService.updateCustomer(this.customer).subscribe((res) => {
+      alert('Cập nhật thành công');
+      this.router.navigate(['/admin/customer']).then((r) => console.log(r));
+    });
   }
 
-
   addValueCustomer() {
-    console.log(this.formCus.value)
+    console.log(this.formCus.value);
     this.customer.customerName = this.formCus.value.customerName;
     this.customer.phoneNumber = this.formCus.value.phoneNumber;
     this.customer.birthday = this.formCus.value.birthday;
@@ -169,12 +165,11 @@ export class CustomerComponent implements OnInit {
     this.customer.citizenIdentifyCart = this.formCus.value.citizenIdentifyCart;
     this.customer.ctime = this.formCus.value.ctime;
     this.customer.status = this.formCus.value.status;
-
   }
 
   deleteCustomer(id: any) {
     this.customerService.deleteCustomer(id).subscribe((res: any) =>
-      this.datas.forEach(value => {
+      this.datas.forEach((value) => {
         if (value.id == id) {
           value.status = 0;
         }
@@ -187,19 +182,17 @@ export class CustomerComponent implements OnInit {
 
   // }
 
-
   pagination(page: any) {
     if (page < 0) {
       page = 0;
     }
     this.indexPage = page;
-    this.customerService.getPageTransfer(this.indexPage,
-      this.sortBy, this.descAsc)
-      .subscribe(res => {
+    this.customerService
+      .getPageTransfer(this.indexPage, this.sortBy, this.descAsc)
+      .subscribe((res) => {
         this.datas = res.object.content;
         this.page = res.object;
         console.log(this.page);
       });
   }
-
 }
