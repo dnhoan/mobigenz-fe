@@ -42,6 +42,7 @@ export class AddCustomerComponent implements OnInit {
     this.customerService.addCustomer(customer).subscribe((res: any) =>
       console.log(res),
     );
+    this.customerService.getAll();
     this.router.navigate(['/admin/customer']);
   }
 

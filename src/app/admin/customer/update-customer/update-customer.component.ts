@@ -51,9 +51,6 @@ export class UpdateCustomerComponent implements OnInit {
         }
       },
     );
-
-
-
   }
 
   initForm() {

@@ -1,4 +1,4 @@
-<h1>Add Customer</h1>
+<h1>Thêm khách hàng</h1>
 
 <form class="formAdd" novalidate [formGroup]="formAdd">
   <div nz-row>
@@ -22,8 +22,8 @@
       <label>Gender: </label><br>
       <nz-radio-group formControlName="gender">
         <div class="rdo_gender">
-          <label nz-radio nzValue="0">Male</label>
-          <label nz-radio nzValue="1">Female</label>
+          <label nz-radio nzValue="1">Nam</label>
+          <label nz-radio nzValue="0">Nữ</label>
         </div>
       </nz-radio-group>
     </div>
@@ -47,8 +47,8 @@
   </div>
   <div nz-row>
     <div nz-col nzSpan="11">
-      <label>Citizen Identify Cart: </label>
-      <input class="form-control" type="date" formControlName="citizenIdentifyCart">
+      <label>CMND/CCCD: </label>
+      <input class="form-control" type="text" formControlName="citizenIdentifyCart">
     </div>
     <div nz-col nzSpan="2"></div>
     <div nz-col nzSpan="11">

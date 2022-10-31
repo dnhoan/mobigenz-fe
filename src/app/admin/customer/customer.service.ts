@@ -28,7 +28,7 @@ export class CustomerService {
   }
 
   public deleteCustomer(id: any): Observable<any> {
-    return this.http.delete<any>(`${this.apiCustomer}`+ "customers/" + id);
+    return this.http.delete<any>(`${this.apiCustomer}` + "customers/" + id);  
   }
 
   public getPageTransfer(indexPage: any,

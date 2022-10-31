@@ -1,13 +1,120 @@
-<h1>Danh sách khách hàng</h1>
 <div nz-row>
-  <div nz-col nzSpan="20">
+  <div nz-col nzSpan="21">
+
+    <form nz-form class="mt-5" [formGroup]="formSearch">
+      <div nz-row>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzSm]="5" [nzXs]="24">Tên khách hàng</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+              <input nz-input type="text" formControlName="customerName" id="customerName" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzSm]="3" [nzXs]="24">Số ĐT</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+              <input nz-input type="text" formControlName="customerName" id="customerName" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzSm]="5" [nzXs]="24">CCCD</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+              <input nz-input type="text" formControlName="cccd" id="cccd"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzSm]="3" [nzXs]="24">Email</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+              <input nz-input type="text" formControlName="email" id="email" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <!-- <div nz-col nzSpan="19">
+        <button class="mb-3 mt-3" style="float: right;" nz-button [nzType]="'primary'"><span>Tìm kiếm</span></button>
+      </div> -->
+    </form>
+
   </div>
-  <div nz-col nzSpan="4">
-    <button class="btnAdd" routerLink="addCustomer" nz-button nzType="primary">Thêm Mới</button>
+
+  <div nz-col nzSpan="3">
+    <button class="mb-3 mt-5" nz-button [nzType]="'primary'" (click)="showModal()"><span>Thêm mới</span></button>
+    <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+      <ng-container *nzModalContent>
+        <form nz-form [formGroup]="formCus">
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="customerName">Tên khách hàng</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Bạn phải nhập tên khách hàng!">
+              <input nz-input type="text" formControlName="customerName" id="customerName" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Số ĐT</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Bạn phải nhập số điện thoại!">
+              <input nz-input type="text" id="phoneNumber" formControlName="phoneNumber" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="birthday" nzRequired>Ngày sinh</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Bạn phải chọn ngày sinh!">
+              <input nz-input type="date" formControlName="birthday" id="birthday" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="gender">Giới tính</nz-form-label>
+            <nz-radio-group class="mt-1" formControlName="gender" nzName="gender">
+              <label nz-radio [nzValue]="1" nzValue=1>Nam</label>
+              <label nz-radio [nzValue]="0" nzValue=0>Nữ</label>
+            </nz-radio-group>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Email</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Bạn phải nhập đúng định dạng email!">
+              <input nz-input type="email" formControlName="email" id="email" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="customerType">Loại khách hàng</nz-form-label>
+            <nz-radio-group class="mt-1" formControlName="customerType" nzName="customerType">
+              <label nz-radio [nzValue]="1" nzValue=1>Công ty</label>
+              <label nz-radio [nzValue]="0" nzValue=0>Cá nhân</label>
+            </nz-radio-group>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="citizenIdentifyCart">CCCD</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Bạn phải nhập CCCD!">
+              <input nz-input type="citizenIdentifyCart" formControlName="citizenIdentifyCart"
+                id="citizenIdentifyCart" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="ctime" nzRequired>Current Time</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Bạn phải chọn current time!">
+              <input nz-input type="date" formControlName="ctime" id="ctime" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status">Trạng thái</nz-form-label>
+            <nz-radio-group class="mt-1" formControlName="status" nzName="status">
+              <label nz-radio [nzValue]="1" nzValue=1>Active</label>
+              <label nz-radio [nzValue]="0" nzValue=0>InActive</label>
+            </nz-radio-group>
+          </nz-form-item>
+        </form>
+      </ng-container>
+    </nz-modal>
   </div>
 </div>
-
-<nz-table>
+<!--  ---------------------------------  -->
+<nz-table *ngIf="datas">
   <thead>
     <tr>
       <th>Mã khách hàng</th>
@@ -29,7 +136,7 @@
       <td>{{item.customerName}}</td>
       <td>{{item.phoneNumber}}</td>
       <td>{{item.birthday}}</td>
-      <td>{{item.account?.email}}</td>
+      <td>{{item.email}}</td>
       <td *ngIf="item.gender">Nam</td>
       <td *ngIf="!item.gender">Nữ</td>
       <td *ngIf="item.customerType">Công ty</td>
@@ -44,5 +151,5 @@
   </tbody>
 </nz-table>
 <div class="footer">
-  <nz-pagination [nzPageIndex]="1" [nzTotal]="50" nzShowSizeChanger [nzPageSize]="5"></nz-pagination>
+  <nz-pagination [nzPageIndex]="1" [nzTotal]="30" nzShowSizeChanger [nzPageSize]="5"></nz-pagination>
 </div>
