@@ -19,14 +19,14 @@ const routes: Routes = [
         path: 'customer',
         component: CustomerComponent,
       },
-      {
-        path: 'customer/addCustomer',
-        component: AddCustomerComponent,
-      },
-      {
-        path: 'customer/editCustomer/:id',
-        component: UpdateCustomerComponent,
-      }
+      // {
+      //   path: 'customer/addCustomer',
+      //   component: AddCustomerComponent,
+      // },
+      // {
+      //   path: 'customer/editCustomer/:id',
+      //   component: UpdateCuCustomerComponent,
+      // }
     ],
   },
 ];
