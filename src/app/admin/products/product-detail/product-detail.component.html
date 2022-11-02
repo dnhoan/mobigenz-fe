@@ -373,7 +373,10 @@
                       'Nhập thuộc tính ' +
                       specificationProduct.specificationName
                     "
-                    [(ngModel)]="specificationProduct.value"
+                    [(ngModel)]="
+                      specificationProduct.productSpecificationDtos
+                        .productSpecificationName
+                    "
                     [nzAutosize]="{ minRows: 1, maxRows: 3 }"
                   ></textarea>
                   <span

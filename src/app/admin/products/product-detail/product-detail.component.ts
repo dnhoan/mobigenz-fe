@@ -203,6 +203,10 @@ export class ProductDetailComponent implements OnInit {
           id: specification.id,
           specificationName: specification.specificationName,
           value: '',
+          productSpecificationDtos: {
+            id: '',
+            productSpecificationName: '',
+          },
         };
       }
     });
@@ -277,7 +281,7 @@ export class ProductDetailComponent implements OnInit {
     // this.product.optionDtos.forEach((optionProduct: any) => {
     //   this.product.optionDtos.push(optionProduct.currentOption);
     // });
-    delete this.product['id'];
+    // delete this.product['id'];
     console.log(this.product);
 
     this.productDetailService
