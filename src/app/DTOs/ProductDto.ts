@@ -11,6 +11,7 @@ export interface ProductDto {
   productName: string;
   description: string;
   image?: string;
+  detail: string;
   images: string[];
   manufacturerDto?: ManufacturerDto;
   productLineDto?: ProductLineDto;
