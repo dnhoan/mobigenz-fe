@@ -1,10 +1,9 @@
-import { UpdateCustomerComponent } from './customer/update-customer/update-customer.component';
-import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { CustomerComponent } from './customer/customer.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { ProductsComponent } from './products/products.component';
+import { AccountComponent } from './account/account.component';
 
 const routes: Routes = [
   {
@@ -18,6 +17,10 @@ const routes: Routes = [
       {
         path: 'customer',
         component: CustomerComponent,
+      },
+      {
+        path: 'account',
+        component: AccountComponent,
       },
       // {
       //   path: 'customer/addCustomer',
