@@ -2,7 +2,6 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
@@ -33,11 +32,25 @@ import {
 import { AngularFireModule } from '@angular/fire/compat';
 // import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { LoginComponent } from './login/login.component';
+import { ForgotComponent } from './forgot/forgot.component';
+import { ToastrModule } from 'ngx-toastr';
 
 registerLocaleData(en);
 
+const configToast: any = {
+  timeOut: 3000,
+  positionClass: 'toast-top-right',
+  preventDuplicates: true,
+  progressBar: true,
+  progressAnimation: 'increasing',
+};
+
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [			AppComponent,
+      LoginComponent,
+      ForgotComponent
+   ],
   imports: [
     SharedModule,
     AppRoutingModule,
@@ -45,6 +58,7 @@ registerLocaleData(en);
     CommonModule,
     HttpClientModule,
     FormsModule,
+    ToastrModule.forRoot(configToast),
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
