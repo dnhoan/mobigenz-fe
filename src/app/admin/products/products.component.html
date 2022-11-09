@@ -1,15 +1,6 @@
-<button nz-button nzType="primary" (click)="open()">Open</button>
-<nz-drawer
-  [nzClosable]="false"
-  [nzVisible]="visible"
-  nzPlacement="right"
-  nzTitle="Basic Drawer"
-  (nzOnClose)="close()"
->
-  <ng-container *nzDrawerContent>
-    <input nz-input placeholder="Basic usage" />
-  </ng-container>
-</nz-drawer>
+<button nz-button nzType="primary" (click)="openDrawer('')">
+  Them san pham
+</button>
 <nz-table #basicTable [nzData]="products">
   <thead>
     <tr>
@@ -22,10 +13,20 @@
   </thead>
   <tbody>
     <tr *ngFor="let product of basicTable.data">
-      <td>Image</td>
-      <td>{{ product.productName }}</td>
-      <td>{{ product.manufacturerDto.manufacturerName }}</td>
-      <td>{{ product.productLineDto.productLineName }}</td>
+      <td>
+        <img
+          nz-image
+          width="50px"
+          height="50px"
+          [nzSrc]="product.images[0]"
+          alt=""
+        />
+      </td>
+      <td>
+        <a (click)="openDrawer(product.id)">{{ product.productName }}</a>
+      </td>
+      <td>{{ product.manufacturerDto!.manufacturerName }}</td>
+      <td>{{ product.productLineDto!.productLineName }}</td>
       <td>{{ product.ctime | date: "hh:mm dd/MM/yyyy" }}</td>
     </tr>
   </tbody>

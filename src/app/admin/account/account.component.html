@@ -6,7 +6,12 @@
           <nz-form-item>
             <nz-form-label [nzSm]="5" [nzXs]="24">Email</nz-form-label>
             <nz-form-control [nzSm]="12" [nzXs]="24">
-              <input nz-input type="email" formControlName="email" id="email" />
+              <input
+                nz-input
+                type="text"
+                formControlName="emailSearch"
+                id="emailSearch"
+              />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -18,7 +23,14 @@
   </div>
 
   <div nz-col nzSpan="3">
-    <button class="mb-3 mt-5" nz-button [nzType]="'primary'" (click)="showModal()"><span>Thêm mới</span></button>
+    <button
+      class="mb-3 mt-5"
+      nz-button
+      [nzType]="'primary'"
+      (click)="showModal()"
+    >
+      <span>Thêm mới</span>
+    </button>
     <nz-modal
       [(nzVisible)]="isVisible"
       (nzOnCancel)="handleCancel()"
@@ -35,10 +47,15 @@
               [nzXs]="24"
               nzErrorTip="Bạn phải nhập đúng định dạng email!"
             >
-              <input nz-input type="email" formControlName="email" id="email" />
+              <input
+                nz-input
+                type="email"
+                formControlName="email"
+                id="email"
+              />
             </nz-form-control>
           </nz-form-item>
-          <nz-form-item>
+          <nz-form-item *ngIf="!formAcc.value.id">
             <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password"
               >Mật khẩu</nz-form-label
             >
@@ -47,7 +64,29 @@
               [nzXs]="24"
               nzErrorTip="Mật khẩu không được để trống!"
             >
-              <input nz-input type="password" formControlName="password" id="password" />
+              <input
+                nz-input
+                type="password"
+                formControlName="password"
+                id="password"
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber"
+              >Số ĐT</nz-form-label
+            >
+            <nz-form-control
+              [nzSm]="14"
+              [nzXs]="24"
+              nzErrorTip="SDT không được để trống!"
+            >
+              <input
+                nz-input
+                type="text"
+                formControlName="phoneNumber"
+                id="phoneNumber"
+              />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item>
@@ -64,12 +103,12 @@
             </nz-radio-group>
           </nz-form-item>
           <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="rollName"
-              >Quyền</nz-form-label
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="role"
+              >Phân quyền</nz-form-label
             >
-            <nz-radio-group class="mt-1" formControlName="rollName" nzName="rollName">
-              <label nz-radio [nzValue]="1" nzValue="1">Admin</label>
-              <label nz-radio [nzValue]="0" nzValue="0">User</label>
+            <nz-radio-group class="mt-1" formControlName="role" nzName="role">
+              <label nz-radio [nzValue]="1">Admin</label>
+              <label nz-radio [nzValue]="2">User</label>
             </nz-radio-group>
           </nz-form-item>
         </form>
@@ -81,8 +120,9 @@
 <nz-table *ngIf="datas">
   <thead>
     <tr>
-      <th>Id</th>
+      <th>Mã TK</th>
       <th>Email</th>
+      <th>Số ĐT</th>
       <th>Role</th>
       <th>Trạng thái</th>
       <th colSpan="2">Thao tác</th>
@@ -92,18 +132,13 @@
     <tr *ngFor="let item of datas">
       <td>{{ item.id }}</td>
       <td>{{ item.email }}</td>
-      <td *ngIf="item.role">Admin</td>
-      <td *ngIf="!item.role">User</td>
+      <td>{{ item.phoneNumber}}</td>
+      <td>{{ item.roleid?.roleName }}</td>
       <td *ngIf="item.status">Active</td>
       <td *ngIf="!item.status">InActive</td>
-      <td style="text-align: center">
-        <span class="btnUpdate" nz-icon nzType="edit" nzTheme="outline"></span>
-        <span
-          class="btnDelete"
-          nz-icon
-          nzType="delete"
-          nzTheme="outline"
-        ></span>
+      <td style="text-align: center;">
+        <span class="btnUpdate" nz-icon nzType="edit" (click)="getInfoAccount(item.id)" nzTheme="outline"></span>
+        <span class="btnDelete" nz-icon nzType="delete" (click)="deleteAccount(item.id)" nzTheme="outline"></span>
       </td>
     </tr>
   </tbody>

@@ -2,9 +2,8 @@ export interface Account{
   id?: number;
   email?: string;
   password?: string;
-  role?: Role;
-  ctime?: Date;
-  mtime?: Date;
+  phoneNumber?: number;
+  roleid?: Role;
   status?: number;
 }
 
@@ -12,9 +11,8 @@ export interface AccountDTO{
   id?: number;
   email?: string;
   password?: string;
-  role?: Role;
-  ctime?: Date;
-  mtime?: Date;
+  phoneNumber?: number;
+  roleid?: Role;
   status?: number;
 }
 

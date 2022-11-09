@@ -11,13 +11,35 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 import { SharedModule } from '../shared/shared.module';
 import { ProductsComponent } from './products/products.component';
-import { AccountComponent } from './account/account.component';
+import { ProductDetailComponent } from './products/product-detail/product-detail.component';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { UpdateCustomerComponent } from './customer/update-customer/update-customer.component';
-
+import { AccountComponent } from './account/account.component';
+import { FilterOptionValuePipe } from './products/product-detail/pipes/filter-option-value.pipe';
+import { GetLengthArrayPipe } from './products/product-detail/pipes/get-length-array.pipe';
+import { FilterSpecificationPipe } from './products/product-detail/pipes/filter-specification.pipe';
 
 @NgModule({
-  declarations: [AdminComponent, ProductsComponent, CustomerComponent, AccountComponent, AddCustomerComponent, UpdateCustomerComponent],
-  imports: [CommonModule, AdminRoutingModule, SharedModule, ReactiveFormsModule, NzGridModule, NzSpaceModule ],
+  declarations: [
+    AdminComponent,
+    ProductsComponent,
+    ProductDetailComponent,
+    CustomerComponent,
+    AccountComponent,
+    AddCustomerComponent,
+    UpdateCustomerComponent,
+    FilterOptionValuePipe,
+    FilterSpecificationPipe,
+    GetLengthArrayPipe,
+  ],
+  imports: [
+    CommonModule,
+    AdminRoutingModule,
+    SharedModule,
+    ReactiveFormsModule,
+    NzGridModule,
+    NzSpaceModule,
+  ],
+  exports: [FilterOptionValuePipe, FilterSpecificationPipe, GetLengthArrayPipe],
 })
-export class AdminModule { }
+export class AdminModule {}

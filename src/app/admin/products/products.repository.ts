@@ -5,21 +5,18 @@ import {
   setEntities,
   withEntities,
   selectEntities,
+  withUIEntities,
 } from '@ngneat/elf-entities';
 import { Injectable } from '@angular/core';
-import { map, withLatestFrom } from 'rxjs';
-
-const {
-  withCollectionIds,
-  selectCollectionIds,
-  addCollectionIds,
-  removeCollectionIds,
-  inCollectionIds,
-} = propsArrayFactory('collectionIds', { initialValue: [] as string[] });
+export interface ProductDtoUI {
+  id: number | string;
+  isOpen: boolean;
+}
 
 export const productsStore = createStore(
   { name: 'products' },
-  withEntities<ProductDto>()
+  withEntities<ProductDto>(),
+  withUIEntities<ProductDtoUI>()
 );
 
 @Injectable({ providedIn: 'root' })

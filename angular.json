@@ -38,7 +38,8 @@
             "styles": [
               "src/theme.less",
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.css"
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },
@@ -109,6 +110,16 @@
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "mobigenz-fe:build:production",
+            "firebaseProject": "mobigenz-327dd",
+            "firebaseHostingSite": "mobigenz-327dd"
           }
         }
       }

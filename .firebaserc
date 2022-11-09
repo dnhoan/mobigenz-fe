@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "mobigenz-327dd": {
+      "hosting": {
+        "mobigenz-fe": [
+          "mobigenz-327dd"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "mobigenz-327dd"
+  }
+}

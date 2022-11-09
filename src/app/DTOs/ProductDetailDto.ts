@@ -1,10 +1,11 @@
 import { ProductVariantCombinationDto } from './ProductVariantCombinationDto';
 
 export interface ProductDetailDto {
-  id: number;
-  price: number;
+  id?: number;
+  price?: number;
+  priceOrigin: number;
+  priceSell: number;
   sku: string;
-  stock: number;
   image: string;
-  productVariantCombinationDtos: ProductVariantCombinationDto[];
+  productVariantCombinationDtos?: ProductVariantCombinationDto[];
 }
