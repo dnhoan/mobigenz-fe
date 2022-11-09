@@ -11,16 +11,6 @@
       />
     </div>
     <nz-divider></nz-divider>
-    <div>
-      <h6>Mô tả sản phẩm</h6>
-      <textarea
-        nz-input
-        placeholder="Controlled autosize"
-        [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-        [(ngModel)]="product.description"
-      ></textarea>
-    </div>
-    <nz-divider></nz-divider>
     <div style="display: flex; justify-content: space-between">
       <div *ngIf="manufacturers">
         <h6>Hãng sản xuất</h6>
@@ -412,6 +402,21 @@
       <button nz-button nzType="dashed" (click)="addSpecificationGroup()">
         Thêm nhóm thuộc tính
       </button>
+    </div>
+    <nz-divider></nz-divider>
+    <div>
+      <h6>Chi tiết sản phẩm</h6>
+      <quill-editor
+        (onEditorCreated)="imageHandler($event)"
+        [(ngModel)]="product.detail"
+      ></quill-editor>
+    </div>
+    <div>
+      <h6>Mô tả sản phẩm</h6>
+      <quill-editor
+        [modules]="modulesDescription"
+        [(ngModel)]="product.description"
+      ></quill-editor>
     </div>
   </div>
 </ng-container>
