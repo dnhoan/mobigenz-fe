@@ -19,6 +19,7 @@ export interface ProductDto {
   optionDtos?: OptionDto[];
   specificationGroupDtos?: SpecificationGroupDto[];
   note?: string;
+  expand?: boolean;
   ctime?: string;
   mtime?: string;
   status?: number;
