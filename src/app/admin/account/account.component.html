@@ -133,7 +133,7 @@
       <td>{{ item.id }}</td>
       <td>{{ item.email }}</td>
       <td>{{ item.phoneNumber}}</td>
-      <td>{{ item.roleid?.roleName }}</td>
+      <td *ngIf="item.roles">{{ item.roles![0].roleName }}</td>
       <td *ngIf="item.status">Active</td>
       <td *ngIf="!item.status">InActive</td>
       <td style="text-align: center;">
