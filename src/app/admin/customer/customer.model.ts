@@ -1,10 +1,10 @@
-import { Account } from "../account/account.model";
+import { Account } from '../account/account.model';
 
 export interface Customer {
   id?: number;
   customerName?: string;
   phoneNumber?: string;
-  birthday?: Date;
+  birthday?: String;
   image?: string;
   gender?: number;
   email?: string;
@@ -16,10 +16,10 @@ export interface Customer {
   account?: Account;
 }
 
-export interface CustomerDTO{
+export interface CustomerDTO {
   customerName?: string;
   phoneNumber?: string;
-  birthday?: Date;
+  birthday?: string;
   gender?: number;
   email?: string;
   customerType?: number;

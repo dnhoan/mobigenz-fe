@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from './account.service';
-import { Account, AccountDTO, Role } from './account.model';
+import { Account, AccountDTO, Permission, Role } from './account.model';
 
 @Component({
   selector: 'app-account',
@@ -39,7 +39,7 @@ export class AccountComponent implements OnInit {
 
   showModal(): void {
     this.formAcc = this.fb.group({
-      id:null,
+      id: null,
       email: ['', [Validators.required, Validators.maxLength(50)]],
       password: ['', [Validators.required]],
       phoneNumber: [
@@ -55,29 +55,26 @@ export class AccountComponent implements OnInit {
     this.isVisible = true;
   }
 
-  // showModalUpdate(id: any): void {
-  //   this.fillValueForm()
-  //   this.isVisible = true;
-  // }
-
   handleOk(): void {
-    console.log(this.account);
     this.saveAccount();
     this.isVisible = false;
   }
 
   saveAccount() {
     this.addValueAccount();
-    this.accountService.addAccount(this.account).subscribe(
-      (res) => {
-        if(this.formAcc.value.id){
-          this.toastr.success('Cập nhật tài khoản thành công!');
-        }else{
-          this.toastr.success('Tạo tài khoản thành công!');
-        }
-
+    if (this.formAcc.value.id) {
+      this.accountService.updateAccount(this.account).subscribe((res) => {
+        this.toastr.success('Cập nhật tài khoản thành công!');
         this.getAllAccount();
       });
+    }
+    if(!this.formAcc.value.id){
+        this.accountService
+          .addAccount(this.account)
+          .subscribe((res) => this.toastr.success('Tạo tài khoản thành công!'));
+          this.getAllAccount();
+    }
+
   }
 
   handleCancel(): void {
@@ -87,7 +84,6 @@ export class AccountComponent implements OnInit {
   getAllAccount() {
     this.accountService.getAll().subscribe((res: any) => {
       this.datas = res.data.accounts.items;
-      console.log(this.datas);
     });
   }
 
@@ -97,14 +93,14 @@ export class AccountComponent implements OnInit {
     });
   }
 
-
   fillValueForm() {
     this.formAcc.patchValue({
       id: this.account.id,
       email: this.account.email,
       phoneNumber: this.account.phoneNumber,
+      password:this.account.password,
       status: this.account.status,
-      role: this.account.roleid?.id,
+      role: this.account.roles![0].id,
     });
   }
 
@@ -112,7 +108,6 @@ export class AccountComponent implements OnInit {
     this.showModal();
     const accountByID = this.datas.find((value) => {
       return value.id == id;
-
     });
     if (accountByID) {
       this.account = accountByID;
@@ -125,7 +120,7 @@ export class AccountComponent implements OnInit {
     this.account.email = this.formAcc.value.email;
     this.account.password = this.formAcc.value.password;
     this.account.phoneNumber = this.formAcc.value.phoneNumber;
-    this.account.roleid = { id: this.formAcc.value.role };
+    this.account.roles = [{ id: this.formAcc.value.role }];
     if (this.formAcc.value.status == 1) {
       this.account.status = 1;
     } else {
@@ -133,20 +128,19 @@ export class AccountComponent implements OnInit {
     }
   }
 
-  // update() {
-  //   this.addValueAccount();
-  //   this.accountService.updateAccount(this.account).subscribe(
-  //     (res) => {
-  //       this.toastr.success('Cập nhật tài khoản thành công!');
-  //       this.router.navigate(['/admin/account'])
-  //     },
-  //     (error) => {
-  //       if (error.error.message === 'Cập nhật thất bại') {
-  //         this.toastr.error(error.error.message);
-  //     }
-  //   }
-  //   );
-  // }
+  update() {
+    this.addValueAccount();
+    this.accountService.updateAccount(this.account).subscribe(
+      (res) => {
+        this.toastr.success('Cập nhật tài khoản thành công!');
+      },
+      (error) => {
+        if (error.error.message === 'Cập nhật thất bại') {
+          this.toastr.error(error.error.message);
+        }
+      }
+    );
+  }
 
   deleteAccount(id: any) {
     this.accountService.deleteAccount(id).subscribe((res: any) =>

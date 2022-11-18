@@ -1,155 +1,158 @@
-<body>
+<!-- <body>
   <form [formGroup]="formLogin" class="login-form">
-    <!-- Email input -->
     <div class="form-outline mb-4">
-      <input type="email" id="form2Example1" class="form-control" />
       <label class="form-label" for="form2Example1">Email address</label>
+      <input type="email" id="form2Example1" class="form-control" />
+
     </div>
 
-    <!-- Password input -->
     <div class="form-outline mb-4">
-      <input type="password" id="form2Example2" class="form-control" />
       <label class="form-label" for="form2Example2">Password</label>
+      <input type="password" id="form2Example2" class="form-control" />
+
     </div>
 
-    <!-- 2 column grid layout for inline styling -->
     <div class="row mb-4">
       <div class="col d-flex justify-content-center">
-        <!-- Checkbox -->
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-          <label class="form-check-label" for="form2Example31"> Remember me </label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="form2Example31"
+            checked
+          />
+          <label class="form-check-label" for="form2Example31">
+            Remember me
+          </label>
         </div>
       </div>
 
       <div class="col">
-        <!-- Simple link -->
         <a (click)="showModalForgot()">Forgot password?</a>
       </div>
     </div>
 
-    <!-- Submit button -->
-    <button type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
+    <button type="button" class="btn btn-primary btn-block mb-4">
+      Sign in
+    </button>
 
-    <!-- Register buttons -->
     <div class="text-center">
-      <p>Not a member? <a  (click)="showModal()">Register</a></p>
+      <p>Not a member? <a (click)="showModal()">Register</a></p>
     </div>
   </form>
 
   <nz-modal
-        [(nzVisible)]="isVisible"
-        (nzOnCancel)="handleCancel()"
-        (nzOnOk)="handleOk()"
-      >
-        <ng-container *nzModalContent>
-          <form nz-form [formGroup]="formRegister">
-            <nz-form-item>
-              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
-                >Email</nz-form-label
-              >
-              <nz-form-control
-                [nzSm]="14"
-                [nzXs]="24"
-                nzErrorTip="Bạn phải nhập đúng định dạng email!"
-              >
-                <input
-                  nz-input
-                  type="text"
-                  formControlName="email"
-                  id="email"
-                />
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password"
-                >Mật khẩu</nz-form-label
-              >
-              <nz-form-control
-                [nzSm]="14"
-                [nzXs]="24"
-                nzErrorTip="Mật khẩu không được để trống!"
-              >
-                <input
-                  nz-input
-                  type="password"
-                  formControlName="password"
-                  id="password"
-                />
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber"
-                >Số ĐT</nz-form-label
-              >
-              <nz-form-control
-                [nzSm]="14"
-                [nzXs]="24"
-                nzErrorTip="SDT không được để trống!"
-              >
-                <input
-                  nz-input
-                  type="text"
-                  formControlName="phoneNumber"
-                  id="phoneNumber"
-                />
-              </nz-form-control>
-            </nz-form-item>
-          </form>
-        </ng-container>
-      </nz-modal>
+    [(nzVisible)]="isVisible"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk()"
+  >
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="formRegister">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
+            >Email</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Bạn phải nhập đúng định dạng email!"
+          >
+            <input nz-input type="text" formControlName="email" id="email" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password"
+            >Mật khẩu</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Mật khẩu không được để trống!"
+          >
+            <input
+              nz-input
+              type="password"
+              formControlName="password"
+              id="password"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber"
+            >Số ĐT</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="SDT không được để trống!"
+          >
+            <input
+              nz-input
+              type="text"
+              formControlName="phoneNumber"
+              id="phoneNumber"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
 
+  <nz-modal
+    [(nzVisible)]="isforgot"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk()"
+  >
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="formForgot">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
+            >Email</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Bạn phải nhập đúng định dạng email!"
+          >
+            <input nz-input type="text" formControlName="email" id="email" />
+          </nz-form-control>
+        </nz-form-item>
+        <button
+          class="btnGetOTP mb-5"
+          (click)="sendOtp()"
+          nzSize="small"
+          nz-button
+          nzType="primary"
+        >
+          Lấy mã OTP
+        </button>
 
-      <nz-modal
-      [(nzVisible)]="isforgot"
-      (nzOnCancel)="handleCancel()"
-      (nzOnOk)="handleOk()"
-    >
-      <ng-container *nzModalContent>
-        <form nz-form [formGroup]="formForgot">
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
-              >Email</nz-form-label
-            >
-            <nz-form-control
-              [nzSm]="14"
-              [nzXs]="24"
-              nzErrorTip="Bạn phải nhập đúng định dạng email!"
-            >
-              <input
-                nz-input
-                type="text"
-                formControlName="email"
-                id="email"
-              />
-            </nz-form-control>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="otp"
+            >OTP</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Mật khẩu không được để trống!"
+          >
+            <input nz-input type="text" formControlName="otp" id="otp" />
+          </nz-form-control>
+        </nz-form-item>
+        <button
+          class="btnConfirmOTP mb-5"
+          nzSize="small"
+          nz-button
+          nzType="primary"
+        >
+          Xác nhận OTP
+        </button>
+      </form>
+    </ng-container>
+  </nz-modal> -->
 
-          </nz-form-item>
-          <button class="btnGetOTP mb-5" (click)="sendOtp()" nzSize="small" nz-button nzType="primary">Lấy mã OTP</button>
-
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="otp"
-              >OTP</nz-form-label
-            >
-            <nz-form-control
-              [nzSm]="14"
-              [nzXs]="24"
-              nzErrorTip="Mật khẩu không được để trống!"
-            >
-              <input
-                nz-input
-                type="text"
-                formControlName="otp"
-                id="otp"
-              />
-            </nz-form-control>
-          </nz-form-item>
-          <button class="btnConfirmOTP mb-5" nzSize="small" nz-button nzType="primary">Xác nhận OTP</button>
-        </form>
-      </ng-container>
-    </nz-modal>
-
-    <!-- <nz-modal
+<!-- <nz-modal
       [(nzVisible)]="isChangePassWord"
       (nzOnCancel)="handleCancel()"
       (nzOnOk)="handleOk()"
@@ -196,5 +199,73 @@
         </form>
       </ng-container>
     </nz-modal> -->
+<!-- </body> -->
 
-</body>
+<div class="container" id="container">
+  <div class="form-container sign-in-container">
+    <form [formGroup]="formLogin">
+      <h1>Đăng nhập</h1>
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="Email" />
+      <label>Password</label>
+      <input type="password" formControlName="password" placeholder="Password" />
+      <div class="row">
+        <div class="col-2">
+          <input type="checkbox"  aria-label="RememberMe?" />
+        </div>
+        <div class="col-10"><a href="">Remember Me?</a></div>
+      </div>
+      <a class="mt-4">Quên mật khẩu?</a>
+      <button (click)="onSubmit()">Đăng nhập</button>
+    </form>
+  </div>
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-right">
+        <h1>Xin chào bạn!</h1>
+        <p>
+          Nếu bạn chưa có tài khoản, hãy đăng ký để trải nghiệm cùng MobileGenz!
+        </p>
+        <button
+          class="btn btn-lg ghost btn-outline-primary"
+          (click)="open(content)"
+          id="regis"
+        >
+          Đăng ký
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formRegister">
+      <label>Email</label>
+      <input type="text" formControlName="email" class="form-control" />
+
+      <label>Mật khẩu</label>
+      <input type="password" formControlName="password" class="form-control" />
+
+      <label>Số ĐT</label>
+      <input type="text" formControlName="phoneNumber" class="form-control" />
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Save
+    </button>
+  </div>
+</ng-template>
