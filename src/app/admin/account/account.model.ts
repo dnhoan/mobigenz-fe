@@ -3,7 +3,7 @@ export interface Account{
   email?: string;
   password?: string;
   phoneNumber?: number;
-  roleid?: Role;
+  roles?: Role[];
   status?: number;
 }
 
@@ -12,7 +12,7 @@ export interface AccountDTO{
   email?: string;
   password?: string;
   phoneNumber?: number;
-  roleid?: Role;
+  roles?: Role[];
   status?: number;
 }
 
@@ -22,4 +22,10 @@ export interface Role{
   ctime?: Date;
   mtime?: Date;
   note?: string;
+}
+
+export interface Permission{
+  id?: number;
+  account_id?: Account;
+  role_id?: Role;
 }
