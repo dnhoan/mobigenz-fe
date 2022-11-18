@@ -17,8 +17,9 @@ import { UpdateCustomerComponent } from './customer/update-customer/update-custo
 import { AccountComponent } from './account/account.component';
 import { FilterOptionValuePipe } from './products/product-detail/pipes/filter-option-value.pipe';
 import { GetLengthArrayPipe } from './products/product-detail/pipes/get-length-array.pipe';
+import { QuillModule } from 'ngx-quill';
 import { FilterSpecificationPipe } from './products/product-detail/pipes/filter-specification.pipe';
-
+import { ImeiComponent } from './products/imei/imei.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -31,6 +32,7 @@ import { FilterSpecificationPipe } from './products/product-detail/pipes/filter-
     FilterOptionValuePipe,
     FilterSpecificationPipe,
     GetLengthArrayPipe,
+    ImeiComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +41,7 @@ import { FilterSpecificationPipe } from './products/product-detail/pipes/filter-
     ReactiveFormsModule,
     NzGridModule,
     NzSpaceModule,
+    QuillModule.forRoot(),
   ],
   exports: [FilterOptionValuePipe, FilterSpecificationPipe, GetLengthArrayPipe],
 })

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import {
   addEntities,
   deleteEntities,
@@ -8,9 +8,12 @@ import {
   updateEntities,
 } from '@ngneat/elf-entities';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
-import { Observable } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { expand, Observable } from 'rxjs';
+import { ProductDetailDto } from 'src/app/DTOs/ProductDetailDto';
 import { ProductDto } from 'src/app/DTOs/ProductDto';
 import { environment } from 'src/environments/environment';
+import { ImeiComponent } from './imei/imei.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductsRepository, productsStore } from './products.repository';
 
@@ -25,7 +28,9 @@ export class ProductsComponent implements OnInit {
   constructor(
     private httpClient: HttpClient,
     private productsRepository: ProductsRepository,
-    private drawerService: NzDrawerService
+    private drawerService: NzDrawerService,
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit(): void {
@@ -39,7 +44,6 @@ export class ProductsComponent implements OnInit {
       console.log(this.products);
     });
   }
-
   openDrawer(productId: number | string) {
     // productsStore.update(
     //   addEntities({ id: productId, isOpen: true }, { ref: UIEntitiesRef })
@@ -66,5 +70,30 @@ export class ProductsComponent implements OnInit {
       console.log('destroy');
       // productsStore.update(deleteEntities(productId, { ref: UIEntitiesRef }));
     });
+  }
+
+  openModalImei(
+    productDetail: ProductDetailDto,
+    productId?: number | string,
+    i_product_detail?: number
+  ) {
+    const modal = this.modal.create({
+      nzTitle: 'Imei/Serial',
+      nzContent: ImeiComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzComponentParams: {
+        productDetail: { ...productDetail },
+        productId,
+        i_product_detail,
+      },
+      nzOnOk: () => new Promise((resolve) => setTimeout(resolve, 1000)),
+      nzFooter: [],
+    });
+    const instance = modal.getContentComponent();
+    modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));
+    // Return a result when closed
+    modal.afterClose.subscribe((result) =>
+      console.log('[afterClose] The result is:', result)
+    );
   }
 }

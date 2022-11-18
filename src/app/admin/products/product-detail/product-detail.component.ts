@@ -39,11 +39,24 @@ export class ProductDetailComponent implements OnInit {
   productLines: ProductLineDto[] = [];
   specificationGroups: SpecificationGroupDto[] = [];
   baseUrl = `${environment.baseUrl}/admin`;
+  modulesDescription = {};
   constructor(
     private productDetailService: ProductDetailService,
     private httpClient: HttpClient,
     private storage: AngularFireStorage
-  ) {}
+  ) {
+    this.modulesDescription = {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+        ['blockquote'],
+        [{ header: 1 }, { header: 2 }], // custom button values
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ align: [] }],
+      ],
+    };
+  }
 
   ngOnInit() {
     this.productDetailService.getManufacturers().subscribe((manufacturers) => {
@@ -282,7 +295,7 @@ export class ProductDetailComponent implements OnInit {
     //   this.product.optionDtos.push(optionProduct.currentOption);
     // });
     // delete this.product['id'];
-    console.log(this.product);
+    console.log(this.product.description);
 
     this.productDetailService
       .createProduct(this.product)
@@ -308,11 +321,48 @@ export class ProductDetailComponent implements OnInit {
       // create manufacture
     }
   }
+  editorInstance: any;
+  imageHandler(event: any) {
+    this.editorInstance = event;
+    let toolbar = event.getModule('toolbar');
+    toolbar.addHandler('image', () => {
+      let data = this.editorInstance;
+      if (this.editorInstance) {
+        let range = this.editorInstance.getSelection();
+        if (range) {
+          let input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('accept', 'image/*');
+          input.addEventListener('change', () => {
+            const file = input.files![0];
+            let n = Date.now();
+            const filePath = `product_images/${n}`;
+            const fileRef = this.storage.ref(filePath);
+            const task = this.storage.upload(`product_images/${n}`, file);
+            task
+              .snapshotChanges()
+              .pipe(
+                finalize(() => {
+                  fileRef.getDownloadURL().subscribe((url: any) => {
+                    if (url) {
+                      data.insertEmbed(range.index, 'image', url);
+                    }
+                  });
+                })
+              )
+              .subscribe();
+          });
+          input.click();
+        }
+      }
+    });
+  }
   fakeProduct: ProductDto = {
     id: '',
     productName: '',
     description: '',
     images: [],
+    detail: '',
     manufacturerDto: {
       id: undefined,
       productLineDtos: [],
@@ -324,6 +374,7 @@ export class ProductDetailComponent implements OnInit {
     specificationGroupDtos: [],
     note: '',
   };
+
   ngOnDestroy() {
     if (this.productId) this.productUI$.unsubscribe();
   }

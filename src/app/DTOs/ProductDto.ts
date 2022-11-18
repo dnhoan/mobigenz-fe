@@ -11,6 +11,7 @@ export interface ProductDto {
   productName: string;
   description: string;
   image?: string;
+  detail: string;
   images: string[];
   manufacturerDto?: ManufacturerDto;
   productLineDto?: ProductLineDto;
@@ -18,6 +19,7 @@ export interface ProductDto {
   optionDtos?: OptionDto[];
   specificationGroupDtos?: SpecificationGroupDto[];
   note?: string;
+  expand?: boolean;
   ctime?: string;
   mtime?: string;
   status?: number;

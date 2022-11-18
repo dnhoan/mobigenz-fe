@@ -4,6 +4,7 @@
 <nz-table #basicTable [nzData]="products">
   <thead>
     <tr>
+      <th></th>
       <th>Anh</th>
       <th>Name</th>
       <th>Manufacturer</th>
@@ -12,22 +13,64 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let product of basicTable.data">
-      <td>
-        <img
-          nz-image
-          width="50px"
-          height="50px"
-          [nzSrc]="product.images[0]"
-          alt=""
-        />
-      </td>
-      <td>
-        <a (click)="openDrawer(product.id)">{{ product.productName }}</a>
-      </td>
-      <td>{{ product.manufacturerDto!.manufacturerName }}</td>
-      <td>{{ product.productLineDto!.productLineName }}</td>
-      <td>{{ product.ctime | date: "hh:mm dd/MM/yyyy" }}</td>
-    </tr>
+    <ng-template ngFor let-product [ngForOf]="basicTable.data">
+      <tr>
+        <td [(nzExpand)]="product.expand"></td>
+        <td>
+          <img
+            nz-image
+            width="50px"
+            height="50px"
+            [nzSrc]="product.images[0]"
+            alt=""
+          />
+        </td>
+        <td>
+          <a (click)="openDrawer(product.id)">{{ product.productName }}</a>
+        </td>
+        <td>{{ product.manufacturerDto!.manufacturerName }}</td>
+        <td>{{ product.productLineDto!.productLineName }}</td>
+        <td>{{ product.ctime | date: "hh:mm dd/MM/yyyy" }}</td>
+      </tr>
+      <tr [nzExpand]="product.expand!">
+        <nz-table
+          #innerTable
+          [nzData]="product.productDetailDtos"
+          nzSize="middle"
+          [nzShowPagination]="false"
+        >
+          <thead>
+            <tr>
+              <!-- <th>Ảnh</th> -->
+              <th>Phân loại</th>
+              <th>Tồn kho</th>
+              <th>Giá nhập</th>
+              <th>Giá bán</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let productDetail of innerTable.data; let i = index">
+              <!-- <td>
+                <img
+                  [src]="productDetail.image"
+                  width="100"
+                  [alt]="productDetail.sku"
+                />
+              </td> -->
+              <td>{{ productDetail.sku }}</td>
+              <td>{{ productDetail.stock }}</td>
+              <td>{{ productDetail.priceSell }}</td>
+              <td>{{ productDetail.priceOrigin }}</td>
+              <td>
+                <a (click)="openModalImei(productDetail, product.id, i)"
+                  >Nhập hàng</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </tr></ng-template
+    >
   </tbody>
 </nz-table>
