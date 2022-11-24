@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   formForgot!: FormGroup;
   account: Account = {};
   isVisible = false;
-  isChangePassWord = false
+  isChangePassWord = false;
   isRegister = false;
   radioValue = 'A';
   isSubmitted = false;
@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
   isforgot = false;
   closeResult = '';
   validateForm!: UntypedFormGroup;
-
 
   constructor(
     private fb: FormBuilder,
@@ -55,33 +54,33 @@ export class LoginComponent implements OnInit {
     this.initForm();
   }
 
+  open(content: any) {
+    this.modalService
+      .open(content, { ariaLabelledBy: 'modal-basic-title' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+  }
 
-	open(content: any) {
-		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-			(result) => {
-				this.closeResult = `Closed with: ${result}`;
-			},
-			(reason) => {
-				this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-			},
-		);
-	}
-
-	private getDismissReason(reason: any): string {
-		if (reason === ModalDismissReasons.ESC) {
-			return 'by pressing ESC';
-		} else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-			return 'by clicking on a backdrop';
-		} else {
-			return `with: ${reason}`;
-		}
-	}
-
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
   initForm() {
     this.formLogin = this.fb.group({
-      email: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      email: ['levantrang4302@gmail.com', [Validators.required]],
+      password: ['Admin@123', [Validators.required]],
       remember: [false, [Validators.required]],
     });
     this.formRegister = this.fb.group({
@@ -97,7 +96,6 @@ export class LoginComponent implements OnInit {
     this.isforgot = true;
   }
 
-
   // submitForm(): void {
   //   if (this.formLogin.valid) {
   //     console.log('submit', this.formLogin.value);
@@ -110,7 +108,6 @@ export class LoginComponent implements OnInit {
   //     });
   //   }
   // }
-
 
   registerAccount() {
     this.addValueAccount();
@@ -159,25 +156,30 @@ export class LoginComponent implements OnInit {
           // this.getByUserName();
           this.infoUser.getUser();
         });
-        if (localStorage.getItem('auth-token') != null && (role.includes('Admin'))) {
+        if (
+          localStorage.getItem('auth-token') != null &&
+          role.includes('Admin')
+        ) {
           this.router.navigate(['/admin']);
-          this.toastr.success("Đăng nhập thành công!")
+          this.toastr.success('Đăng nhập thành công!');
         }
-        if(localStorage.getItem('auth-token') != null && (role.includes('User'))){
+        if (
+          localStorage.getItem('auth-token') != null &&
+          role.includes('User')
+        ) {
           this.router.navigate(['/login']);
-          this.toastr.error("Bạn không có quyền đăng nhập vào trang này!")
+          this.toastr.error('Bạn không có quyền đăng nhập vào trang này!');
         }
 
         // if (localStorage.getItem('auth-token') && (role.includes('User'))) {
 
         // }
-
       });
     }
     if (localStorage.getItem('auth-token') == null) {
       this.isLoggedIn = false;
       this.router.navigate(['/login']);
-      this.toastr.error("Tài khoản hoặc mật khẩu không chính xác!")
+      this.toastr.error('Tài khoản hoặc mật khẩu không chính xác!');
       return;
     }
   }
@@ -186,19 +188,14 @@ export class LoginComponent implements OnInit {
     this.isSubmitted = true;
     if (this.formLogin.value) {
       this.loginService.login(this.formLogin.value).subscribe((data) => {
-          console.log(
-            this.formLogin.value.email,
-            this.formLogin.value.password
-          );
+        console.log(this.formLogin.value.email, this.formLogin.value.password);
 
-          this.isLoggedIn = true;
-          // this.roles = this.tokenService.getUser().roles;
-          this.router.navigate(['/admin']);
-        });
+        this.isLoggedIn = true;
+        // this.roles = this.tokenService.getUser().roles;
+        this.router.navigate(['/admin']);
+      });
     }
   }
-
-
 
   addValueAccount() {
     this.account.email = this.formRegister.value.email;
@@ -221,5 +218,4 @@ export class LoginComponent implements OnInit {
   //       localStorage.setItem('id-user', res.id);
   //     });
   // }
-
 }

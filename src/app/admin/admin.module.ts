@@ -15,11 +15,18 @@ import { ProductDetailComponent } from './products/product-detail/product-detail
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { UpdateCustomerComponent } from './customer/update-customer/update-customer.component';
 import { AccountComponent } from './account/account.component';
-import { FilterOptionValuePipe } from './products/product-detail/pipes/filter-option-value.pipe';
-import { GetLengthArrayPipe } from './products/product-detail/pipes/get-length-array.pipe';
+import { FilterOptionValuePipe } from './pipes/filter-option-value.pipe';
+import { GetLengthArrayPipe } from './pipes/get-length-array.pipe';
 import { QuillModule } from 'ngx-quill';
-import { FilterSpecificationPipe } from './products/product-detail/pipes/filter-specification.pipe';
+import { FilterSpecificationPipe } from './pipes/filter-specification.pipe';
 import { ImeiComponent } from './products/imei/imei.component';
+import { OrdersComponent } from './orders/orders.component';
+import { CreateOrderComponent } from './create-order/create-order.component';
+import { OrderStatusPipe } from './pipes/order-status.pipe';
+import { SelectImeiComponent } from './create-order/select-imei/select-imei.component';
+import { DeliveryInfoComponent } from './create-order/delivery-info/delivery-info.component';
+import { CustomerInfoComponent } from './create-order/customer-info/customer-info.component';
+import { AddressComponent } from './create-order/address/address.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -33,6 +40,13 @@ import { ImeiComponent } from './products/imei/imei.component';
     FilterSpecificationPipe,
     GetLengthArrayPipe,
     ImeiComponent,
+    OrderStatusPipe,
+    OrdersComponent,
+    CreateOrderComponent,
+    SelectImeiComponent,
+    DeliveryInfoComponent,
+    CustomerInfoComponent,
+    AddressComponent,
   ],
   imports: [
     CommonModule,

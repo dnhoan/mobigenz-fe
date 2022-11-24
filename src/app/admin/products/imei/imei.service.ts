@@ -29,6 +29,21 @@ export class ImeiService {
         catchError(this.handleError<any>('Error get imei', []))
       );
   }
+  getImeisInStockByProductDetailId(
+    productDetailId: number
+  ): Observable<ImeiDto[]> {
+    return this.httpClient
+      .get(`${this.baseUrl}/imeisInStock?product_detail_id=${productDetailId}`)
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 200) {
+            return res.data.imeis;
+          }
+          return [];
+        }),
+        catchError(this.handleError<any>('Error get imei', []))
+      );
+  }
   save(imeiDto: ImeiDto): Observable<ImeiDto[]> {
     return this.httpClient.post(`${this.baseUrl}/imei`, imeiDto).pipe(
       map((res: any) => {
@@ -41,6 +56,27 @@ export class ImeiService {
       catchError(this.handleError<any>('Error create imei', []))
     );
   }
+  addImeisToOrderDetail(
+    order_detail_id: number,
+    product_detail_id: number,
+    imeiDtos: ImeiDto[]
+  ): Observable<ImeiDto[]> {
+    return this.httpClient
+      .post(
+        `${this.baseUrl}/addImeisToOrderDetail/${order_detail_id}/${product_detail_id}`,
+        imeiDtos
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 201) {
+            this.message.success('Success');
+            return res.data.imeis;
+          }
+          return [];
+        }),
+        catchError(this.handleError<any>('Error add imei', []))
+      );
+  }
   deleteImei(idImei?: number): Observable<boolean> {
     return this.httpClient.delete(`${this.baseUrl}/imei/${idImei}`).pipe(
       map((res: any) => {
@@ -52,6 +88,20 @@ export class ImeiService {
       }),
       catchError(this.handleError<any>('Error delete imei', []))
     );
+  }
+  deleteOrderDetailToImei(idImei: number): Observable<boolean> {
+    return this.httpClient
+      .delete(`${this.baseUrl}/deleteOrderDetailToImei/${idImei}`)
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 200) {
+            this.message.success('Success');
+            return true;
+          }
+          return false;
+        }),
+        catchError(this.handleError<any>('Error Delete Imei', []))
+      );
   }
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

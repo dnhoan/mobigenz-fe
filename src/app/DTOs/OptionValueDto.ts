@@ -6,4 +6,5 @@ export interface OptionValueDto {
   ctime?: string;
   mtime?: string;
   status?: number;
+  selected: boolean;
 }

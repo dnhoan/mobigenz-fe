@@ -5,6 +5,8 @@ import { AdminComponent } from './admin.component';
 import { ProductsComponent } from './products/products.component';
 import { AccountComponent } from './account/account.component';
 import { LoginComponent } from '../login/login.component';
+import { CreateOrderComponent } from './create-order/create-order.component';
+import { OrdersComponent } from './orders/orders.component';
 
 const routes: Routes = [
   {
@@ -22,6 +24,18 @@ const routes: Routes = [
       {
         path: 'account',
         component: AccountComponent,
+      },
+      {
+        path: 'createOrder',
+        component: CreateOrderComponent,
+      },
+      {
+        path: 'order/:id',
+        component: CreateOrderComponent,
+      },
+      {
+        path: 'orders',
+        component: OrdersComponent,
       },
       // {
       //   path: 'customer/addCustomer',
