@@ -16,6 +16,7 @@ import { environment } from 'src/environments/environment';
 import { ImeiComponent } from './imei/imei.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductsRepository, productsStore } from './products.repository';
+import { ProductsService } from './products.service';
 
 @Component({
   selector: 'app-products',
@@ -30,15 +31,14 @@ export class ProductsComponent implements OnInit {
     private productsRepository: ProductsRepository,
     private drawerService: NzDrawerService,
     private modal: NzModalService,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private productService: ProductsService
   ) {}
 
   ngOnInit(): void {
-    this.httpClient
-      .get(`${environment.baseUrl}/test/products`)
-      .subscribe((res: any) => {
-        this.productsRepository.setProducts(res.data.products);
-      });
+    this.productService.getProducts().subscribe((res: any) => {
+      this.productsRepository.setProducts(res);
+    });
     productsStore.pipe(selectAllEntities()).subscribe((products: any) => {
       this.products = products;
       console.log(this.products);
