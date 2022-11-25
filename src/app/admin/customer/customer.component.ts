@@ -124,10 +124,7 @@ export class CustomerComponent implements OnInit {
 
   initFormSearch() {
     this.formSearch! = this.fb.group({
-      customerName: '',
-      phoneNumber: '',
-      email: '',
-      cccd: '',
+      valueSearch: '',
     });
   }
 
