@@ -28,6 +28,11 @@ export class SessionService {
     return JSON.parse(value!);
   }
 
+  getItemUser(key: string): any {
+    const value = localStorage.getItem(key);
+    return value;
+  }
+
   /**
    * remove session storage item
    *

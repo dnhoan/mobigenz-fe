@@ -15,7 +15,9 @@ export class CustomerComponent implements OnInit {
   radioValue = 'A';
   customer: Customer = {};
   datas: Customer[] = [];
-  page: object = {};
+  offset = 0;
+  limit = 3;
+  Page: any;
   customerSearch: CustomerDTO = {};
   customerDTO: CustomerDTO = {};
   sortBy = 'customerName';
@@ -30,7 +32,7 @@ export class CustomerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAllCustomer();
+    this.pagination(this.offset)
     this.initFormSearch();
   }
 
@@ -86,7 +88,7 @@ export class CustomerComponent implements OnInit {
   }
 
   getAllCustomer() {
-    this.customerService.getAll().subscribe((res: any) => {
+    this.customerService.getAll(this.offset, this.limit).subscribe((res: any) => {
       this.datas = res.data.customers.items;
     });
   }
@@ -177,22 +179,29 @@ export class CustomerComponent implements OnInit {
     );
   }
 
-  // delete(id: any) {
-  //   console.log(id);
-
-  // }
 
   pagination(page: any) {
-    if (page < 0) {
-      page = 0;
-    }
-    this.indexPage = page;
-    this.customerService
-      .getPageTransfer(this.indexPage, this.sortBy, this.descAsc)
-      .subscribe((res) => {
-        this.datas = res.object.content;
-        this.page = res.object;
-        console.log(this.page);
-      });
+    if (page < 0) page = 0;
+    this.offset = page
+    this.customerService.getAll(this.offset, this.limit)
+      .subscribe(res => {
+        this.datas = res.data.customers.items;
+        console.log(this.datas);
+
+        this.Page = res.data.customers;
+      },)
+
+  }
+
+  pageItem(pageItems: any){
+    this.limit =  pageItems;
+    this.pagination(this.offset);
+  }
+
+
+  preNextPage(selector: string) {
+    if (selector == 'pre') --this.offset
+    if (selector == 'next') ++this.offset;
+    this.pagination(this.offset);
   }
 }

@@ -1,1 +1,48 @@
-<router-outlet></router-outlet>
+<nz-layout>
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+    <div class="logo"></div>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li nz-submenu nzTitle="User" nzIcon="user">
+        <ul>
+          <li nz-menu-item><a routerLink="products">Quản lý sản phâm</a></li>
+          <li nz-menu-item><a routerLink="customer">Quản lý khách hàng</a></li>
+          <li nz-menu-item><a routerLink="account">Quản lý tài khoản</a></li>
+          <li nz-menu-item>Alex</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="Team" nzIcon="team">
+        <ul>
+          <li nz-menu-item>Team 1</li>
+          <li nz-menu-item>Team 2</li>
+        </ul>
+      </li>
+      <li nz-menu-item>
+        <span nz-icon nzType="file"></span>
+        <span>File</span>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <span
+        class="trigger"
+        nz-icon
+        [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+        (click)="isCollapsed = !isCollapsed"
+      ></span>
+
+      <a  style="float: right;" nz-dropdown [nzDropdownMenu]="menu"><span nz-icon nzType="user" nzTheme="outline"></span><a href="">Hello Admins</a></a>
+
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item>Thông tin cá nhân</li>
+          <li nz-menu-item>Đăng xuất</li>
+        </ul>
+      </nz-dropdown-menu>
+    </nz-header>
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
+    <nz-footer></nz-footer>
+  </nz-layout>
+</nz-layout>

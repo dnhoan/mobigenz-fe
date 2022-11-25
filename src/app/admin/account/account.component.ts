@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from './account.service';
 import { Account, AccountDTO, Permission, Role } from './account.model';
+import { SearchDTO } from 'src/app/DTOs/searchDTO';
 
 @Component({
   selector: 'app-account',
@@ -16,15 +17,17 @@ export class AccountComponent implements OnInit {
   radioValue = 'A';
   account: Account = {};
   datas: AccountDTO[] = [];
-  page: object = {};
   accountSearch: AccountDTO = {};
   accountDTO: AccountDTO = {};
   sortBy = 'email';
   descAsc = 'desc';
   idCustomer: any;
-  indexPage = 0;
+  offset = 0;
+  limit = 1;
+  Page: any;
   isVisible = false;
   action = true;
+  searchDTO: SearchDTO ={};
   constructor(
     private readonly router: Router,
     private accountService: AccountService,
@@ -33,8 +36,9 @@ export class AccountComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAllAccount();
+    // this.getAllAccount();
     this.initFormSearch();
+    this.pagination(this.offset);
   }
 
   showModal(): void {
@@ -82,15 +86,22 @@ export class AccountComponent implements OnInit {
   }
 
   getAllAccount() {
-    this.accountService.getAll().subscribe((res: any) => {
+    this.accountService.getAll(this.offset, this.limit).subscribe((res: any) => {
+      console.log(res);
+
       this.datas = res.data.accounts.items;
     });
   }
 
   initFormSearch() {
     this.formSearch! = this.fb.group({
-      emailSearch: ['', Validators.email],
+      valueSearch: [''],
     });
+  }
+
+  FillValueSearch() {
+    const formSearchValue = this.formSearch.value;
+    this.searchDTO.valueSearch = formSearchValue.valueSearch;
   }
 
   fillValueForm() {
@@ -151,4 +162,46 @@ export class AccountComponent implements OnInit {
       })
     );
   }
+
+
+  pagination(page: any) {
+    if (page < 0) page = 0;
+    this.offset = page
+    this.accountService.getAll(this.offset, this.limit)
+      .subscribe(res => {
+        this.datas = res.data.accounts.items;
+        this.Page = res.data.accounts;
+      },)
+
+  }
+
+  pageItem(pageItems: any){
+    this.limit =  pageItems;
+    this.pagination(this.offset);
+  }
+
+
+  preNextPage(selector: string) {
+    if (selector == 'pre') --this.offset
+    if (selector == 'next') ++this.offset;
+    this.pagination(this.offset);
+  }
+
+  searchWithPage(page: any) {
+    if (page < 0) page = 0;
+    this.offset = page
+    this.accountService.getPageAccount(this.offset, this.limit, this.searchDTO)
+      .subscribe(res => {
+        this.datas = res.data.accounts.content;
+        this.Page = res.data.accounts;
+      },)
+
+  }
+
+  timkiem(){
+    this.FillValueSearch();
+    this.searchWithPage(0);
+    this.initFormSearch();
+  }
+
 }
