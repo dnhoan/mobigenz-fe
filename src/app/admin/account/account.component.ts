@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from './account.service';
 import { Account, AccountDTO, Permission, Role } from './account.model';
-import { SearchDTO } from 'src/app/DTOs/searchDTO';
+import { SearchDTO } from 'src/app/DTOs/SearchDTO';
 
 @Component({
   selector: 'app-account',
