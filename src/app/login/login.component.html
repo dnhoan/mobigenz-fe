@@ -208,15 +208,18 @@
       <label>Email</label>
       <input type="email" formControlName="email" placeholder="Email" />
       <label>Password</label>
-      <input type="password" formControlName="password" placeholder="Password" />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+      />
       <div class="row">
         <div class="col-2">
-          <input type="checkbox"  aria-label="RememberMe?" />
+          <input type="checkbox" aria-label="RememberMe?" />
         </div>
         <div class="col-10"><a href="">Remember Me?</a></div>
       </div>
-      <a class="mt-4">Quên mật khẩu?</a>
-      <button (click)="onSubmit()">Đăng nhập</button>
+      <button class="mt-3" (click)="onSubmit()">Đăng nhập</button>
     </form>
   </div>
   <div class="overlay-container">
@@ -228,8 +231,7 @@
         </p>
         <button
           class="btn btn-lg ghost btn-outline-primary"
-          (click)="open(content)"
-          id="regis"
+          (click)="showModal()"
         >
           Đăng ký
         </button>
@@ -237,35 +239,97 @@
     </div>
   </div>
 </div>
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
-  </div>
-  <div class="modal-body">
-    <form [formGroup]="formRegister">
-      <label>Email</label>
-      <input type="text" formControlName="email" class="form-control" />
 
-      <label>Mật khẩu</label>
-      <input type="password" formControlName="password" class="form-control" />
+<nz-modal
+    [(nzVisible)]="isVisible"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk()"
+    nzTitle="Đăng ký tài khoản"
+  >
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="formRegister">
 
-      <label>Số ĐT</label>
-      <input type="text" formControlName="phoneNumber" class="form-control" />
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-dark"
-      (click)="modal.close('Save click')"
-    >
-      Save
-    </button>
-  </div>
-</ng-template>
+        <nz-form-item>
+          <nz-form-label class="label" [nzSm]="24"  [nzXs]="24" nzRequired
+            >Email</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="24"
+            [nzXs]="24"
+          >
+            <input nz-input type="text" formControlName="email" id="email" />
+            <small class="col alert text-danger" nz-col nzSpan="24" role="alert"
+          *ngIf="formRegister.get('email')?.errors?.['required'] && formRegister.get('email')?.touched">
+           Email không được để trống!
+      </small>
+          </nz-form-control>
+
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label class="label" [nzSm]="24" [nzXs]="24" nzRequired
+            >Mật khẩu</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="24"
+            [nzXs]="24"
+          >
+            <input
+              nz-input
+              type="password"
+              formControlName="password"
+              id="password"
+            />
+            <small class="col alert text-danger" nz-col nzSpan="24" role="alert"
+             *ngIf="formRegister.get('password')?.errors?.['required'] && formRegister.get('password')?.touched">
+             Mật khẩu không được để trống !
+             </small>
+          </nz-form-control>
+
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label class="label" [nzSm]="24" [nzXs]="24" nzRequired nzFor="repassword"
+            >Xác nhận mật khẩu</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="24"
+            [nzXs]="24"
+            nzErrorTip="Xác nhận mật khẩu không được để trống!"
+          >
+            <input
+              nz-input
+              type="password"
+              formControlName="repassword"
+              id="repassword"
+            />
+            <small class="col alert text-danger" nz-col nzSpan="24" role="alert"
+             *ngIf="formRegister.get('repassword')?.errors?.['required'] && formRegister.get('repassword')?.touched">
+             Xác nhận mật khẩu không được để trống !
+             </small>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label class="label" [nzSm]="24" [nzXs]="24" nzRequired nzFor="phoneNumber"
+            >Số ĐT</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="24"
+            [nzXs]="24"
+            nzErrorTip="SDT không được để trống!"
+          >
+            <input
+              nz-input
+              type="text"
+              formControlName="phoneNumber"
+              id="phoneNumber"
+            />
+            <small class="col alert text-danger" nz-col nzSpan="24" role="alert"
+             *ngIf="formRegister.get('phoneNumber')?.errors?.['required'] && formRegister.get('phoneNumber')?.touched">
+             Số điện thoại không được để trống !
+             </small>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>

@@ -5,6 +5,7 @@ import { AdminComponent } from './admin.component';
 import { ProductsComponent } from './products/products.component';
 import { AccountComponent } from './account/account.component';
 import { LoginComponent } from '../login/login.component';
+import { AdminGuard } from '../guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -13,14 +14,17 @@ const routes: Routes = [
     children: [
       {
         path: 'products',
+        canActivate: [AdminGuard],
         component: ProductsComponent,
       },
       {
         path: 'customer',
+        canActivate: [AdminGuard],
         component: CustomerComponent,
       },
       {
         path: 'account',
+        canActivate: [AdminGuard],
         component: AccountComponent,
       },
       // {

@@ -5,51 +5,60 @@ import { environment } from 'src/environments/environment';
 import { Customer } from './customer.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CustomerService {
   public apiCustomer = `${environment.baseUrl}/`;
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
-  getAll(): Observable<any> {
-    return this.http.get<any>(this.apiCustomer + "customers");
+  
+  getAll(offset: any, limit: any): Observable<any> {
+    return this.http.get<any>(this.apiCustomer + "admin/customers?offset=" + offset + "&limit=" + limit
+    );
   }
 
   addCustomer(customer: Customer): Observable<any> {
-    return this.http.post(this.apiCustomer + "customers", customer);
+    return this.http.post(this.apiCustomer + 'customers', customer);
   }
 
   getCustomerById(id: any): Observable<any> {
-    return this.http.get<any>(this.apiCustomer + "customers/" + id);
+    return this.http.get<any>(this.apiCustomer + 'customers/' + id);
   }
 
-
   getCustomerByAccountId(accountId: any): Observable<any> {
-    return this.http.get<any>(this.apiCustomer + "getCustomerByAccountId?accountId=" + accountId);
+    return this.http.get<any>(
+      this.apiCustomer + 'getCustomerByAccountId?accountId=' + accountId
+    );
   }
 
   getCustomerByCusName(customerName: any): Observable<any> {
-    return this.http.get<any>(this.apiCustomer + "customers/customerName?customerName=" + customerName);
+    return this.http.get<any>(
+      this.apiCustomer + 'customers/customerName?customerName=' + customerName
+    );
   }
 
   getCustomerByEmail(email: any): Observable<any> {
-    return this.http.get<any>(this.apiCustomer + "customers/email?email=" + email);
+    return this.http.get<any>(
+      this.apiCustomer + 'customers/email?email=' + email
+    );
   }
 
-
   public updateCustomer(customer: Customer): Observable<any> {
-    return this.http.put<any>(this.apiCustomer + "customers/", customer);
+    return this.http.put<any>(this.apiCustomer + 'customers/', customer);
   }
 
   public deleteCustomer(id: any): Observable<any> {
-    return this.http.delete<any>(`${this.apiCustomer}` + "customers/" + id);
+    return this.http.delete<any>(`${this.apiCustomer}` + 'customers/' + id);
   }
 
-  public getPageTransfer(indexPage: any,
-    descAsc: any, dto: any): Observable<any> {
-    return this.http.put<any>(this.apiCustomer + '/sortByKey?page=' + indexPage +
-      '&descAsc=' + descAsc, dto);
+  public getPageTransfer(
+    indexPage: any,
+    descAsc: any,
+    dto: any
+  ): Observable<any> {
+    return this.http.put<any>(
+      this.apiCustomer + '/sortByKey?page=' + indexPage + '&descAsc=' + descAsc,
+      dto
+    );
   }
-
 }

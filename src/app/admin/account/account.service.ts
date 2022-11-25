@@ -18,8 +18,8 @@ export class AccountService {
     return this.http.post(this.apiAccount + "register", account);
   }
 
-  getAll(): Observable<any> {
-    return this.http.get<any>(this.apiAccount + "admin/account/getAll");
+  getAll(offset: any, limit: any): Observable<any> {
+    return this.http.get<any>(this.apiAccount + "admin/account/getAll?offset="+ offset + "&limit="+ limit);
   }
 
   addAccount(account: Account): Observable<any> {
@@ -28,7 +28,7 @@ export class AccountService {
 
 
   getAccountById(id: any): Observable<any> {
-    return this.http.get<any>(this.apiAccount + "admin/getAccountById?id=" + id);
+    return this.http.get<any>(this.apiAccount + "admin/account/getAccountById?id=" + id);
   }
 
   getAccountByEmail(email: any): Observable<any> {
@@ -47,10 +47,8 @@ export class AccountService {
     return this.http.post<any>(this.apiAccount + "login", form);
   }
 
-  public getPageTransfer(indexPage: any,
-    descAsc: any, dto: any): Observable<any> {
-    return this.http.put<any>(this.apiAccount + '/sortByKey?page=' + indexPage +
-      '&descAsc=' + descAsc, dto);
+  public getPageAccount(offset: number,limit: number, searchDTO: any): Observable<any> {
+    return this.http.put<any>(this.apiAccount + 'admin/account/findByKey?offset=' + offset + '&limit=' + limit, searchDTO);
   }
 
   sendOTP(email: any): Observable<any> {

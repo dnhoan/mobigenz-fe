@@ -31,7 +31,20 @@
         (click)="isCollapsed = !isCollapsed"
       ></span>
 
-      <a  style="float: right;" nz-dropdown [nzDropdownMenu]="menu"><span nz-icon nzType="user" nzTheme="outline"></span><a href="">Hello Admins</a></a>
+      <a nz-dropdown [nzDropdownMenu]="menu" class="user">
+
+
+
+        <span nz-icon nzType="down"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item>1st menu item</li>
+          <li nz-menu-item>2nd menu item</li>
+          <li nz-menu-item>3rd menu item</li>
+          <li nz-menu-item nzDanger>4th danger item</li>
+        </ul>
+      </nz-dropdown-menu>
 
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu nzSelectable>

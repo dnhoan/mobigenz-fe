@@ -38,17 +38,17 @@ export class AddCustomerComponent implements OnInit {
 
   }
 
-  saveCustomer(customer: Customer) {
-    this.customerService.addCustomer(customer).subscribe((res: any) =>
-      console.log(res),
-    );
-    this.customerService.getAll();
-    this.router.navigate(['/admin/customer']);
-  }
+  // saveCustomer(customer: Customer) {
+  //   this.customerService.addCustomer(customer).subscribe((res: any) =>
+  //     console.log(res),
+  //   );
+  //   this.customerService.getAll();
+  //   this.router.navigate(['/admin/customer']);
+  // }
 
-  getInfoCustomer(id: any) {
-    const url = 'admin/customer/editCustomer/' + id;
-    this.router.navigate([url]);
-  }
+  // getInfoCustomer(id: any) {
+  //   const url = 'admin/customer/editCustomer/' + id;
+  //   this.router.navigate([url]);
+  // }
 
 }

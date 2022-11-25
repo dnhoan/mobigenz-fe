@@ -4,21 +4,20 @@
       <div nz-row>
         <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label [nzSm]="5" [nzXs]="24">Email</nz-form-label>
             <nz-form-control [nzSm]="12" [nzXs]="24">
               <input
                 nz-input
                 type="text"
-                formControlName="emailSearch"
-                id="emailSearch"
+                formControlName="valueSearch"
+                id="valueSearch"
+                placeholder="Nhập email hoặc số điện thoại để tìm?"
               />
             </nz-form-control>
+            <button class="btnSearch" nz-button (click)="timkiem()" [nzType]="'primary'"><span>Tìm kiếm</span></button>
           </nz-form-item>
         </div>
       </div>
-      <!-- <div nz-col nzSpan="19">
-        <button class="mb-3 mt-3" style="float: right;" nz-button [nzType]="'primary'"><span>Tìm kiếm</span></button>
-      </div> -->
+
     </form>
   </div>
 
@@ -144,10 +143,27 @@
   </tbody>
 </nz-table>
 <div class="footer">
-  <nz-pagination
-    [nzPageIndex]="1"
-    [nzTotal]="30"
-    nzShowSizeChanger
-    [nzPageSize]="5"
-  ></nz-pagination>
+  <div>
+    <nav class="mr-3" aria-label="..." *ngIf="Page">
+      <ul class="pagination justify-content-end">
+        <select #selectSize (change)="pageItem(selectSize.value)"  class="page-items" >
+          <option selected >3</option>
+          <option >5</option>
+          <option >8</option>
+        </select>
+        <li class="page-item " [ngClass]="offset == 0?'disabled':''">
+          <a class="page-link" (click)="preNextPage('pre')">Previous</a>
+        </li>
+
+        <li *ngFor="let Page of [].constructor(Page['totalPages']);let i = index"
+            class="page-item" [ngClass]="offset == i?'active':''">
+          <a class="page-link" (click)="pagination(i)">{{i + 1}}</a>
+        </li>
+
+        <li class="page-item" [ngClass]="(Page['totalPages'] - 1) == offset?'disabled':''">
+          <a class="page-link" (click)="preNextPage('next')">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>

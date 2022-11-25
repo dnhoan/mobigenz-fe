@@ -5,35 +5,14 @@
       <div nz-row>
         <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label [nzSm]="5" [nzXs]="24">Tên khách hàng</nz-form-label>
             <nz-form-control [nzSm]="12" [nzXs]="24">
-              <input nz-input type="text" formControlName="customerName" id="customerName" />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-          <nz-form-item>
-            <nz-form-label [nzSm]="3" [nzXs]="24">Số ĐT</nz-form-label>
-            <nz-form-control [nzSm]="12" [nzXs]="24">
-              <input nz-input type="text" formControlName="customerName" id="customerName" />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row>
-        <div nz-col nzSpan="12">
-          <nz-form-item>
-            <nz-form-label [nzSm]="5" [nzXs]="24">CCCD</nz-form-label>
-            <nz-form-control [nzSm]="12" [nzXs]="24">
-              <input nz-input type="text" formControlName="cccd" id="cccd" />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="12">
-          <nz-form-item>
-            <nz-form-label [nzSm]="3" [nzXs]="24">Email</nz-form-label>
-            <nz-form-control [nzSm]="12" [nzXs]="24">
-              <input nz-input type="text" formControlName="email" id="email" />
+              <input
+                nz-input
+                type="text"
+                formControlName="valueSearch"
+                id="valueSearch"
+                placeholder="Nhập email hoặc số điện thoại để tìm?"
+              />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -114,7 +93,7 @@
   </div>
 </div>
 <!--  ---------------------------------  -->
-<nz-table *ngIf="datas">
+<nz-table *ngIf="datas" style="width: 100%;">
   <thead>
     <tr>
       <th>Mã khách hàng</th>
@@ -135,7 +114,7 @@
       <td>{{item.id}}</td>
       <td>{{item.customerName}}</td>
       <td>{{item.phoneNumber}}</td>
-      <td>{{item.birthday}}</td>
+      <td>{{item.birthday | date: 'yyyy/MM/dd' }}</td>
       <td>{{item.email}}</td>
       <td *ngIf="item.gender">Nam</td>
       <td *ngIf="!item.gender">Nữ</td>
@@ -150,6 +129,30 @@
     </tr>
   </tbody>
 </nz-table>
-<div class="footer">
-  <nz-pagination [nzPageIndex]="1" [nzTotal]="30" nzShowSizeChanger [nzPageSize]="5"></nz-pagination>
+<div class="footer" style="
+margin-top: 20px;">
+  <div>
+    <!--              Pagination                -->
+    <nav class="page " aria-label="..." *ngIf="Page">
+      <ul class="pagination justify-content-end">
+          <select #selectSize (change)="pageItem(selectSize.value)"   class="page-items" >
+            <option selected >2</option>
+            <option >5</option>
+            <option >8</option>
+          </select>
+          <li class="page-item " [ngClass]="offset == 0?'disabled':''">
+            <a class="page-link" (click)="preNextPage('pre')">Previous</a>
+          </li>
+
+          <li *ngFor="let Page of [].constructor(Page['totalPages']);let i = index"
+              class="page-item" [ngClass]="offset == i?'active':''">
+            <a class="page-link" (click)="pagination(i)">{{i + 1}}</a>
+          </li>
+
+          <li class="page-item" [ngClass]="(Page['totalPages'] - 1) == offset?'disabled':''">
+            <a class="page-link" (click)="preNextPage('next')">Next</a>
+          </li>
+      </ul>
+    </nav>
+  </div>
 </div>

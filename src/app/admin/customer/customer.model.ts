@@ -4,7 +4,7 @@ export interface Customer {
   id?: number;
   customerName?: string;
   phoneNumber?: string;
-  birthday?: String;
+  birthday?: Date;
   image?: string;
   gender?: number;
   email?: string;
@@ -19,7 +19,7 @@ export interface Customer {
 export interface CustomerDTO {
   customerName?: string;
   phoneNumber?: string;
-  birthday?: string;
+  birthday?: Date;
   gender?: number;
   email?: string;
   customerType?: number;
