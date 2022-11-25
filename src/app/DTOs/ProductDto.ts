@@ -1,5 +1,6 @@
 import { ManufacturerDto } from './ManufacturerDto';
 import { OptionDto } from './OptionDto';
+import { OptionValueDto } from './OptionValueDto';
 import { ProductDetailDto } from './ProductDetailDto';
 import { ProductLineDto } from './ProductLineDto';
 import { ProductSpecificationGroupDto } from './ProductSpecificationGroupDto';

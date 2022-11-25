@@ -17,6 +17,7 @@ export interface Customer {
 }
 
 export interface CustomerDTO {
+  id?: number;
   customerName?: string;
   phoneNumber?: string;
   birthday?: Date;

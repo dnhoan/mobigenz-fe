@@ -14,7 +14,7 @@ export class AppComponent {
   // fb!: string;
   // downloadURL!: Observable<string>;
   constructor(private storage: AngularFireStorage) {}
-
+  isCollapsed = false;
   // onFileSelected(event: any) {
   //   console.log(event);
 

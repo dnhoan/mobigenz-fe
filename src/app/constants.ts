@@ -1,0 +1,9 @@
+export const ORDER_STATUS = {
+  CANCEL_ORDER: -1,
+  PENDING: 0,
+  CONFIRMED: 1,
+  PACKAGING: 2,
+  PACKAGED: 3,
+  DELIVERING: 4,
+  COMPLETE: 5,
+};

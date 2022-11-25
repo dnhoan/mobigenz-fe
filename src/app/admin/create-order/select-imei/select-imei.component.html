@@ -1,0 +1,12 @@
+<nz-select
+  nzMode="multiple"
+  nzPlaceHolder="Please select"
+  [(ngModel)]="listImeiSelected"
+>
+  <nz-option
+    *ngFor="let imei of listImei"
+    [nzLabel]="imei.imei"
+    [nzValue]="imei"
+  ></nz-option>
+</nz-select>
+<button nz-button (click)="addToOrder()" nzType="primary">Thêm</button>
