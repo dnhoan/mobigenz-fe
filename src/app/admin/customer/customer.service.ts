@@ -8,12 +8,12 @@ import { Customer } from './customer.model';
   providedIn: 'root',
 })
 export class CustomerService {
-  public apiCustomer = `${environment.baseUrl}/`;
+  public apiCustomer = `${environment.baseUrl}/admin/`;
   constructor(private http: HttpClient) {}
 
-  
   getAll(offset: any, limit: any): Observable<any> {
-    return this.http.get<any>(this.apiCustomer + "admin/customers?offset=" + offset + "&limit=" + limit
+    return this.http.get<any>(
+      this.apiCustomer + 'admin/customers?offset=' + offset + '&limit=' + limit
     );
   }
 

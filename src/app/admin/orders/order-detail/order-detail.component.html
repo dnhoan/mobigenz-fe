@@ -1,0 +1,106 @@
+<div class="rounded-3 mb-3">
+  <nz-steps [nzCurrent]="currentOrder.orderStatus">
+    <ng-container *ngFor="let orderStatus of commonService.orderStatuses">
+      <nz-step
+        (click)="onIndexChange(orderStatus.status)"
+        style="cursor: pointer"
+        [nzTitle]="orderStatus.statusName"
+        [nzStatus]="
+          currentOrder.orderStatus == -1
+            ? 'process'
+            : currentOrder.orderStatus >= orderStatus.status &&
+              orderStatus.status != -1
+            ? 'process'
+            : 'wait'
+        "
+        [nzIcon]="orderStatus.icon"
+      ></nz-step>
+    </ng-container>
+  </nz-steps>
+</div>
+<div class="rounded-3 mb-3">
+  <div class="d-flex">
+    <div class="border-end m-3 pe-3">
+      <p><b>Mã đơn hàng</b></p>
+      <p>
+        {{ currentOrder.id }}
+      </p>
+    </div>
+    <div class="border-end m-3 pe-3">
+      <p><b>Ngày tạo</b></p>
+      <p>
+        {{ currentOrder.ctime | date: "dd/MM/yyyy HH:mm" }}
+      </p>
+    </div>
+    <div class="border-end m-3 pe-3">
+      <p><b>Tổng tiền</b></p>
+      <p>{{ currentOrder.totalMoney | number }}đ</p>
+    </div>
+  </div>
+</div>
+<nz-divider></nz-divider>
+<div class="rounded-3 p-3 mb-3">
+  <p><b>Thông tin người nhận</b></p>
+  <div class="">
+    <p><b>Tên người nhận: </b>{{ currentOrder.recipientName }}</p>
+    <p><b>Địa chỉ người nhận: </b>{{ currentOrder.address }}</p>
+    <p><b>SĐT người nhận: </b>{{ currentOrder.recipientPhone }}</p>
+    <p><b>Email người nhận: </b>{{ currentOrder.recipientEmail }}</p>
+    <p><b>Ghi chú: </b>{{ currentOrder.note }}</p>
+    <p *ngIf="currentOrder.orderStatus == -1">
+      <b>Nội dung hủy: </b>{{ currentOrder.cancelNote }}
+    </p>
+  </div>
+</div>
+<nz-divider></nz-divider>
+<div class="rounded-3 p-3">
+  <p><b>Thông tin đơn hàng</b></p>
+  <div class="">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Ảnh</th>
+          <th scope="col">Sảm phẩm</th>
+          <th scope="col">SL</th>
+          <th scope="col">Đơn giá</th>
+          <th scope="col">Thành tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let orderDetail of currentOrder.orderDetailDtos">
+          <td>
+            <img
+              [src]="orderDetail.productDetailCartDto.image"
+              alt=""
+              width="50"
+            />
+          </td>
+          <td>{{ orderDetail.productDetailCartDto.productName }}</td>
+          <td>{{ orderDetail.amount }}</td>
+          <td>{{ orderDetail.productDetailCartDto.price | number }} đ</td>
+          <td>
+            {{
+              orderDetail.amount * orderDetail.productDetailCartDto.price
+                | number
+            }}đ
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<nz-modal
+  [(nzVisible)]="isShowConfirmCancelOrder"
+  nzTitle="Hủy đơn hàng"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <textarea
+      nz-input
+      [(ngModel)]="cancelNote"
+      placeholder="Nhập lý do hủy đơn hàng"
+      [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+    ></textarea>
+  </ng-container>
+</nz-modal>
