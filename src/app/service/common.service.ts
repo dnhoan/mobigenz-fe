@@ -67,6 +67,12 @@ export class CommonService {
       icon: 'check-circle',
     },
     {
+      status: -2,
+      statusName: 'Đổi trả',
+      color: 'purple',
+      icon: 'sync',
+    },
+    {
       status: -1,
       statusName: 'Hủy',
       color: 'error',

@@ -2,6 +2,7 @@
   nzMode="multiple"
   nzPlaceHolder="Please select"
   [(ngModel)]="listImeiSelected"
+  [nzMaxMultipleCount]="isExchange ? 1 : listImei.length"
 >
   <nz-option
     *ngFor="let imei of listImei"
@@ -9,4 +10,10 @@
     [nzValue]="imei"
   ></nz-option>
 </nz-select>
-<button nz-button (click)="addToOrder()" nzType="primary">Thêm</button>
+<button
+  nz-button
+  (click)="isExchange ? exchangeProduct() : addToOrder()"
+  nzType="primary"
+>
+  Thêm
+</button>

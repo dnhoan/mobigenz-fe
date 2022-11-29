@@ -16,6 +16,7 @@ import { OrderDetailDto } from 'src/app/DTOs/OrderDetailDto';
 import { OrderDto } from 'src/app/DTOs/OrderDto';
 import { ProductDetailDto } from 'src/app/DTOs/ProductDetailDto';
 import { ProductDto } from 'src/app/DTOs/ProductDto';
+import { CommonService } from 'src/app/service/common.service';
 import { OrdersService } from '../orders/orders.service';
 import { ImeiService } from '../products/imei/imei.service';
 import { ProductsService } from '../products/products.service';
@@ -34,6 +35,8 @@ export class CreateOrderComponent implements OnInit {
   subProducts!: Subscription;
   subOrder!: Subscription;
   order!: OrderDto;
+  cancelNote: string = '';
+  isShowConfirmCancelOrder = false;
   private searchTerms = new Subject<string>();
 
   constructor(
@@ -43,7 +46,8 @@ export class CreateOrderComponent implements OnInit {
     private orderService: OrdersService,
     private route: ActivatedRoute,
     private imeiService: ImeiService,
-    private router: Router
+    private router: Router,
+    public commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +64,8 @@ export class CreateOrderComponent implements OnInit {
     if (id) {
       this.isEdit = true;
       this.orderService.getOrderById(id).subscribe((orderDto) => {
+        console.log(orderDto);
+
         orderStore.update(() => ({
           orderDto,
         }));
@@ -127,6 +133,18 @@ export class CreateOrderComponent implements OnInit {
       console.log('[afterClose] The result is:', result)
     );
   }
+  openModelAddImei(orderDetail: OrderDetailDto) {
+    const modal = this.modal.create({
+      nzTitle: 'Chọn Imei',
+      nzContent: SelectImeiComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzComponentParams: {
+        productDetail: orderDetail.productDetailCartDto,
+        orderId: this.order.id,
+      },
+      nzFooter: [],
+    });
+  }
   search(term: any): void {
     this.searchTerms.next(term);
   }
@@ -171,5 +189,35 @@ export class CreateOrderComponent implements OnInit {
       if (!this.isEdit) this.router.navigate(['/admin/orders']);
     });
     console.log(this.order);
+  }
+  onIndexChange(event: any) {
+    if (
+      (event == -1 && event != this.order.orderStatus) ||
+      event > this.order.orderStatus
+    ) {
+      if (event == -1) {
+        this.isShowConfirmCancelOrder = true;
+      } else {
+        this.updateStatus(this.order.id, event);
+      }
+    }
+  }
+  updateStatus(orderId: number, newStatus: number, note?: string) {
+    this.orderService
+      .updateOrderStatus(orderId, newStatus, note)
+      .subscribe((res) => {
+        if (res) {
+          this.order.orderStatus = newStatus;
+          this.order.cancelNote = this.cancelNote;
+        }
+      });
+  }
+
+  handleOk() {
+    this.updateStatus(this.order.id, -1, this.cancelNote);
+    this.isShowConfirmCancelOrder = false;
+  }
+  handleCancel() {
+    this.isShowConfirmCancelOrder = false;
   }
 }

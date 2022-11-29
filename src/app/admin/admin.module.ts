@@ -31,6 +31,9 @@ import {ChartModule} from 'primeng/chart';
 import { StatisticalComponent } from './statistical/statistical.component';
 import { IncomeComponent } from './statistical/income/income.component';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import { ExchangeOrderComponent } from './exchange-order/exchange-order.component';
+import { ExchangeOrderDetailComponent } from './exchange-order/exchange-order-detail/exchange-order-detail.component';
+import { ExchangeProductComponent } from './exchange-order/exchange-order-detail/exchange-product/exchange-product.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -54,6 +57,9 @@ import { OrderDetailComponent } from './orders/order-detail/order-detail.compone
     AddressComponent,
     IncomeComponent,
     OrderDetailComponent,
+    ExchangeOrderComponent,
+    ExchangeOrderDetailComponent,
+    ExchangeProductComponent,
   ],
   imports: [
     CommonModule,

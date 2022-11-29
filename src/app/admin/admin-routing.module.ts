@@ -8,6 +8,8 @@ import { LoginComponent } from '../login/login.component';
 import { AdminGuard } from '../guards/admin.guard';
 import { CreateOrderComponent } from './create-order/create-order.component';
 import { OrdersComponent } from './orders/orders.component';
+import { ExchangeOrderDetailComponent } from './exchange-order/exchange-order-detail/exchange-order-detail.component';
+import { ExchangeOrderComponent } from './exchange-order/exchange-order.component';
 import { StatisticalComponent } from './statistical/statistical.component';
 import { IncomeComponent } from './statistical/income/income.component';
 
@@ -38,6 +40,14 @@ const routes: Routes = [
       {
         path: 'order/:id',
         component: CreateOrderComponent,
+      },
+      {
+        path: 'exchangeOrder/:id',
+        component: ExchangeOrderDetailComponent,
+      },
+      {
+        path: 'exchangeOrders',
+        component: ExchangeOrderComponent,
       },
       {
         path: 'orders',
