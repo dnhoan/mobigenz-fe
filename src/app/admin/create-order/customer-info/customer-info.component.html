@@ -1,5 +1,5 @@
-<div class="row d-flex justify-content-between">
-  <div class="col-11" *ngIf="!isEdit">
+<div class="row d-flex justify-content-between" *ngIf="!isEdit">
+  <div class="col-10">
     <nz-select
       style="width: 100%"
       nzPlaceHolder="Tìm kiếm tên, sđt, email"
@@ -21,6 +21,9 @@
         Đang tải...
       </nz-option>
     </nz-select>
+  </div>
+  <div class="col-2">
+    <app-add-customer></app-add-customer>
   </div>
 </div>
 <ng-container *ngIf="customer.id!">

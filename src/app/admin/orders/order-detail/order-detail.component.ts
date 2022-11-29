@@ -24,7 +24,7 @@ export class OrderDetailComponent implements OnInit {
   onIndexChange(event: any) {
     if (
       (event == -1 && event != this.currentOrder.orderStatus) ||
-      event > this.currentOrder.orderStatus
+      event != this.currentOrder.orderStatus
     ) {
       if (event == -1) {
         this.isShowConfirmCancelOrder = true;

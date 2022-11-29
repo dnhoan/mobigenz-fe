@@ -30,6 +30,48 @@ export class OrdersService {
         catchError(this.handleError<any>('Lỗi hệ thống', []))
       );
   }
+  createOrderDetailWhenExchangeImei(
+    orderId: number,
+    oldImeiId: number,
+    orderDetailDto: OrderDetailDto
+  ) {
+    return this.httpClient
+      .post(
+        `${environment.baseUrl}/admin/createOrderDetailWhenExchangeImei/${orderId}/${oldImeiId}`,
+        orderDetailDto
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 201) {
+            this.message.success('Thành công');
+            return res.data.orderDetail;
+          }
+          return [];
+        }),
+        catchError(this.handleError<any>('Lỗi hệ thống', false))
+      );
+  }
+  changeOrderDetail(
+    orderId: number,
+    currentOrderDetailId: number,
+    orderDetailDto: OrderDetailDto
+  ) {
+    return this.httpClient
+      .post(
+        `${environment.baseUrl}/admin/changeOrderDetail/${orderId}/${currentOrderDetailId}`,
+        orderDetailDto
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 200) {
+            this.message.success('Thành công');
+            return res.data.orderDetail;
+          }
+          return [];
+        }),
+        catchError(this.handleError<any>('Lỗi hệ thống', false))
+      );
+  }
   createOrderDetailToOrder(order_id: number, orderDetailDto: OrderDetailDto) {
     return this.httpClient
       .post(

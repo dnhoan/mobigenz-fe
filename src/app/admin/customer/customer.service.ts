@@ -13,7 +13,7 @@ export class CustomerService {
 
   getAll(offset: any, limit: any): Observable<any> {
     return this.http.get<any>(
-      this.apiCustomer + 'admin/customers?offset=' + offset + '&limit=' + limit
+      this.apiCustomer + 'customers?offset=' + offset + '&limit=' + limit
     );
   }
 

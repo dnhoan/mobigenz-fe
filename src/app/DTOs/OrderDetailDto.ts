@@ -11,4 +11,5 @@ export interface OrderDetailDto {
   note: string;
   ctime?: string;
   mtime?: string;
+  expand?: boolean;
 }

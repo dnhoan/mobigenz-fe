@@ -1,0 +1,87 @@
+<div>
+  <h5>Sản phẩm đổi</h5>
+  <nz-list nzItemLayout="horizontal">
+    <nz-list-item>
+      <nz-list-item-meta
+        nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+      >
+        <nz-list-item-meta-title>
+          <h6 class="mb-1">
+            {{ currentOrderDetail.productDetailCartDto.productName }}
+          </h6>
+          <p class="mb-1">
+            <span nz-icon nzType="tags" nzTheme="outline"></span>
+            {{ currentOrderDetail.productDetailCartDto.sku }}
+          </p>
+          <p class="text-danger">
+            {{ currentOrderDetail.productDetailCartDto.price | number }}đ
+          </p>
+        </nz-list-item-meta-title>
+      </nz-list-item-meta>
+    </nz-list-item>
+  </nz-list>
+</div>
+<nz-divider></nz-divider>
+<div class="m-3">
+  <nz-input-group [nzSuffix]="suffixIconSearch">
+    <input
+      #searchBox
+      type="text"
+      [(ngModel)]="searchTerm"
+      nz-input
+      placeholder="input search text"
+      (ngModelChange)="search(searchTerm)"
+    />
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+    <span nz-icon nzType="search"></span>
+  </ng-template>
+  <ng-container *ngFor="let product of products; let i_product = index">
+    <div class="mt-3 mb-3 shadow-sm row">
+      <div class="col-2">
+        <img [src]="product.images[0]" alt="" width="100" />
+      </div>
+      <div class="col-10">
+        <h5>
+          <b>{{ product.productName }}</b>
+        </h5>
+        <ng-container
+          *ngFor="let option of product.optionDtos; let i_option = index"
+        >
+          <p>{{ option.optionName }}</p>
+          <div class="mb-2">
+            <ng-container
+              *ngFor="
+                let optionValue of option.optionValueDtos;
+                let i_optionValue = index
+              "
+            >
+              <button
+                nz-button
+                [nzType]="optionValue.selected ? 'primary' : 'default'"
+                (click)="
+                  selectOptionValue(
+                    i_option,
+                    i_product,
+                    i_optionValue,
+                    optionValue.selected
+                  )
+                "
+              >
+                {{ optionValue.optionValueName }}
+              </button>
+            </ng-container>
+          </div>
+        </ng-container>
+        <button
+          nz-button
+          nzType="primary"
+          (click)="openModalSelectImei(product)"
+        >
+          <span nz-icon nzType="shopping-cart"></span>
+          Chọn Imei
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</div>

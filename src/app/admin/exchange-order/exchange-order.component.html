@@ -1,0 +1,68 @@
+<div class="mt-4 bg-white">
+  <div class="d-flex justify-content-between p-3 row">
+    <button class="col-2" nz-button nzType="primary">Tạo đơn hàng</button>
+    <nz-input-group class="col-4" [nzSuffix]="suffixIconSearch">
+      <input
+        type="text"
+        nz-input
+        placeholder="input search text"
+      /> </nz-input-group
+    ><ng-template #suffixIconSearch>
+      <span nz-icon nzType="search"></span>
+    </ng-template>
+  </div>
+  <nz-table #basicTable [nzData]="orders">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Tạo lúc</th>
+        <th>Tên KH</th>
+        <th>SĐT KH</th>
+        <th>SL</th>
+        <th>Giao hàng</th>
+        <th>Phí Ship</th>
+        <th>Tổng tiền hàng</th>
+        <th>Tổng</th>
+        <th>Khách trả</th>
+        <th>Trạng thái ĐH</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of basicTable.data">
+        <td>
+          <a nz-button nzType="link" (click)="showOrderDetail(order)">{{
+            order.id
+          }}</a>
+        </td>
+        <td>{{ order.ctime | date: "dd/MM/yyyy HH:mm " }}</td>
+        <td>{{ order.recipientName }}</td>
+        <td>{{ order.recipientPhone }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>{{ order.delivery == 1 ? "Giao hàng" : "Tại cửa hàng" }}</td>
+        <td>{{ order.shipFee }}</td>
+        <td>{{ order.goodsValue }}</td>
+        <td>{{ order.totalMoney }}</td>
+        <td>{{ order.checkout }}</td>
+        <td class="">
+          <ng-container *ngFor="let status of commonService.orderStatuses">
+            <nz-tag
+              [nzColor]="status.color"
+              *ngIf="status.status == order.orderStatus"
+              >{{ status.statusName }}</nz-tag
+            ></ng-container
+          >
+        </td>
+        <td>
+          <a
+            *ngIf="order.orderStatus != -1"
+            nz-button
+            nzType="link"
+            (click)="openEditOrder(order.id)"
+            ><span nz-icon nzType="sync" nzTheme="outline"></span
+          ></a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

@@ -1,11 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Interface } from 'readline';
 import { catchError, map, Observable, of } from 'rxjs';
 import { ImeiDto } from 'src/app/DTOs/ImeiDto';
 import { ProductDetailDto } from 'src/app/DTOs/ProductDetailDto';
 import { environment } from 'src/environments/environment';
 
+export interface ExchangeImei {
+  newImeiId: number;
+  oldImeiId: number;
+  currentOrderDetailId: number;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -29,6 +35,20 @@ export class ImeiService {
         catchError(this.handleError<any>('Error get imei', []))
       );
   }
+  exchangeImeiTheSameOrderDetail(data: ExchangeImei): Observable<ImeiDto[]> {
+    return this.httpClient
+      .put(`${this.baseUrl}/exchangeImeiTheSameOrderDetail`, data)
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 200) {
+            this.message.success('Thành công');
+            return res;
+          }
+          return false;
+        }),
+        catchError(this.handleError<any>('Lỗi đổi imei', false))
+      );
+  }
   getImeisInStockByProductDetailId(
     productDetailId: number
   ): Observable<ImeiDto[]> {
@@ -48,7 +68,7 @@ export class ImeiService {
     return this.httpClient.post(`${this.baseUrl}/imei`, imeiDto).pipe(
       map((res: any) => {
         if (res.statusCode === 201) {
-          this.message.success('Success');
+          this.message.success('Thành công');
           return res.data.imei;
         }
         return [];
@@ -69,7 +89,7 @@ export class ImeiService {
       .pipe(
         map((res: any) => {
           if (res.statusCode === 201) {
-            this.message.success('Success');
+            this.message.success('Thành Công');
             return res.data.imeis;
           }
           return [];

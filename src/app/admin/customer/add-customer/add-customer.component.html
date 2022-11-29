@@ -1,77 +1,128 @@
-<h1>Thêm khách hàng</h1>
-
-<form class="formAdd" novalidate [formGroup]="formAdd">
-  <div nz-row>
-    <div nz-col nzSpan="11">
-      <label>Tên khách hàng:</label>
-      <input class="form-control" type="text" formControlName="customerName">
-    </div>
-    <div nz-col nzSpan="2"></div>
-    <div nz-col nzSpan="11">
-      <label>Phone Number: </label>
-      <input class="form-control" type="text" formControlName="phoneNumber">
-    </div>
-  </div>
-  <div nz-row>
-    <div nz-col nzSpan="11">
-      <label>Birthday: </label>
-      <input class="form-control" type="date" formControlName="birthday">
-    </div>
-    <div nz-col nzSpan="2"></div>
-    <div nz-col nzSpan="11">
-      <label>Gender: </label><br>
-      <nz-radio-group formControlName="gender">
-        <div class="rdo_gender">
-          <label nz-radio nzValue="1">Nam</label>
-          <label nz-radio nzValue="0">Nữ</label>
-        </div>
-      </nz-radio-group>
-    </div>
-  </div>
-  <div nz-row>
-    <div nz-col nzSpan="11">
-      <label>Customer Type: </label><br>
-      <select class="form-control" formControlName="customerType">
-        <option [selected]="formAdd.value.customerType == 0" value="1">Công ty</option>
-        <option value="0">Cá nhân</option>
-      </select>
-    </div>
-    <div nz-col nzSpan="2"></div>
-    <div nz-col nzSpan="11">
-      <label>Status: </label>
-      <select class="form-control" formControlName="status">
-        <option [selected]="formAdd.value.status == 0" value="1">Active</option>
-        <option value="0">InActive</option>
-      </select>
-    </div>
-  </div>
-  <div nz-row>
-    <div nz-col nzSpan="11">
-      <label>CMND/CCCD: </label>
-      <input class="form-control" type="text" formControlName="citizenIdentifyCart">
-    </div>
-    <div nz-col nzSpan="2"></div>
-    <div nz-col nzSpan="11">
-      <label>Avatar: </label><br>
-      <input class="avt" type="file" formControlName="image">
-    </div>
-  </div>
-  <div nz-row>
-    <div nz-col nzSpan="11">
-      <label>CTime: </label>
-      <input class="form-control" type="date" formControlName="ctime">
-    </div>
-    <div nz-col nzSpan="2"></div>
-    <div nz-col nzSpan="11">
-      <label>MTime: </label>
-      <input class="form-control" type="date" formControlName="mtime">
-    </div>
-  </div>
-  <div nz-row>
-    <div nz-col nzSpan="22">
-    </div>
-    <div nz-col nzSpan="2">
-      <a class="btnAdd" nz-button nzType="primary">Save</a>
-    </div>
-  </div>
-</form>
+<button nz-button [nzType]="'primary'" (click)="showModalAddCustomer()">
+  <span><span nz-icon nzType="plus" nzTheme="outline"></span></span>
+</button>
+<nz-modal
+  [(nzVisible)]="isShowModalAddCustomer"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="formCus">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="customerName"
+          >Tên khách hàng</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Bạn phải nhập tên khách hàng!"
+        >
+          <input
+            nz-input
+            type="text"
+            formControlName="customerName"
+            id="customerName"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired
+          >Số ĐT</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Bạn phải nhập số điện thoại!"
+        >
+          <input
+            nz-input
+            type="text"
+            id="phoneNumber"
+            formControlName="phoneNumber"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="birthday" nzRequired
+          >Ngày sinh</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Bạn phải chọn ngày sinh!"
+        >
+          <input
+            nz-input
+            type="date"
+            formControlName="birthday"
+            id="birthday"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="gender"
+          >Giới tính</nz-form-label
+        >
+        <nz-radio-group class="mt-1" formControlName="gender" nzName="gender">
+          <label nz-radio [nzValue]="1" nzValue="1">Nam</label>
+          <label nz-radio [nzValue]="0" nzValue="0">Nữ</label>
+        </nz-radio-group>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
+          >Email</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Bạn phải nhập đúng định dạng email!"
+        >
+          <input nz-input type="email" formControlName="email" id="email" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="customerType"
+          >Loại khách hàng</nz-form-label
+        >
+        <nz-radio-group
+          class="mt-1"
+          formControlName="customerType"
+          nzName="customerType"
+        >
+          <label nz-radio [nzValue]="1" nzValue="1">Công ty</label>
+          <label nz-radio [nzValue]="0" nzValue="0">Cá nhân</label>
+        </nz-radio-group>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label
+          [nzSm]="6"
+          [nzXs]="24"
+          nzRequired
+          nzFor="citizenIdentifyCart"
+          >CCCD</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Bạn phải nhập CCCD!"
+        >
+          <input
+            nz-input
+            type="citizenIdentifyCart"
+            formControlName="citizenIdentifyCart"
+            id="citizenIdentifyCart"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status"
+          >Trạng thái</nz-form-label
+        >
+        <nz-radio-group class="mt-1" formControlName="status" nzName="status">
+          <label nz-radio [nzValue]="1" nzValue="1">Active</label>
+          <label nz-radio [nzValue]="0" nzValue="0">InActive</label>
+        </nz-radio-group>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

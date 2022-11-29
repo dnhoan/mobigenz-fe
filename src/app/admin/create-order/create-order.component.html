@@ -1,3 +1,25 @@
+<div class="row m-0 w-100 mt-4 p-2" *ngIf="isEdit">
+  <div class="bg-white p-3 rounded-3 h-100">
+    <nz-steps [nzCurrent]="order.orderStatus">
+      <ng-container *ngFor="let orderStatus of commonService.orderStatuses">
+        <nz-step
+          (click)="onIndexChange(orderStatus.status)"
+          style="cursor: pointer"
+          [nzTitle]="orderStatus.statusName"
+          [nzStatus]="
+            order.orderStatus == -1
+              ? 'process'
+              : order.orderStatus >= orderStatus.status &&
+                orderStatus.status != -1
+              ? 'process'
+              : 'wait'
+          "
+          [nzIcon]="orderStatus.icon"
+        ></nz-step>
+      </ng-container>
+    </nz-steps>
+  </div>
+</div>
 <div class="row m-0 w-100 mt-4">
   <div class="col-7">
     <div class="bg-white p-3 rounded-3 h-100">
@@ -24,11 +46,7 @@
                 ><br />{{ orderDetail.productDetailCartDto.sku }}
               </td>
               <td>
-                {{
-                  orderDetail.imeiDtoList
-                    ? orderDetail.imeiDtoList.length
-                    : orderDetail.amount
-                }}
+                {{ orderDetail.amount }}
               </td>
               <td>{{ orderDetail.priceSell | number }}đ</td>
               <td>
@@ -47,6 +65,17 @@
                     {{ imei.imei }}
                   </nz-tag>
                   <br />
+                </ng-container>
+                <ng-container
+                  *ngIf="orderDetail.imeiDtoList!.length != orderDetail.amount"
+                >
+                  <button
+                    nz-button
+                    nzType="dashed"
+                    (click)="openModelAddImei(orderDetail)"
+                  >
+                    <span nz-icon nzType="plus" nzTheme="outline"></span>
+                  </button>
                 </ng-container>
               </td>
             </tr>
@@ -182,3 +211,19 @@
   </div>
 </div>
 <ng-template #noResult> </ng-template>
+
+<nz-modal
+  [(nzVisible)]="isShowConfirmCancelOrder"
+  nzTitle="Hủy đơn hàng"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <textarea
+      nz-input
+      [(ngModel)]="cancelNote"
+      placeholder="Nhập lý do hủy đơn hàng"
+      [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+    ></textarea>
+  </ng-container>
+</nz-modal>
