@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FirebaseStorage } from 'firebase/storage';
 import { finalize, Observable } from 'rxjs';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { InfoService } from './service/infoUser.service';
+import { Route, Router } from '@angular/router';
+import { Toast, ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,7 +16,10 @@ export class AppComponent {
   // selectedFile!: File;
   // fb!: string;
   // downloadURL!: Observable<string>;
-  constructor(private storage: AngularFireStorage) {}
+  constructor(private storage: AngularFireStorage,
+    private infoService: InfoService,
+    private router: Router,
+    private toast: ToastrService) {}
   isCollapsed = false;
   // onFileSelected(event: any) {
   //   console.log(event);
@@ -45,4 +51,13 @@ export class AppComponent {
   //       }
   //     });
   // }
+
+  public logout() {
+    window.localStorage.removeItem('auth-token');
+    window.localStorage.removeItem('auth-user');
+    window.localStorage.removeItem('id-account');
+    this.router.navigate(['/logout']);
+    this.toast.success("Đăng xuất thành công!")
+    this.infoService.setUser(null);
+  }
 }
