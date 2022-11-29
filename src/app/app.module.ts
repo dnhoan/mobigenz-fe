@@ -37,6 +37,7 @@ import { ForgotComponent } from './forgot/forgot.component';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './interceptor/auth-interceptor.js';
 import { OrderDetailComponent } from './admin/orders/order-detail/order-detail.component';
+import {ChartModule} from 'primeng/chart';
 
 registerLocaleData(en);
 
@@ -55,6 +56,7 @@ const configToast: any = {
     AppRoutingModule,
     BrowserModule,
     CommonModule,
+    ChartModule,
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,

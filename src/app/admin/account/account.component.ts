@@ -23,11 +23,12 @@ export class AccountComponent implements OnInit {
   descAsc = 'desc';
   idCustomer: any;
   offset = 0;
-  limit = 1;
+  limit = 5;
   Page: any;
   isVisible = false;
   action = true;
-  searchDTO: SearchDTO ={};
+  searchDTO: SearchDTO = {};
+  submit = false;
   constructor(
     private readonly router: Router,
     private accountService: AccountService,
@@ -42,43 +43,37 @@ export class AccountComponent implements OnInit {
   }
 
   showModal(): void {
+    this.submit = false;
     this.formAcc = this.fb.group({
       id: null,
-      email: ['', [Validators.required, Validators.maxLength(50)]],
-      password: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.pattern('^(?=[^A-Z\\n]*[A-Z])(?=[^a-z\\n]*[a-z])(?=[^0-9\\n]*[0-9])(?=[^#?!@$%^&*\\n-]*[#?!@$%^&*-]).{8,}$')]],
       phoneNumber: [
         '',
-        [
-          Validators.required,
-          Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
-        ],
+        [Validators.required, Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})')],
       ],
-      role: ['', [Validators.required]],
-      status: ['', [Validators.required]],
+      role: [1, [Validators.required]],
+      status: [1, [Validators.required]],
     });
     this.isVisible = true;
   }
 
-  handleOk(): void {
-    this.saveAccount();
+  handleOk() {
+    this.submit = true;
+    if(this.formAcc.valid){
+      this.saveAccount();
     this.isVisible = false;
+    }
   }
 
   saveAccount() {
     this.addValueAccount();
     if (this.formAcc.value.id) {
-      this.accountService.updateAccount(this.account).subscribe((res) => {
-        this.toastr.success('Cập nhật tài khoản thành công!');
-        this.getAllAccount();
-      });
+      this.update();
     }
-    if(!this.formAcc.value.id){
-        this.accountService
-          .addAccount(this.account)
-          .subscribe((res) => this.toastr.success('Tạo tài khoản thành công!'));
-          this.getAllAccount();
+    if (!this.formAcc.value.id) {
+      this.addAccount(this.account);
     }
-
   }
 
   handleCancel(): void {
@@ -86,11 +81,13 @@ export class AccountComponent implements OnInit {
   }
 
   getAllAccount() {
-    this.accountService.getAll(this.offset, this.limit).subscribe((res: any) => {
-      console.log(res);
+    this.accountService
+      .getAll(this.offset, this.limit)
+      .subscribe((res: any) => {
+        console.log(res);
 
-      this.datas = res.data.accounts.items;
-    });
+        this.datas = res.data.accounts.items;
+      });
   }
 
   initFormSearch() {
@@ -109,7 +106,7 @@ export class AccountComponent implements OnInit {
       id: this.account.id,
       email: this.account.email,
       phoneNumber: this.account.phoneNumber,
-      password:this.account.password,
+      password: this.account.password,
       status: this.account.status,
       role: this.account.roles![0].id,
     });
@@ -139,18 +136,36 @@ export class AccountComponent implements OnInit {
     }
   }
 
-  update() {
-    this.addValueAccount();
-    this.accountService.updateAccount(this.account).subscribe(
-      (res) => {
-        this.toastr.success('Cập nhật tài khoản thành công!');
-      },
-      (error) => {
-        if (error.error.message === 'Cập nhật thất bại') {
+  addAccount(account: Account) {
+    if (this.formAcc.valid) {
+      this.accountService.addAccount(account).subscribe(
+        (res) => {
+          this.getAllAccount();
+          this.toastr.success('Thêm tài khoản thành công!');
+        },
+        (error) => {
           this.toastr.error(error.error.message);
         }
-      }
-    );
+      );
+    }
+  }
+
+
+  update() {
+    if (this.formAcc.valid) {
+      this.addValueAccount();
+      this.accountService.updateAccount(this.account).subscribe(
+        (res) => {
+          this.getAllAccount();
+          this.toastr.success('Cập nhật tài khoản thành công!');
+          return;
+        },
+        (error) => {
+          this.toastr.error(error.error.message);
+        }
+      );
+    }
+    return;
   }
 
   deleteAccount(id: any) {
@@ -163,45 +178,40 @@ export class AccountComponent implements OnInit {
     );
   }
 
-
   pagination(page: any) {
     if (page < 0) page = 0;
-    this.offset = page
-    this.accountService.getAll(this.offset, this.limit)
-      .subscribe(res => {
-        this.datas = res.data.accounts.items;
-        this.Page = res.data.accounts;
-      },)
-
+    this.offset = page;
+    this.accountService.getAll(this.offset, this.limit).subscribe((res) => {
+      this.datas = res.data.accounts.items;
+      this.Page = res.data.accounts;
+    });
   }
 
-  pageItem(pageItems: any){
-    this.limit =  pageItems;
+  pageItem(pageItems: any) {
+    this.limit = pageItems;
     this.pagination(this.offset);
   }
 
-
   preNextPage(selector: string) {
-    if (selector == 'pre') --this.offset
+    if (selector == 'pre') --this.offset;
     if (selector == 'next') ++this.offset;
     this.pagination(this.offset);
   }
 
   searchWithPage(page: any) {
     if (page < 0) page = 0;
-    this.offset = page
-    this.accountService.getPageAccount(this.offset, this.limit, this.searchDTO)
-      .subscribe(res => {
+    this.offset = page;
+    this.accountService
+      .getPageAccount(this.offset, this.limit, this.searchDTO)
+      .subscribe((res) => {
         this.datas = res.data.accounts.content;
         this.Page = res.data.accounts;
-      },)
-
+      });
   }
 
-  timkiem(){
+  timkiem() {
     this.FillValueSearch();
     this.searchWithPage(0);
     this.initFormSearch();
   }
-
 }

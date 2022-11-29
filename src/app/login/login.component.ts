@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
   isforgot = false;
   validateForm!: UntypedFormGroup;
   modalService: any;
+  submit = false;
 
   constructor(
     private fb: FormBuilder,
@@ -56,30 +57,45 @@ export class LoginComponent implements OnInit {
 
   initForm() {
     this.formLogin = this.fb.group({
-      email: ['levantrang4302@gmail.com', [Validators.required]],
-      password: ['Admin@123', [Validators.required]],
-      remember: [false, [Validators.required]],
+      email: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+      remember: [true],
     });
     this.formRegister = this.fb.group({
-      email: ['', [Validators.required, Validators.maxLength(50)]],
-      password: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            '^(?=[^A-Z\\n]*[A-Z])(?=[^a-z\\n]*[a-z])(?=[^0-9\\n]*[0-9])(?=[^#?!@$%^&*\\n-]*[#?!@$%^&*-]).{8,}$'
+          ),
+        ],
+      ],
       repassword: ['', [Validators.required]],
-      phoneNumber: ['',[Validators.required]],
+      phoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
+        ],
+      ],
     });
 
     this.formForgot! = this.fb.group({
-      email: ['', [Validators.required, Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email]],
       otp: ['', [Validators.required]],
     });
     this.isforgot = true;
   }
 
   showModal(): void {
+    this.submit = false;
     this.initForm();
     this.isVisible = true;
   }
 
-  initRegis(){
+  initRegis() {
     this.formRegister.value.email = '';
     this.formRegister.value.password = '';
     this.formRegister.value.repassword = '';
@@ -87,8 +103,10 @@ export class LoginComponent implements OnInit {
   }
 
   handleOk(): void {
-    this.registerAccount();
-    this.isVisible = false;
+    this.submit = true;
+    if (this.formRegister.valid) {
+      this.registerAccount();
+    }
   }
 
   handleCancel(): void {
@@ -97,29 +115,41 @@ export class LoginComponent implements OnInit {
   }
 
   registerAccount() {
-    if(!this.formRegister.valid){
-      this.toastr.error("Bạn phải nhập đầy đủ thông tin!")
+    if (!this.formRegister.valid) {
+      this.toastr.error('Bạn phải nhập đầy đủ thông tin!');
+      this.isVisible = true;
       return;
     }
-    if(this.formRegister.value.password != this.formRegister.value.repassword){
-      this.toastr.error("Mật khẩu xác nhận phải trùng khớp!")
+    if (
+      this.formRegister.value.password != this.formRegister.value.repassword
+    ) {
+      this.toastr.error('Mật khẩu xác nhận phải trùng khớp!');
+      this.isVisible = true;
       return;
-    }else{
+    } else {
       this.addValueAccount();
       this.accountService.register(this.account).subscribe(
         (res) => {
           this.toastr.success('Đăng ký tài khoản thành công!');
+          this.isVisible = false;
         },
         (error) => {
-          if (error.error.message === 'Email này đã tồn tại') {
+          this.isVisible = true;
+          if (error.error.message === 'Email đã tồn tại!') {
             this.toastr.error(error.error.message);
-          } else if (error.error.message === 'Không được để trống') {
+            return;
+          }
+          if (error.error.message === 'Số điện thoại đã tồn tại!') {
             this.toastr.error(error.error.message);
+            return;
+          }
+          if (error.error.message === 'Đăng ký thất bại!') {
+            this.toastr.error(error.error.message);
+            return;
           }
         }
       );
     }
-
   }
 
   onSubmit() {
@@ -135,14 +165,14 @@ export class LoginComponent implements OnInit {
           this.infoUser.getUser();
           if (
             localStorage.getItem('auth-token') != null &&
-            role.includes("Admin")
+            role.includes('Admin')
           ) {
             this.router.navigate(['/admin']);
             this.toastr.success('Đăng nhập thành công!');
           }
           if (
             localStorage.getItem('auth-token') != null &&
-            role.includes("User")
+            role.includes('User')
           ) {
             this.router.navigate(['/login']);
             this.toastr.error('Bạn không có quyền đăng nhập vào trang này!');
@@ -153,6 +183,12 @@ export class LoginComponent implements OnInit {
           this.toastr.error('Tài khoản hoặc mật khẩu không chính xác!');
         }
       );
+      return;
+    } else {
+      this.toastr.error(
+        'Bạn phải nhập tài khoản và mật khẩu để có thể đăng nhập!'
+      );
+      return;
     }
   }
 

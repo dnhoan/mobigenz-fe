@@ -18,7 +18,6 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.getInfo();
-    this.getUserName();
   }
 
 getInfo(){
@@ -26,10 +25,6 @@ getInfo(){
   const email = this.sessionService.getItemUser('auth-user');
           this.accountService
             .getAccountByEmail(jwtDecode.sub)
-}
-
-getUserName(){
-  console.log(this.infoService.getUser());
 }
 
   logout() {}

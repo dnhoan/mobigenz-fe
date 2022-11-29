@@ -2,7 +2,7 @@
   <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
     <div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
-      <li nz-submenu nzTitle="User" nzIcon="user">
+      <li nz-submenu nzTitle="Người dùng" nzIcon="user">
         <ul>
           <li nz-menu-item>
             <a nz-button nzType="link" routerLink="admin/customer"
@@ -43,6 +43,24 @@
         <span nz-icon nzType="file"></span>
         <span>File</span>
       </li>
+      <li nz-submenu nzTitle="Thống kê" nzIcon="area-chart">
+        <ul>
+          <li nz-menu-item>
+            <a nz-button nzType="link" routerLink="admin/statis/income"
+              >Cuối ngày</a
+            >
+          </li>
+          <li nz-menu-item>
+            <a nz-button nzType="link" routerLink="admin/orders">Doanh thu</a>
+          </li>
+          <li nz-menu-item>
+            <a nz-button nzType="link" routerLink="products">Số hàng bán ra</a>
+          </li>
+          <li nz-menu-item>
+            <a nz-button nzType="link" routerLink="products">Đặt hàng</a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </nz-sider>
   <nz-layout>
@@ -53,18 +71,14 @@
         [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
         (click)="isCollapsed = !isCollapsed"
       ></span>
-
-      <a style="float: right" nz-dropdown [nzDropdownMenu]="menu"
-        ><span nz-icon nzType="user" nzTheme="outline"></span
-        ><a href="">Hello Admins</a></a
-      >
-
+      <span><a style="float: right" nz-dropdown [nzDropdownMenu]="menu"><span nz-icon nzType="user"></span><a>Hello Admin</a></a></span>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu nzSelectable>
           <li nz-menu-item>Thông tin cá nhân</li>
-          <li nz-menu-item>Đăng xuất</li>
+          <li nz-menu-item (click)="logout()">Đăng xuất</li>
         </ul>
       </nz-dropdown-menu>
+
     </nz-header>
     <nz-content>
       <router-outlet></router-outlet>

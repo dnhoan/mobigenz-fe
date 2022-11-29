@@ -27,6 +27,9 @@ import { SelectImeiComponent } from './create-order/select-imei/select-imei.comp
 import { DeliveryInfoComponent } from './create-order/delivery-info/delivery-info.component';
 import { CustomerInfoComponent } from './create-order/customer-info/customer-info.component';
 import { AddressComponent } from './create-order/address/address.component';
+import {ChartModule} from 'primeng/chart';
+import { StatisticalComponent } from './statistical/statistical.component';
+import { IncomeComponent } from './statistical/income/income.component';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 @NgModule({
   declarations: [
@@ -42,18 +45,21 @@ import { OrderDetailComponent } from './orders/order-detail/order-detail.compone
     GetLengthArrayPipe,
     ImeiComponent,
     OrderStatusPipe,
+    StatisticalComponent,
     OrdersComponent,
     CreateOrderComponent,
     SelectImeiComponent,
     DeliveryInfoComponent,
     CustomerInfoComponent,
     AddressComponent,
+    IncomeComponent,
     OrderDetailComponent,
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     SharedModule,
+    ChartModule,
     ReactiveFormsModule,
     NzGridModule,
     NzSpaceModule,
