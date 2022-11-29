@@ -25,12 +25,13 @@
         <th>Tổng</th>
         <th>Khách trả</th>
         <th>Trạng thái ĐH</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let order of basicTable.data">
         <td>
-          <a nz-button nzType="link" (click)="openEditOrder(order.id)">{{
+          <a nz-button nzType="link" (click)="showOrderDetail(order)">{{
             order.id
           }}</a>
         </td>
@@ -43,13 +44,37 @@
         <td>{{ order.goodsValue }}</td>
         <td>{{ order.totalMoney }}</td>
         <td>{{ order.checkout }}</td>
-        <td class="d-flex justify-content-between">
-          {{ order.orderStatus | orderStatus }}
-          <ng-container *ngIf="order.orderStatus != -1">
-            <nz-divider nzType="vertical"></nz-divider>
-            <a nz-button nzType="text"
-              ><span nz-icon nzType="edit" nzTheme="outline"></span></a
-          ></ng-container>
+        <td class="">
+          <ng-container *ngFor="let status of commonService.orderStatuses">
+            <nz-tag
+              [nzColor]="status.color"
+              *ngIf="status.status == order.orderStatus"
+              >{{ status.statusName }}</nz-tag
+            ></ng-container
+          >
+          <!-- <div [ngSwitch]="order.orderStatus">
+            <div *ngSwitchCase="1">
+            </div>
+            <div *ngSwitchCase="-1">
+              <nz-tag nzColor="error">{{
+                order.orderStatus | orderStatus
+              }}</nz-tag>
+            </div>
+            <div *ngSwitchCase="0">
+              <nz-tag nzColor="default">{{
+                order.orderStatus | orderStatus
+              }}</nz-tag>
+            </div>
+          </div> -->
+        </td>
+        <td>
+          <a
+            *ngIf="order.orderStatus != -1"
+            nz-button
+            nzType="link"
+            (click)="openEditOrder(order.id)"
+            ><span nz-icon nzType="edit" nzTheme="outline"></span
+          ></a>
         </td>
       </tr>
     </tbody>

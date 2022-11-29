@@ -30,6 +30,7 @@ import { AddressComponent } from './create-order/address/address.component';
 import {ChartModule} from 'primeng/chart';
 import { StatisticalComponent } from './statistical/statistical.component';
 import { IncomeComponent } from './statistical/income/income.component';
+import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -51,7 +52,8 @@ import { IncomeComponent } from './statistical/income/income.component';
     DeliveryInfoComponent,
     CustomerInfoComponent,
     AddressComponent,
-    IncomeComponent
+    IncomeComponent,
+    OrderDetailComponent,
   ],
   imports: [
     CommonModule,

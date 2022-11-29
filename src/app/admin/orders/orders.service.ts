@@ -4,6 +4,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { catchError, map, Observable, of } from 'rxjs';
 import { OrderDetailDto } from 'src/app/DTOs/OrderDetailDto';
 import { OrderDto } from 'src/app/DTOs/OrderDto';
+import { StatusUpdate } from 'src/app/DTOs/StatusUpdate';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -72,6 +73,25 @@ export class OrdersService {
           return false;
         }),
         catchError(this.handleError<any>('Lỗi hủy đơn hàng', false))
+      );
+  }
+  updateOrderStatus(order_id: number, newStatus: number, cancelNote?: string) {
+    let data: StatusUpdate = {
+      orderId: order_id,
+      newStatus,
+      note: cancelNote ? cancelNote : '',
+    };
+    return this.httpClient
+      .put(`${environment.baseUrl}/admin/updateOrderStatus`, data)
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 200) {
+            this.message.success('Cập nhật trạng thái đơn hàng thành công');
+            return true;
+          }
+          return false;
+        }),
+        catchError(this.handleError<any>('Lỗi cập nhật đơn hàng', false))
       );
   }
   getOrders(order_status?: any) {

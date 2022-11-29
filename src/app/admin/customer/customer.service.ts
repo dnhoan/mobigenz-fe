@@ -8,7 +8,7 @@ import { Customer } from './customer.model';
   providedIn: 'root',
 })
 export class CustomerService {
-  public apiCustomer = `${environment.baseUrl}/`;
+  public apiCustomer = `${environment.baseUrl}/admin/`;
   constructor(private http: HttpClient) {}
 
 
