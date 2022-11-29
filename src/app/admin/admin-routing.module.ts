@@ -10,6 +10,8 @@ import { CreateOrderComponent } from './create-order/create-order.component';
 import { OrdersComponent } from './orders/orders.component';
 import { ExchangeOrderDetailComponent } from './exchange-order/exchange-order-detail/exchange-order-detail.component';
 import { ExchangeOrderComponent } from './exchange-order/exchange-order.component';
+import { StatisticalComponent } from './statistical/statistical.component';
+import { IncomeComponent } from './statistical/income/income.component';
 
 const routes: Routes = [
   {
@@ -50,6 +52,10 @@ const routes: Routes = [
       {
         path: 'orders',
         component: OrdersComponent,
+      },
+      {
+        path: 'statis/income',
+        component: IncomeComponent,
       },
       // {
       //   path: 'customer/addCustomer',

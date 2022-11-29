@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'forgot',
     component: ForgotComponent,
   },
+  {
+    path: 'logout',
+    component: LoginComponent,
+  },
 ];
 
 @NgModule({

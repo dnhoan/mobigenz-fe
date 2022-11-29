@@ -3,6 +3,9 @@ import { CustomerService } from './customer.service';
 import { Component, OnInit } from '@angular/core';
 import { Customer, CustomerDTO } from './customer.model';
 import { Router } from '@angular/router';
+import { SearchDTO } from 'src/app/DTOs/SearchDTO';
+import { ToastrService } from 'ngx-toastr';
+import { error } from 'console';
 
 @Component({
   selector: 'app-customer',
@@ -16,23 +19,24 @@ export class CustomerComponent implements OnInit {
   customer: Customer = {};
   datas: Customer[] = [];
   offset = 0;
-  limit = 3;
+  limit = 5;
   Page: any;
   customerSearch: CustomerDTO = {};
   customerDTO: CustomerDTO = {};
-  sortBy = 'customerName';
-  descAsc = 'desc';
+  searchDTO: SearchDTO = {};
   idCustomer: any;
   indexPage = 0;
   isVisible = false;
+  submit = false;
   constructor(
     private readonly router: Router,
     private customerService: CustomerService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.pagination(this.offset)
+    this.pagination(this.offset);
     this.initFormSearch();
   }
 
@@ -41,46 +45,58 @@ export class CustomerComponent implements OnInit {
   // }
 
   showModal(): void {
-    if (this.customer && this.customer.id != 0) {
-      this.customer.id = 0;
-    }
-
+    this.submit = false;
     this.formCus = this.fb.group({
-      customerName: ['', [Validators.required, Validators.maxLength(50)]],
+      id: null,
+      customerName: ['', [Validators.required]],
       phoneNumber: [
         '',
-        [
-          Validators.required,
-          Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
-        ],
+        [Validators.required, Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})')],
       ],
-      birthday: ['', [Validators.required, Validators.maxLength(50)]],
-      gender: [1, [Validators.required]],
-      email: ['', Validators.required],
-      customerType: [1, Validators.required],
-      citizenIdentifyCart: ['', Validators.required],
-      ctime: [''],
-      status: [1, Validators.required],
+      birthday: ['', [Validators.required]],
+      gender: [''],
+      email: ['', [Validators.required, Validators.email]],
+      customerType: [''],
+      citizenIdentifyCart: [''],
+      ctime: ['', [Validators.required]],
+      status: [1,],
     });
     this.isVisible = true;
   }
 
-  // showModalUpdate(id: any): void {
-  //   this.fillValueForm()
-  //   this.isVisible = true;
-  // }
-
   handleOk(): void {
-    console.log(this.customer);
-    this.addValueCustomer();
-    this.saveCustomer(this.customer);
-    this.isVisible = false;
+    this.submit = true;
+    if (this.formCus.valid) {
+      this.saveCustomer();
+      this.isVisible = false;
+    }
   }
 
-  saveCustomer(customer: Customer) {
-    this.customerService
-      .addCustomer(customer)
-      .subscribe((res: any) => this.getAllCustomer());
+  saveCustomer() {
+    if (this.customer.id) {
+      this.update();
+
+      return;
+    }
+    this.addCustomer(this.customer);
+  }
+
+  addCustomer(customer: Customer) {
+    if (this.formCus.valid) {
+      this.addValueCustomer();
+      this.customerService.addCustomer(customer).subscribe(
+        (res) => {
+          this.getAllCustomer();
+          this.toastr.success('Thêm khách hàng thành công!');
+          this.isVisible = false;
+        },
+        (error) => {
+          this.toastr.error(error.error.message);
+        }
+      );
+    }
+    this.isVisible = true;
+    return;
   }
 
   handleCancel(): void {
@@ -88,9 +104,11 @@ export class CustomerComponent implements OnInit {
   }
 
   getAllCustomer() {
-    this.customerService.getAll(this.offset, this.limit).subscribe((res: any) => {
-      this.datas = res.data.customers.items;
-    });
+    this.customerService
+      .getAll(this.offset, this.limit)
+      .subscribe((res: any) => {
+        this.datas = res.data.customers.items;
+      });
   }
 
   getInfoCustomer(id: any) {
@@ -144,17 +162,26 @@ export class CustomerComponent implements OnInit {
   }
 
   update() {
-    this.addValueCustomer();
-    console.log(this.addValueCustomer());
-    console.log(this.customer);
-    this.customerService.updateCustomer(this.customer).subscribe((res) => {
-      alert('Cập nhật thành công');
-      this.router.navigate(['/admin/customer']).then((r) => console.log(r));
-    });
+    if (this.formCus.valid) {
+      this.addValueCustomer();
+      this.customerService.updateCustomer(this.customer).subscribe(
+        (res) => {
+          this.getAllCustomer();
+          this.toastr.success('Cập nhật khách hàng thành công!');
+          return;
+        },
+        (error) => {
+          this.toastr.error(error.error.message);
+        }
+      );
+    }
+      this.isVisible = true;
+      return;
+
   }
 
   addValueCustomer() {
-    console.log(this.formCus.value);
+    this.customer.id = this.formCus.value.id;
     this.customer.customerName = this.formCus.value.customerName;
     this.customer.phoneNumber = this.formCus.value.phoneNumber;
     this.customer.birthday = this.formCus.value.birthday;
@@ -167,38 +194,62 @@ export class CustomerComponent implements OnInit {
   }
 
   deleteCustomer(id: any) {
-    this.customerService.deleteCustomer(id).subscribe((res: any) =>
-      this.datas.forEach((value) => {
-        if (value.id == id) {
-          value.status = 0;
-        }
-      })
+    this.customerService.deleteCustomer(id).subscribe(
+      (res) => {
+        this.datas.forEach((value) => {
+          if (value.id == id) {
+            value.status = 0;
+            this.toastr.success('Xóa thành công!');
+            return;
+          }
+        });
+      },
+      (error) => {
+        this.toastr.error(error.error.message);
+      }
     );
   }
 
-
   pagination(page: any) {
     if (page < 0) page = 0;
-    this.offset = page
-    this.customerService.getAll(this.offset, this.limit)
-      .subscribe(res => {
-        this.datas = res.data.customers.items;
-        console.log(this.datas);
+    this.offset = page;
+    this.customerService.getAll(this.offset, this.limit).subscribe((res) => {
+      this.datas = res.data.customers.items;
+      console.log(this.datas);
 
-        this.Page = res.data.customers;
-      },)
-
+      this.Page = res.data.customers;
+    });
   }
 
-  pageItem(pageItems: any){
-    this.limit =  pageItems;
+  pageItem(pageItems: any) {
+    this.limit = pageItems;
     this.pagination(this.offset);
   }
-
 
   preNextPage(selector: string) {
-    if (selector == 'pre') --this.offset
+    if (selector == 'pre') --this.offset;
     if (selector == 'next') ++this.offset;
     this.pagination(this.offset);
+  }
+
+  searchWithPage(page: any) {
+    if (page < 0) page = 0;
+    this.offset = page;
+    this.customerService
+      .getPageCustomer(this.offset, this.limit, this.searchDTO)
+      .subscribe((res) => {
+        this.datas = res.data.customers.content;
+        this.Page = res.data.customers;
+      });
+  }
+  FillValueSearch() {
+    const formSearchValue = this.formSearch.value;
+    this.searchDTO.valueSearch = formSearchValue.valueSearch;
+  }
+
+  timkiem() {
+    this.FillValueSearch();
+    this.searchWithPage(0);
+    this.initFormSearch();
   }
 }

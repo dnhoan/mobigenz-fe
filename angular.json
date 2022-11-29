@@ -43,8 +43,10 @@
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.bubble.css",
               "node_modules/quill/dist/quill.snow.css"
+
             ],
-            "scripts": ["node_modules/quill/dist/quill.min.js"]
+            "scripts": ["node_modules/quill/dist/quill.min.js",
+                        "node_modules/chart.js/dist/chart.js"]
           },
           "configurations": {
             "production": {
