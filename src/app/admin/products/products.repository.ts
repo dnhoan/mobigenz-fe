@@ -8,15 +8,10 @@ import {
   withUIEntities,
 } from '@ngneat/elf-entities';
 import { Injectable } from '@angular/core';
-export interface ProductDtoUI {
-  id: number | string;
-  isOpen: boolean;
-}
 
 export const productsStore = createStore(
   { name: 'products' },
-  withEntities<ProductDto>(),
-  withUIEntities<ProductDtoUI>()
+  withEntities<ProductDto>()
 );
 
 @Injectable({ providedIn: 'root' })

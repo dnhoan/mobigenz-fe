@@ -8,4 +8,5 @@ export interface OptionDto {
   ctime?: string;
   mtime?: string;
   status?: number;
+  noChange?: boolean;
 }

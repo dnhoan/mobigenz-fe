@@ -5,6 +5,7 @@ import { productsStore } from '../products.repository';
 import { ImeiService } from './imei.service';
 import { updateEntities } from '@ngneat/elf-entities';
 import { ProductDto } from 'src/app/DTOs/ProductDto';
+import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 @Component({
   selector: 'app-imei',
   templateUrl: './imei.component.html',
@@ -15,7 +16,14 @@ export class ImeiComponent implements OnInit, OnDestroy {
   @Input('productId') productId!: number | string;
   @Input('i_product_detail') i_product_detail: number = -1;
   newImei = '';
-
+  fileList: NzUploadFile[] = [
+    {
+      uid: '-1',
+      name: 'xxx.png',
+      status: 'done',
+      url: 'http://www.baidu.com/xxx.png',
+    },
+  ];
   imeis: ImeiDto[] = [];
   isLoading = false;
   constructor(private imeiService: ImeiService) {}
@@ -88,6 +96,24 @@ export class ImeiComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     console.log('on destroy imei');
+  }
+  handleChange(info: NzUploadChangeParam): void {
+    let fileList = [...info.fileList];
+
+    // 1. Limit the number of uploaded files
+    // Only to show two recent uploaded files, and old ones will be replaced by the new
+    fileList = fileList.slice(-2);
+
+    // 2. Read from response and show file link
+    fileList = fileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.url;
+      }
+      return file;
+    });
+
+    this.fileList = fileList;
   }
   currentImei!: ImeiDto;
   fakeImei = {

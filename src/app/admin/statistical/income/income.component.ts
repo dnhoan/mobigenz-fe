@@ -3,208 +3,48 @@ import { Subscription } from 'rxjs';
 import { getISOWeek } from 'date-fns';
 import { ApplicationConfig } from '@angular/platform-browser';
 import { PrimeNGConfig } from 'primeng/api';
-
+import {
+  StatisticIncome,
+  StatisticIncomeService,
+} from './statistic-income.service';
+export interface DataReport {
+  label: string;
+  dt_online: number;
+  dt_store: number;
+}
 @Component({
   selector: 'app-income',
   templateUrl: './income.component.html',
-  styleUrls: ['./income.component.scss']
+  styleUrls: ['./income.component.scss'],
 })
 export class IncomeComponent implements OnInit {
   stackedData: any;
-  mode = 'date';
-
-
-  dataReport = [
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 24000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 22000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 30000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 45000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 24000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 22000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 30000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 45000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 24000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 22000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 30000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 45000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 24000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 22000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 30000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 45000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 24000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 22000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 30000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 45000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 24000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 22000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 30000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 45000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 24000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 22000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 30000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 45000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 24000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 22000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 30000000,
-    },
-    {
-      label: '1/1/2022',
-      onlineReport: 15000000,
-      storeReport: 45000000,
-    },
-  ];
+  mode = 'year';
+  date!: Date;
+  dataReport: StatisticIncome[] = [];
   stackedOptions: any;
 
-  constructor(private primengConfig: PrimeNGConfig) {}
-
-  onChange(result: Date[]): void {
+  constructor(private statisticIncomeService: StatisticIncomeService) {}
+  onChange(result: Date): void {
     console.log('onChange: ', result);
+    switch (this.mode) {
+      case 'week':
+        let s_date = new Date(result.setDate(result.getDate())).toUTCString();
+        let e_date = new Date(
+          result.setDate(result.getDate() + 6)
+        ).toUTCString();
+        console.log(s_date, ' ', e_date);
+        break;
+      case 'year':
+        this.getStatisticIncomeByMonth(this.date.getFullYear());
+        break;
+      case 'month':
+        console.log(result.getMonth());
+        break;
+    }
   }
-  getWeek(result: Date[]): void {
-    console.log('week: ', result.map(getISOWeek));
-  }
-
   ngOnInit() {
-    this.stackedData = {
-      labels: this.dataReport.map((data) => data.label),
-      datasets: [
-        {
-          type: 'bar',
-          label: 'DT Cửa hàng',
-          backgroundColor: '#42A5F5',
-          data: this.dataReport.map((data) => data.storeReport),
-        },
-        {
-          type: 'bar',
-          label: 'DT Online',
-          backgroundColor: '#FFA726',
-          data: this.dataReport.map((data) => data.onlineReport),
-        },
-      ],
-    };
+    this.getStatisticIncomeByMonth(new Date().getFullYear());
 
     this.stackedOptions = {
       tooltips: {
@@ -291,8 +131,44 @@ export class IncomeComponent implements OnInit {
         },
       },
     };
-    this.primengConfig.ripple = true;
-  }
+    console.log(this.stackedData);
   }
 
-
+  getStatisticIncomeByMonth(year: number) {
+    this.dataReport = [];
+    this.stackedData = {};
+    this.statisticIncomeService
+      .getStatisticIncomeByYear(year)
+      .subscribe((res: StatisticIncome[]) => {
+        if (res.length) {
+          let statisticIncomes = res;
+          let j = 0;
+          for (let i = 1; i < 13; i++) {
+            if (statisticIncomes[j].thang == i) {
+              this.dataReport.push(statisticIncomes[j]);
+              j++;
+            } else {
+              this.dataReport.push({ thang: i, dt_store: 0, dt_online: 0 });
+            }
+          }
+          this.stackedData = {
+            labels: this.dataReport.map((data) => 'Tháng ' + data.thang),
+            datasets: [
+              {
+                type: 'bar',
+                label: 'DT Cửa hàng',
+                backgroundColor: '#42A5F5',
+                data: this.dataReport.map((data) => data.dt_store),
+              },
+              {
+                type: 'bar',
+                label: 'DT Online',
+                backgroundColor: '#FFA726',
+                data: this.dataReport.map((data) => data.dt_online),
+              },
+            ],
+          };
+        }
+      });
+  }
+}

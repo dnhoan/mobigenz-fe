@@ -1,0 +1,19 @@
+<div class="bg-white mt-3 p-3">
+  <div class="mb-4">
+    <nz-range-picker
+      [(ngModel)]="date"
+      (ngModelChange)="onChange($event)"
+      [nzFormat]="'dd/MM/yyyy'"
+    ></nz-range-picker>
+    <br />
+  </div>
+  <h5>Đơn hàng</h5>
+  <div class="col-lg-6 col-md-12 m-auto">
+    <p-chart
+      type="doughnut"
+      [data]="data"
+      [options]="chartOptions"
+      [style]="{ width: '40%' }"
+    ></p-chart>
+  </div>
+</div>
