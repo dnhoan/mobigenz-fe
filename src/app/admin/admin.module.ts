@@ -27,13 +27,14 @@ import { SelectImeiComponent } from './create-order/select-imei/select-imei.comp
 import { DeliveryInfoComponent } from './create-order/delivery-info/delivery-info.component';
 import { CustomerInfoComponent } from './create-order/customer-info/customer-info.component';
 import { AddressComponent } from './create-order/address/address.component';
-import {ChartModule} from 'primeng/chart';
-import { StatisticalComponent } from './statistical/statistical.component';
+import { ChartModule } from 'primeng/chart';
 import { IncomeComponent } from './statistical/income/income.component';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { ExchangeOrderComponent } from './exchange-order/exchange-order.component';
 import { ExchangeOrderDetailComponent } from './exchange-order/exchange-order-detail/exchange-order-detail.component';
 import { ExchangeProductComponent } from './exchange-order/exchange-order-detail/exchange-product/exchange-product.component';
+import { OrderStatusComponent } from './statistical/order-status/order-status.component';
+import { ProductVariantsComponent } from './products/product-detail/product-variants/product-variants.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -48,7 +49,6 @@ import { ExchangeProductComponent } from './exchange-order/exchange-order-detail
     GetLengthArrayPipe,
     ImeiComponent,
     OrderStatusPipe,
-    StatisticalComponent,
     OrdersComponent,
     CreateOrderComponent,
     SelectImeiComponent,
@@ -60,6 +60,8 @@ import { ExchangeProductComponent } from './exchange-order/exchange-order-detail
     ExchangeOrderComponent,
     ExchangeOrderDetailComponent,
     ExchangeProductComponent,
+    OrderStatusComponent,
+    ProductVariantsComponent,
   ],
   imports: [
     CommonModule,
