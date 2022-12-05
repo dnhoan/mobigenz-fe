@@ -8,8 +8,10 @@
         [nzStatus]="
           currentOrder.orderStatus == -1
             ? 'process'
-            : currentOrder.orderStatus >= orderStatus.status &&
-              orderStatus.status != -1
+            : (currentOrder.orderStatus >= orderStatus.status &&
+                orderStatus.status != -1 &&
+                orderStatus.status != -2) ||
+              (currentOrder.orderStatus == -2 && orderStatus.status != -1)
             ? 'process'
             : 'wait'
         "
@@ -29,7 +31,7 @@
     <div class="border-end m-3 pe-3">
       <p><b>Ngày tạo</b></p>
       <p>
-        {{ currentOrder.ctime | date: "dd/MM/yyyy HH:mm" }}
+        {{ currentOrder.ctime | date : "dd/MM/yyyy HH:mm" }}
       </p>
     </div>
     <div class="border-end m-3 pe-3">

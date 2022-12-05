@@ -1,7 +1,7 @@
-<div class="bg-white mt-4">
+<div class="bg-white mt-4 p-3">
   <div class="p-3 d-flex justify-content-between">
     <button nz-button nzType="primary" (click)="openDrawer('')">
-      Them san pham
+      Thêm sản phẩm
     </button>
     <nz-input-group style="width: 40%" [nzSuffix]="suffixIconSearch">
       <input type="text" nz-input placeholder="input search text" />
@@ -42,8 +42,8 @@
           </td>
           <td>{{ product.manufacturerDto!.manufacturerName }}</td>
           <td>{{ product.productLineDto!.productLineName }}</td>
-          <td>{{ product.ctime | date: "hh:mm dd/MM/yyyy" }}</td>
-          <td>{{ product.mtime | date: "hh:mm dd/MM/yyyy" }}</td>
+          <td>{{ product.ctime | date : "hh:mm dd/MM/yyyy" }}</td>
+          <td>{{ product.mtime | date : "hh:mm dd/MM/yyyy" }}</td>
         </tr>
         <tr [nzExpand]="product.expand!">
           <nz-table
