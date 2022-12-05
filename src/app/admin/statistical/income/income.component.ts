@@ -141,10 +141,12 @@ export class IncomeComponent implements OnInit {
       .getStatisticIncomeByYear(year)
       .subscribe((res: StatisticIncome[]) => {
         if (res.length) {
+          console.log(res);
+
           let statisticIncomes = res;
           let j = 0;
           for (let i = 1; i < 13; i++) {
-            if (statisticIncomes[j].thang == i) {
+            if (j < res.length && statisticIncomes[j].thang == i) {
               this.dataReport.push(statisticIncomes[j]);
               j++;
             } else {

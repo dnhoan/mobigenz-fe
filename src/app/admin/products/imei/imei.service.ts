@@ -6,6 +6,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { ImeiDto } from 'src/app/DTOs/ImeiDto';
 import { ProductDetailDto } from 'src/app/DTOs/ProductDetailDto';
 import { environment } from 'src/environments/environment';
+import { ImeiUpload } from './imei.component';
 
 export interface ExchangeImei {
   newImeiId: number;
@@ -75,6 +76,26 @@ export class ImeiService {
       }),
       catchError(this.handleError<any>('Error create imei', []))
     );
+  }
+  batchSaveImei(
+    productDetailId: number,
+    imeiUploads: ImeiUpload[]
+  ): Observable<ImeiDto[] | ImeiUpload[]> {
+    return this.httpClient
+      .post(`${this.baseUrl}/imeis/${productDetailId}`, imeiUploads)
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 201) {
+            this.message.success('Thành công');
+          } else if (res.statusCode == 400) {
+            this.message.success(
+              'Data chưa hợp lên vui lòng tải file về và kiểm tra lại'
+            );
+          }
+          return res;
+        }),
+        catchError(this.handleError<any>('Error upload file', false))
+      );
   }
   addImeisToOrderDetail(
     order_detail_id: number,

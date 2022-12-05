@@ -10,18 +10,14 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: 'shop',
-    loadChildren: () => import('./shop/shop.module').then((m) => m.ShopModule),
-  },
-  {
     path: 'admin',
     canActivate: [AdminGuard],
     loadChildren: () =>
       import('./admin/admin.module').then((m) => m.AdminModule),
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'forgot',

@@ -1,6 +1,5 @@
-<div class="mt-4 bg-white">
+<div class="mt-4 bg-white p-3">
   <div class="d-flex justify-content-between p-3 row">
-    <button class="col-2" nz-button nzType="primary">Tạo đơn hàng</button>
     <nz-input-group class="col-4" [nzSuffix]="suffixIconSearch">
       <input
         type="text"
@@ -35,7 +34,7 @@
             order.id
           }}</a>
         </td>
-        <td>{{ order.ctime | date: "dd/MM/yyyy HH:mm " }}</td>
+        <td>{{ order.ctime | date : "dd/MM/yyyy HH:mm " }}</td>
         <td>{{ order.recipientName }}</td>
         <td>{{ order.recipientPhone }}</td>
         <td>{{ order.quantity }}</td>

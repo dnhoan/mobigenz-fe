@@ -51,7 +51,10 @@ export class CustomerComponent implements OnInit {
       customerName: ['', [Validators.required]],
       phoneNumber: [
         '',
-        [Validators.required, Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})')],
+        [
+          Validators.required,
+          Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
+        ],
       ],
       birthday: ['', [Validators.required]],
       gender: [''],
@@ -59,7 +62,7 @@ export class CustomerComponent implements OnInit {
       customerType: [''],
       citizenIdentifyCart: [''],
       ctime: ['', [Validators.required]],
-      status: [1,],
+      status: [1],
     });
     this.isVisible = true;
   }
@@ -174,9 +177,8 @@ export class CustomerComponent implements OnInit {
         }
       );
     }
-      this.isVisible = true;
-      return;
-
+    this.isVisible = true;
+    return;
   }
 
   addValueCustomer() {
@@ -222,6 +224,8 @@ export class CustomerComponent implements OnInit {
       this.Page = res.data.customers;
     });
   }
+
+  changePage(page: number) {}
 
   pageItem(pageItems: any) {
     this.limit = pageItems;
