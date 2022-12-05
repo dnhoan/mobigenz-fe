@@ -5,7 +5,6 @@ export interface Customer {
   customerName?: string;
   phoneNumber?: string;
   birthday?: Date;
-  image?: string;
   gender?: number;
   email?: string;
   customerType?: number;

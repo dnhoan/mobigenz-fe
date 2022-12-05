@@ -1,8 +1,9 @@
 <div class="container" id="container">
   <div class="form-container sign-in-container">
+
     <form [formGroup]="formLogin">
-      <h1>Đăng nhập</h1>
-      <label>Email</label>
+      <h1 class="juntify-content-center">Đăng nhập</h1>
+      <label class="mt-5">Email</label>
       <input type="email" formControlName="email" placeholder="Email" />
       <label>Password</label>
       <input
@@ -10,13 +11,7 @@
         formControlName="password"
         placeholder="Password"
       />
-      <div class="row">
-        <div class="col-2">
-          <input type="checkbox" aria-label="RememberMe?" />
-        </div>
-        <div class="col-10"><a href="">Remember Me?</a></div>
-      </div>
-      <button class="mt-3" (click)="onSubmit()">Đăng nhập</button>
+      <button class="mt-5" (click)="onSubmit()">Đăng nhập</button>
     </form>
   </div>
   <div class="overlay-container">
@@ -24,20 +19,20 @@
       <div class="overlay-panel overlay-right">
         <h1>Xin chào bạn!</h1>
         <p>
-          Nếu bạn chưa có tài khoản, hãy đăng ký để trải nghiệm cùng MobileGenz!
+          Chào mừng bạn đến với MobileGenz!
         </p>
-        <button
+        <!-- <button
           class="btn btn-lg ghost btn-outline-primary"
           (click)="showModal()"
         >
           Đăng ký
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
 </div>
 
-<nz-modal
+<!-- <nz-modal
     [(nzVisible)]="isVisible"
     (nzOnCancel)="handleCancel()"
     (nzOnOk)="handleOk()"
@@ -158,4 +153,4 @@
         </nz-form-item>
       </form>
     </ng-container>
-  </nz-modal>
+  </nz-modal> -->

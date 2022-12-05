@@ -58,7 +58,6 @@ export class UpdateCustomerComponent implements OnInit {
       customerName: '',
       phoneNumber: '',
       birthday: '',
-      image: '',
       gender: '',
       email: '',
       customerType: '',
@@ -73,7 +72,6 @@ export class UpdateCustomerComponent implements OnInit {
       customerName: this.customer?.customerName,
       phoneNumber: this.customer?.phoneNumber,
       birthday: this.customer?.birthday,
-      image: this.customer?.image,
       gender: this.customer?.gender,
       email: this.customer?.account?.email,
       customerType: this.customer?.customerType,
@@ -100,7 +98,6 @@ export class UpdateCustomerComponent implements OnInit {
     this.customer.customerName = this.formEdit.value.customerName;
     this.customer.phoneNumber = this.formEdit.value.phoneNumber;
     this.customer.birthday = this.formEdit.value.birthday;
-    this.customer.image = this.formEdit.value.image;
     this.customer.gender = this.formEdit.value.gender;
     this.customer.email = this.formEdit.value.email;
     this.customer.customerType = this.formEdit.value.customerType;

@@ -59,7 +59,6 @@ export class LoginComponent implements OnInit {
     this.formLogin = this.fb.group({
       email: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      remember: [true],
     });
     this.formRegister = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -102,55 +101,55 @@ export class LoginComponent implements OnInit {
     this.formRegister.value.phoneNumber = '';
   }
 
-  handleOk(): void {
-    this.submit = true;
-    if (this.formRegister.valid) {
-      this.registerAccount();
-    }
-  }
+  // handleOk(): void {
+  //   this.submit = true;
+  //   if (this.formRegister.valid) {
+  //     this.registerAccount();
+  //   }
+  // }
 
   handleCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisible = false;
   }
 
-  registerAccount() {
-    if (!this.formRegister.valid) {
-      this.toastr.error('Bạn phải nhập đầy đủ thông tin!');
-      this.isVisible = true;
-      return;
-    }
-    if (
-      this.formRegister.value.password != this.formRegister.value.repassword
-    ) {
-      this.toastr.error('Mật khẩu xác nhận phải trùng khớp!');
-      this.isVisible = true;
-      return;
-    } else {
-      this.addValueAccount();
-      this.accountService.register(this.account).subscribe(
-        (res) => {
-          this.toastr.success('Đăng ký tài khoản thành công!');
-          this.isVisible = false;
-        },
-        (error) => {
-          this.isVisible = true;
-          if (error.error.message === 'Email đã tồn tại!') {
-            this.toastr.error(error.error.message);
-            return;
-          }
-          if (error.error.message === 'Số điện thoại đã tồn tại!') {
-            this.toastr.error(error.error.message);
-            return;
-          }
-          if (error.error.message === 'Đăng ký thất bại!') {
-            this.toastr.error(error.error.message);
-            return;
-          }
-        }
-      );
-    }
-  }
+  // registerAccount() {
+  //   if (!this.formRegister.valid) {
+  //     this.toastr.error('Bạn phải nhập đầy đủ thông tin!');
+  //     this.isVisible = true;
+  //     return;
+  //   }
+  //   if (
+  //     this.formRegister.value.password != this.formRegister.value.repassword
+  //   ) {
+  //     this.toastr.error('Mật khẩu xác nhận phải trùng khớp!');
+  //     this.isVisible = true;
+  //     return;
+  //   } else {
+  //     this.addValueAccount();
+  //     this.accountService.register(this.account).subscribe(
+  //       (res) => {
+  //         this.toastr.success('Đăng ký tài khoản thành công!');
+  //         this.isVisible = false;
+  //       },
+  //       (error) => {
+  //         this.isVisible = true;
+  //         if (error.error.message === 'Email đã tồn tại!') {
+  //           this.toastr.error(error.error.message);
+  //           return;
+  //         }
+  //         if (error.error.message === 'Số điện thoại đã tồn tại!') {
+  //           this.toastr.error(error.error.message);
+  //           return;
+  //         }
+  //         if (error.error.message === 'Đăng ký thất bại!') {
+  //           this.toastr.error(error.error.message);
+  //           return;
+  //         }
+  //       }
+  //     );
+  //   }
+  // }
 
   onSubmit() {
     this.isSubmitted = true;
@@ -180,7 +179,7 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           this.router.navigate(['/login']);
-          this.toastr.error('Tài khoản hoặc mật khẩu không chính xác!');
+          this.toastr.error("Tài khoản hoặc mật khẩu không chính xác!");
         }
       );
       return;
