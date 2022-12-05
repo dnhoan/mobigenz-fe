@@ -35,6 +35,8 @@ import { ExchangeOrderDetailComponent } from './exchange-order/exchange-order-de
 import { ExchangeProductComponent } from './exchange-order/exchange-order-detail/exchange-product/exchange-product.component';
 import { OrderStatusComponent } from './statistical/order-status/order-status.component';
 import { ProductVariantsComponent } from './products/product-detail/product-variants/product-variants.component';
+import { NgxPrinterModule } from 'ngx-printer';
+import { PrinterOrderComponent } from './create-order/printer-order/printer-order.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -62,6 +64,7 @@ import { ProductVariantsComponent } from './products/product-detail/product-vari
     ExchangeProductComponent,
     OrderStatusComponent,
     ProductVariantsComponent,
+    PrinterOrderComponent,
   ],
   imports: [
     CommonModule,
@@ -72,6 +75,11 @@ import { ProductVariantsComponent } from './products/product-detail/product-vari
     NzGridModule,
     NzSpaceModule,
     QuillModule.forRoot(),
+    NgxPrinterModule.forRoot({
+      printOpenWindow: true,
+      renderClass: 'custom-print',
+      printPreviewOnly: false,
+    }),
   ],
   exports: [FilterOptionValuePipe, FilterSpecificationPipe, GetLengthArrayPipe],
 })

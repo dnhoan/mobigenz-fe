@@ -46,12 +46,12 @@ export class CustomerInfoComponent implements OnInit {
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((term: string) =>
-          this.customerService.getCustomerByCusName(term)
+          this.customerService.getPageCustomer(0, 10, { valueSearch: term })
         )
       )
       .subscribe((res) => {
         this.isLoading = false;
-        this.customers = res.data.customers;
+        this.customers = res.data.customers.content;
       });
   }
   changeCustomer() {

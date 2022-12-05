@@ -1,222 +1,251 @@
-<div nz-row>
-  <div nz-col nzSpan="21">
-    <form nz-form class="mt-5" [formGroup]="formSearch">
-      <div nz-row>
-        <div nz-col nzSpan="20">
-          <nz-form-item>
-            <nz-form-control [nzSm]="12" [nzXs]="24">
-              <input
-                nz-input
-                type="text"
-                formControlName="valueSearch"
-                id="valueSearch"
-                placeholder="Nhập email hoặc số điện thoại để có thể tìm kiếm!"
-              />
-            </nz-form-control>
-            <button class="btnSearch" nz-button (click)="timkiem()" [nzType]="'primary'"><span>Tìm kiếm</span></button>
-          </nz-form-item>
-        </div>
-      </div>
-
-    </form>
-  </div>
-
-  <div nz-col nzSpan="3">
-    <button
-      class="mb-3 mt-5"
-      nz-button
-      [nzType]="'primary'"
-      (click)="showModal()"
-    >
-      <span>Thêm mới</span>
-    </button>
-    <nz-modal
-      [(nzVisible)]="isVisible"
-      (nzOnCancel)="handleCancel()"
-      (nzOnOk)="handleOk()"
-    >
-      <ng-container *nzModalContent>
-        <form nz-form [formGroup]="formAcc">
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
-              >Email</nz-form-label
-            >
-            <nz-form-control
-              [nzSm]="14"
-              [nzXs]="24"
-            >
-              <input
-                nz-input
-                type="email"
-                formControlName="email"
-                id="email"
-              />
-              <small
-                class="col alert text-danger col-12"
-                role="alert"
-                *ngIf="formAcc.get('email')?.errors?.['required'] && formAcc.get('email')?.touched || submit && formAcc.get('email')?.errors?.['required'] "
+<div class="bg-white mt-4 p-3">
+  <div class="d-flex justify-content-between p-3">
+    <div>
+      <button nz-button [nzType]="'primary'" (click)="showModal()">
+        <span>Thêm mới</span>
+      </button>
+      <nz-modal
+        [(nzVisible)]="isVisible"
+        (nzOnCancel)="handleCancel()"
+        (nzOnOk)="handleOk()"
+      >
+        <ng-container *nzModalContent>
+          <form nz-form [formGroup]="formAcc">
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
+                >Email</nz-form-label
               >
-                Email không được để trống !
-              </small>
-              <small
-              class="col alert text-danger col-12"
-              role="alert"
-              *ngIf="!formAcc.get('email')?.errors?.['required'] && formAcc.get('email')?.errors?.['email']"
-            >
-              Email phải đúng định dạng !
-            </small>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item *ngIf="!formAcc.value.id">
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password"
-              >Mật khẩu</nz-form-label
-            >
-            <nz-form-control
-              [nzSm]="14"
-              [nzXs]="24"
-            >
-              <input
-                nz-input
-                type="password"
-                formControlName="password"
-                id="password"
-              />
-              <small
-                class="col alert text-danger col-12"
-                role="alert"
-                *ngIf="formAcc.get('password')?.errors?.['required'] && formAcc.get('password')?.touched || submit && formAcc.get('password')?.errors?.['required'] "
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input
+                  nz-input
+                  type="email"
+                  formControlName="email"
+                  id="email"
+                />
+                <small
+                  class="col alert text-danger col-12"
+                  role="alert"
+                  *ngIf="formAcc.get('email')?.errors?.['required'] && formAcc.get('email')?.touched || submit && formAcc.get('email')?.errors?.['required'] "
+                >
+                  Email không được để trống !
+                </small>
+                <small
+                  class="col alert text-danger col-12"
+                  role="alert"
+                  *ngIf="!formAcc.get('email')?.errors?.['required'] && formAcc.get('email')?.errors?.['email']"
+                >
+                  Email phải đúng định dạng !
+                </small>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngIf="!formAcc.value.id">
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password"
+                >Mật khẩu</nz-form-label
               >
-                Mật khẩu không được để trống !
-              </small>
-              <small
-              class="col alert text-danger col-12"
-              role="alert"
-              *ngIf="!formAcc.get('password')?.errors?.['required'] && formAcc.get('password')?.errors?.['pattern']"
-            >
-            Mật khẩu phải có 8 ký tự trở lên, bao gồm cả chữ, cả số và cả kí tự đặc biệt !
-            </small>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber"
-              >Số ĐT</nz-form-label
-            >
-            <nz-form-control
-              [nzSm]="14"
-              [nzXs]="24"
-            >
-              <input
-                nz-input
-                type="text"
-                formControlName="phoneNumber"
-                id="phoneNumber"
-              />
-              <small
-                class="col alert text-danger col-12"
-                role="alert"
-                *ngIf="formAcc.get('phoneNumber')?.errors?.['required'] && formAcc.get('phoneNumber')?.touched || submit && formAcc.get('phoneNumber')?.errors?.['required'] "
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input
+                  nz-input
+                  type="password"
+                  formControlName="password"
+                  id="password"
+                />
+                <small
+                  class="col alert text-danger col-12"
+                  role="alert"
+                  *ngIf="formAcc.get('password')?.errors?.['required'] && formAcc.get('password')?.touched || submit && formAcc.get('password')?.errors?.['required'] "
+                >
+                  Mật khẩu không được để trống !
+                </small>
+                <small
+                  class="col alert text-danger col-12"
+                  role="alert"
+                  *ngIf="!formAcc.get('password')?.errors?.['required'] && formAcc.get('password')?.errors?.['pattern']"
+                >
+                  Mật khẩu phải có 8 ký tự trở lên, bao gồm cả chữ, cả số và cả
+                  kí tự đặc biệt !
+                </small>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label
+                [nzSm]="6"
+                [nzXs]="24"
+                nzRequired
+                nzFor="phoneNumber"
+                >Số ĐT</nz-form-label
               >
-                Số điện thoại không được để trống!
-              </small>
-              <small class="col alert text-danger" role="alert"
-              *ngIf="!formAcc.get('phoneNumber')?.errors?.['required'] && formAcc.get('phoneNumber')?.errors?.pattern">
-                Số điện thoại phải là số và tối đa 10 kí tự!
-              </small>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status"
-              >Trạng thái</nz-form-label
-            >
-            <nz-radio-group
-              class="mt-1"
-              formControlName="status"
-              nzName="status"
-            >
-              <label nz-radio [nzValue]="1" nzValue="1">Active</label>
-              <label nz-radio [nzValue]="0" nzValue="0">InActive</label>
-            </nz-radio-group>
-            <small
+              <nz-form-control [nzSm]="14" [nzXs]="24">
+                <input
+                  nz-input
+                  type="text"
+                  formControlName="phoneNumber"
+                  id="phoneNumber"
+                />
+                <small
+                  class="col alert text-danger col-12"
+                  role="alert"
+                  *ngIf="formAcc.get('phoneNumber')?.errors?.['required'] && formAcc.get('phoneNumber')?.touched || submit && formAcc.get('phoneNumber')?.errors?.['required'] "
+                >
+                  Số điện thoại không được để trống!
+                </small>
+                <small
+                  class="col alert text-danger"
+                  role="alert"
+                  *ngIf="!formAcc.get('phoneNumber')?.errors?.['required'] && formAcc.get('phoneNumber')?.errors?.pattern"
+                >
+                  Số điện thoại phải là số và tối đa 10 kí tự!
+                </small>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status"
+                >Trạng thái</nz-form-label
+              >
+              <nz-radio-group
+                class="mt-1"
+                formControlName="status"
+                nzName="status"
+              >
+                <label nz-radio [nzValue]="1" nzValue="1">Active</label>
+                <label nz-radio [nzValue]="0" nzValue="0">InActive</label>
+              </nz-radio-group>
+              <small
                 class="col alert text-danger col-12"
                 role="alert"
                 *ngIf="formAcc.get('status')?.errors?.required && submit"
               >
                 Bạn phải chọn trạng thái!
               </small>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="role"
-              >Phân quyền</nz-form-label
-            >
-            <nz-radio-group class="mt-1" formControlName="role" nzName="role">
-              <label nz-radio [nzValue]="1">Admin</label>
-              <label nz-radio [nzValue]="2">User</label>
-            </nz-radio-group>
-            <small
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="role"
+                >Phân quyền</nz-form-label
+              >
+              <nz-radio-group class="mt-1" formControlName="role" nzName="role">
+                <label nz-radio [nzValue]="1">Admin</label>
+                <label nz-radio [nzValue]="2">User</label>
+              </nz-radio-group>
+              <small
                 class="col alert text-danger col-12"
                 role="alert"
                 *ngIf="formAcc.get('role')?.errors?.required && submit"
               >
                 Bạn phải chọn quyền!
               </small>
-          </nz-form-item>
-        </form>
-      </ng-container>
-    </nz-modal>
+            </nz-form-item>
+          </form>
+        </ng-container>
+      </nz-modal>
+    </div>
+    <div>
+      <form nz-form [formGroup]="formSearch">
+        <div>
+          <div>
+            <nz-form-item>
+              <nz-form-control>
+                <input
+                  nz-input
+                  type="text"
+                  formControlName="valueSearch"
+                  id="valueSearch"
+                  placeholder="Nhập email hoặc số điện thoại để có thể tìm kiếm!"
+                />
+              </nz-form-control>
+              <button
+                class="btnSearch"
+                nz-button
+                (click)="timkiem()"
+                [nzType]="'primary'"
+              >
+                <span>Tìm kiếm</span>
+              </button>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-<!--  ---------------------------------  -->
-<nz-table *ngIf="datas">
-  <thead>
-    <tr>
-      <th>Mã TK</th>
-      <th>Email</th>
-      <th>Số ĐT</th>
-      <th>Role</th>
-      <th>Trạng thái</th>
-      <th colSpan="2">Thao tác</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of datas">
-      <td>{{ item.id }}</td>
-      <td>{{ item.email }}</td>
-      <td>{{ item.phoneNumber}}</td>
-      <td *ngIf="item.roles">{{ item.roles![0].roleName }}</td>
-      <td *ngIf="item.status">Active</td>
-      <td *ngIf="!item.status">InActive</td>
-      <td style="text-align: center;">
-        <span class="btnUpdate" nz-icon nzType="edit" (click)="getInfoAccount(item.id)" nzTheme="outline"></span>
-        <span class="btnDelete" nz-icon nzType="delete" (click)="deleteAccount(item.id)" nzTheme="outline"></span>
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
-<div class="footer">
-  <div>
-    <nav class="mr-3" aria-label="..." *ngIf="Page">
-      <ul class="pagination justify-content-end">
-        <select #selectSize (change)="pageItem(selectSize.value)"  class="page-items" >
-          <option selected >5</option>
-          <option >10</option>
-          <option >15</option>
-          <option >20</option>
-          <option >25</option>
-          <option >30</option>
-        </select>
-        <li class="page-item " [ngClass]="offset == 0?'disabled':''">
-          <a class="page-link" (click)="preNextPage('pre')">Previous</a>
-        </li>
+  <!--  ---------------------------------  -->
+  <ng-template #noResult></ng-template>
+  <nz-table *ngIf="datas" [nzNoResult]="noResult">
+    <thead>
+      <tr>
+        <th>Mã TK</th>
+        <th>Email</th>
+        <th>Số ĐT</th>
+        <th>Role</th>
+        <th>Trạng thái</th>
+        <th colSpan="2">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of datas">
+        <td>{{ item.id }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.phoneNumber }}</td>
+        <td *ngIf="item.roles">{{ item.roles![0].roleName }}</td>
+        <td *ngIf="item.status">Active</td>
+        <td *ngIf="!item.status">InActive</td>
+        <td style="text-align: center">
+          <span
+            class="btnUpdate"
+            nz-icon
+            nzType="edit"
+            (click)="getInfoAccount(item.id)"
+            nzTheme="outline"
+          ></span>
+          <span
+            class="btnDelete"
+            nz-icon
+            nzType="delete"
+            (click)="deleteAccount(item.id)"
+            nzTheme="outline"
+          ></span>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="footer">
+    <div>
+      <nav class="mr-3" aria-label="..." *ngIf="Page">
+        <ul class="pagination justify-content-end">
+          <select
+            style="width: 100px; margin-right: 10px"
+            class="form-select"
+            aria-label="Default select example"
+            #selectSize
+            (change)="pageItem(selectSize.value)"
+          >
+            <option selected>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option>20</option>
+            <option>25</option>
+            <option>30</option>
+          </select>
+          <li class="page-item" [ngClass]="offset == 0 ? 'disabled' : ''">
+            <a class="page-link" (click)="preNextPage('pre')">Previous</a>
+          </li>
 
-        <li *ngFor="let Page of [].constructor(Page['totalPages']);let i = index"
-            class="page-item" [ngClass]="offset == i?'active':''">
-          <a class="page-link" (click)="pagination(i)">{{i + 1}}</a>
-        </li>
+          <li
+            *ngFor="
+              let Page of [].constructor(Page['totalPages']);
+              let i = index
+            "
+            class="page-item"
+            [ngClass]="offset == i ? 'active' : ''"
+          >
+            <a class="page-link" (click)="pagination(i)">{{ i + 1 }}</a>
+          </li>
 
-        <li class="page-item" [ngClass]="(Page['totalPages'] - 1) == offset?'disabled':''">
-          <a class="page-link" (click)="preNextPage('next')">Next</a>
-        </li>
-      </ul>
-    </nav>
+          <li
+            class="page-item"
+            [ngClass]="Page['totalPages'] - 1 == offset ? 'disabled' : ''"
+          >
+            <a class="page-link" (click)="preNextPage('next')">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </div>

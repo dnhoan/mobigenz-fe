@@ -9,8 +9,10 @@
           [nzStatus]="
             order.orderStatus == -1
               ? 'process'
-              : order.orderStatus >= orderStatus.status &&
-                orderStatus.status != -1
+              : (order.orderStatus >= orderStatus.status &&
+                  orderStatus.status != -1 &&
+                  orderStatus.status != -2) ||
+                (order.orderStatus == -2 && orderStatus.status != -1)
               ? 'process'
               : 'wait'
           "
@@ -162,9 +164,16 @@
           <p>Tổng tiền</p>
           <p>{{ order.totalMoney | number }}đ</p>
         </div>
-        <div class="d-flex justify-content-between">
-          <p>Phí giao hàng</p>
-          <p>{{ order.shipFee | number }}đ</p>
+        <div class="row d-flex justify-content-between">
+          <p class="col-6">Phí giao hàng</p>
+          <div class="col-6">
+            <nz-input-number
+              style="width: 100%"
+              [(ngModel)]="order.shipFee"
+              [nzMin]="1"
+              [nzStep]="1"
+            ></nz-input-number>
+          </div>
         </div>
         <div class="row d-flex justify-content-between">
           <p class="col-6">Khách thanh toán</p>
@@ -173,14 +182,16 @@
               style="width: 100%"
               [(ngModel)]="order.checkout"
               [nzMin]="1"
-              [nzMax]="order.totalMoney"
+              [nzMax]="order.goodsValue + order.shipFee!"
               [nzStep]="1"
             ></nz-input-number>
           </div>
         </div>
         <div class="d-flex justify-content-between">
           <p>Còn thiếu</p>
-          <p>{{ order.totalMoney - order.checkout | number }}đ</p>
+          <p>
+            {{ order.goodsValue + order.shipFee! - order.checkout | number }}đ
+          </p>
         </div>
         <textarea
           nz-input
@@ -198,8 +209,13 @@
         ></app-delivery-info>
       </div>
       <div class="p-3 rounded-3 d-flex justify-content-end bg-white">
-        <button nz-button nzType="default" nzSize="large" (click)="save()">
-          <span nz-icon nzType="save" nzTheme="outline"></span>
+        <button
+          nz-button
+          nzType="default"
+          nzSize="large"
+          (click)="printOrder()"
+        >
+          <span nz-icon nzType="printer" nzTheme="outline"></span>
           In hóa đơn
         </button>
         <button nz-button nzType="primary" nzSize="large" (click)="save()">
@@ -227,3 +243,111 @@
     ></textarea>
   </ng-container>
 </nz-modal>
+<!-- ngxPrintItem printName="First one"-->
+<div style="display: none">
+  <!-- <app-printer-order [order]="order"></app-printer-order> -->
+  <div id="printDiv">
+    <div id="page" class="p-3" style="width: 500px">
+      <section>
+        <h2 class="text-center"><b>Mobigenz Store</b></h2>
+        <h5 class="text-center">Hóa đơn mua hàng</h5>
+        <p class="text-center">{{ nowDate | date : "HH:mm dd/MM/yyyy" }}</p>
+        <div class="row">
+          <label class="col">Mã hóa đơn: {{ order.id }}</label>
+        </div>
+        <div class="row">
+          <label class="col">Tên khách hàng: {{ order.recipientName }}</label>
+        </div>
+        <div class="row">
+          <label class="col">Điện thoại: {{ order.recipientPhone }}</label>
+        </div>
+        <div class="row">
+          <label class="col">Email: {{ order.recipientEmail }}</label>
+        </div>
+        <div class="row">
+          <label class="col">SĐT: {{ order.recipientPhone }}</label>
+        </div>
+        <div class="row">
+          <label class="col">Địa chỉ: {{ order.address }}</label>
+        </div>
+        <div>
+          -------------------------------------------------------------------------
+        </div>
+        <div>
+          <table
+            class="table table-borderless"
+            *ngFor="let item of order.orderDetailDtos"
+          >
+            <thead>
+              <tr>
+                <th class="w-50">Tên Sp</th>
+                <th scope="col">Imei</th>
+                <th scope="col">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="w-50">
+                  {{ item.productDetailCartDto.productName }} <br />
+                  {{ item.productDetailCartDto.sku }}
+                </td>
+                <td>
+                  <ng-container *ngFor="let item of item.imeiDtoList">
+                    {{ item.imei }}
+                  </ng-container>
+                </td>
+                <td>
+                  {{ item.priceSell * item.imeiDtoList!.length | number }}đ
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2"><b>Tổng tiền</b></td>
+                <td>{{ order.totalMoney | number }}đ</td>
+              </tr>
+              <tr>
+                <td colspan="2"><b>Khách thanh toán</b></td>
+                <td>{{ order.checkout | number }}đ</td>
+              </tr>
+              <tr>
+                <td colspan="2"><b>Dư nợ</b></td>
+                <td>{{ order.totalMoney - order.checkout | number }}đ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          -------------------------------------------------------------------------
+        </div>
+        <div class="row" *ngFor="let item of order.orderDetailDtos">
+          <label class="col"
+            >Ngày tạo: {{ order.ctime | date : "HH:mm dd/MM/yyyy" }}</label
+          >
+        </div>
+        <div class="row">
+          <label class="col">Nhân viên bán hàng: Mobigenz Store</label>
+        </div>
+        <div>
+          -------------------------------------------------------------------------
+        </div>
+        <div class="row text-center">
+          <label class="col"><b>Chính sách đổi trả</b></label>
+        </div>
+        <div class="row text-center">
+          <label class="col">
+            Cửa hàng hỗ trợ 1 đổi 1 trong vòng 30 ngày kể từ ngày khách nhận
+            hàng nếu có lỗi từ nhà sản xuất!</label
+          >
+        </div>
+        <div class="row text-center">
+          <label class="col"><b>CẢM ƠN QUÝ KHÁCH ĐÃ MUA HÀNG</b></label>
+        </div>
+        <div class="row text-center">
+          <label class="col"><b>HẸN GẶP LẠI!</b></label>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<br />
+<!-- ngxPrintItemButton divID="printDiv" -->

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NgxPrinterService } from 'ngx-printer';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -29,6 +30,7 @@ import { SelectImeiComponent } from './select-imei/select-imei.component';
   styleUrls: ['./create-order.component.scss'],
 })
 export class CreateOrderComponent implements OnInit {
+  nowDate = new Date();
   isEdit = false;
   products: ProductDto[] = [];
   searchTerm = '';
@@ -47,7 +49,8 @@ export class CreateOrderComponent implements OnInit {
     private route: ActivatedRoute,
     private imeiService: ImeiService,
     private router: Router,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private printerService: NgxPrinterService
   ) {}
 
   ngOnInit(): void {
@@ -183,6 +186,7 @@ export class CreateOrderComponent implements OnInit {
     orderStore.update(() => ({ orderDto: this.order }));
   }
   save() {
+    this.order.totalMoney = this.order.shipFee! + this.order.goodsValue;
     this.orderService.saveOrder(this.order).subscribe((res) => {
       console.log(res);
       this.order = res;
@@ -212,7 +216,16 @@ export class CreateOrderComponent implements OnInit {
         }
       });
   }
+  printOrder() {
+    this.nowDate = new Date();
+    const head = document.getElementsByTagName('head')[0];
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.media = 'print';
+    head.appendChild(style);
 
+    this.printerService.printDiv('printDiv');
+  }
   handleOk() {
     this.updateStatus(this.order.id, -1, this.cancelNote);
     this.isShowConfirmCancelOrder = false;

@@ -6,6 +6,12 @@ import { ImeiService } from './imei.service';
 import { updateEntities } from '@ngneat/elf-entities';
 import { ProductDto } from 'src/app/DTOs/ProductDto';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
+import * as XLSX from 'xlsx';
+import { utils } from 'xlsx';
+export interface ImeiUpload {
+  imei: string;
+  error?: string;
+}
 @Component({
   selector: 'app-imei',
   templateUrl: './imei.component.html',
@@ -16,6 +22,7 @@ export class ImeiComponent implements OnInit, OnDestroy {
   @Input('productId') productId!: number | string;
   @Input('i_product_detail') i_product_detail: number = -1;
   newImei = '';
+  fileName: string = 'uploadFile.xlsx';
   fileList: NzUploadFile[] = [
     {
       uid: '-1',
@@ -24,7 +31,9 @@ export class ImeiComponent implements OnInit, OnDestroy {
       url: 'http://www.baidu.com/xxx.png',
     },
   ];
-  imeis: ImeiDto[] = [];
+  hasErrorUploadFile = false;
+  // imeis: ImeiDto[] = [];
+  dataUpload: ImeiUpload[] = [];
   isLoading = false;
   constructor(private imeiService: ImeiService) {}
 
@@ -97,23 +106,46 @@ export class ImeiComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     console.log('on destroy imei');
   }
-  handleChange(info: NzUploadChangeParam): void {
-    let fileList = [...info.fileList];
+  onFileChange(evt: any) {
+    this.hasErrorUploadFile = false;
+    const target: DataTransfer = <DataTransfer>evt.target;
+    if (target.files.length !== 1) throw new Error('Không thể sử dụng file');
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+      this.dataUpload = utils.sheet_to_json<ImeiUpload>(
+        wb.Sheets[wb.SheetNames[0]]
+      );
+      console.log(this.dataUpload);
 
-    // 1. Limit the number of uploaded files
-    // Only to show two recent uploaded files, and old ones will be replaced by the new
-    fileList = fileList.slice(-2);
+      this.dataUpload = this.dataUpload.map((res) => {
+        console.log(res);
 
-    // 2. Read from response and show file link
-    fileList = fileList.map((file) => {
-      if (file.response) {
-        // Component will show file.url as link
-        file.url = file.response.url;
-      }
-      return file;
-    });
-
-    this.fileList = fileList;
+        return { imei: res.imei };
+      });
+      console.log(this.dataUpload);
+      this.imeiService
+        .batchSaveImei(this.productDetail.id!, this.dataUpload)
+        .subscribe((res: any) => {
+          if (res.statusCode == 201) {
+            this.productDetail.imeis = this.productDetail.imeis?.concat(
+              res.data.data
+            );
+          } else if (res.statusCode == 400) {
+            this.hasErrorUploadFile = true;
+            this.dataUpload = res.data.data;
+          }
+        });
+    };
+    reader.readAsBinaryString(target.files[0]);
+    console.log('dataa ', this.dataUpload);
+  }
+  downloadFileError() {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataUpload);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, this.fileName);
   }
   currentImei!: ImeiDto;
   fakeImei = {
