@@ -78,7 +78,6 @@ export class CustomerComponent implements OnInit {
   saveCustomer() {
     if (this.customer.id) {
       this.update();
-
       return;
     }
     this.addCustomer(this.customer);
@@ -183,6 +182,9 @@ export class CustomerComponent implements OnInit {
   }
 
   addValueCustomer() {
+    // let bd;
+    // if (this.customer.birthday) bd = this.reFormatDate(this.customer.birthday);
+    // else bd = null;
     this.customer.id = this.formCus.value.id;
     this.customer.customerName = this.formCus.value.customerName;
     this.customer.phoneNumber = this.formCus.value.phoneNumber;
@@ -255,5 +257,30 @@ export class CustomerComponent implements OnInit {
     this.FillValueSearch();
     this.searchWithPage(0);
     this.initFormSearch();
+  }
+
+  formatDate(date: Date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+
+  reFormatDate(date: Date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day, ].join('-');
   }
 }
