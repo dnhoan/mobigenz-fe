@@ -1,0 +1,97 @@
+<form nz-form [formGroup]="formProfile">
+  <ng-container>
+    <div nz-row class="mt-5">
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="email"
+            >Email</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input type="email" formControlName="email" id="email" />
+            <small
+              class="col alert text-danger col-12"
+              role="alert"
+              *ngIf="formProfile.get('email')?.errors?.['required'] && formProfile.get('email')?.touched || submit && formProfile.get('email')?.errors?.['required'] "
+            >
+              Email không được để trống !
+            </small>
+            <small
+              class="col alert text-danger col-12"
+              role="alert"
+              *ngIf="!formProfile.get('email')?.errors?.['required'] && formProfile.get('email')?.errors?.['email']"
+            >
+              Email phải đúng định dạng !
+            </small>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="phoneNumber"
+            >Số ĐT</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input
+              nz-input
+              type="text"
+              formControlName="phoneNumber"
+              id="phoneNumber"
+            />
+            <small
+              class="col alert text-danger col-12"
+              role="alert"
+              *ngIf="formProfile.get('phoneNumber')?.errors?.['required'] && formProfile.get('phoneNumber')?.touched || submit && formProfile.get('phoneNumber')?.errors?.['required'] "
+            >
+              Số điện thoại không được để trống!
+            </small>
+            <small
+              class="col alert text-danger"
+              role="alert"
+              *ngIf="!formProfile.get('phoneNumber')?.errors?.['required'] && formProfile.get('phoneNumber')?.errors?.pattern"
+            >
+              Số điện thoại phải là số và tối đa 10 kí tự!
+            </small>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <div nz-row>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="email"
+            >Email</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input type="text" formControlName="email" id="email" />
+            <small
+              class="col alert text-danger col-12"
+              role="alert"
+              *ngIf="formProfile.get('email')?.errors?.['required'] && formProfile.get('email')?.touched || submit && formProfile.get('email')?.errors?.['required'] "
+            >
+              Email không được để trống!
+            </small>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="role"
+            >Phân quyền</nz-form-label
+          >
+          <nz-radio-group class="mt-1" formControlName="role" nzName="role">
+            <label nz-radio [nzValue]="1">Admin</label>
+            <label nz-radio [nzValue]="2">User</label>
+          </nz-radio-group>
+          <small
+            class="col alert text-danger col-12"
+            role="alert"
+            *ngIf="formProfile.get('role')?.errors?.required && submit"
+          >
+            Bạn phải chọn quyền!
+          </small>
+        </nz-form-item>
+      </div>
+    </div>
+  </ng-container>
+</form>

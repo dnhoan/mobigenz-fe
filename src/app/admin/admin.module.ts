@@ -1,7 +1,7 @@
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomerComponent } from './customer/customer.component';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -37,6 +37,8 @@ import { OrderStatusComponent } from './statistical/order-status/order-status.co
 import { ProductVariantsComponent } from './products/product-detail/product-variants/product-variants.component';
 import { NgxPrinterModule } from 'ngx-printer';
 import { PrinterOrderComponent } from './create-order/printer-order/printer-order.component';
+import { EmployeeComponent } from './employee/employee.component';
+import { ProfileComponent } from './profile/profile.component';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -65,6 +67,8 @@ import { PrinterOrderComponent } from './create-order/printer-order/printer-orde
     OrderStatusComponent,
     ProductVariantsComponent,
     PrinterOrderComponent,
+    EmployeeComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
@@ -73,6 +77,7 @@ import { PrinterOrderComponent } from './create-order/printer-order/printer-orde
     ChartModule,
     ReactiveFormsModule,
     NzGridModule,
+    FormsModule,
     NzSpaceModule,
     QuillModule.forRoot(),
     NgxPrinterModule.forRoot({

@@ -5,10 +5,13 @@
       <li nz-submenu nzTitle="Người dùng" nzIcon="user">
         <ul>
           <li nz-menu-item>
-            <a nz-button nzType="link" routerLink="customer">Khách hàng</a>
+            <a nz-button nzType="link" routerLink="account">Tài khoản</a>
           </li>
           <li nz-menu-item>
-            <a nz-button nzType="link" routerLink="account">Tài khoản</a>
+            <a nz-button nzType="link" routerLink="employee">Nhân viên</a>
+          </li>
+          <li nz-menu-item>
+            <a nz-button nzType="link" routerLink="customer">Khách hàng</a>
           </li>
         </ul>
       </li>
@@ -68,7 +71,7 @@
       </a>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu nzSelectable>
-          <li nz-menu-item>Thông tin cá nhân</li>
+          <li nz-menu-item routerLink="profile">Thông tin cá nhân</li>
           <li nz-menu-item (click)="logout()">Đăng xuất</li>
         </ul>
       </nz-dropdown-menu>

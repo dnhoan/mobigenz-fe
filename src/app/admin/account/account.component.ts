@@ -47,10 +47,21 @@ export class AccountComponent implements OnInit {
     this.formAcc = this.fb.group({
       id: null,
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.pattern('^(?=[^A-Z\\n]*[A-Z])(?=[^a-z\\n]*[a-z])(?=[^0-9\\n]*[0-9])(?=[^#?!@$%^&*\\n-]*[#?!@$%^&*-]).{8,}$')]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            '^(?=[^A-Z\\n]*[A-Z])(?=[^a-z\\n]*[a-z])(?=[^0-9\\n]*[0-9])(?=[^#?!@$%^&*\\n-]*[#?!@$%^&*-]).{8,}$'
+          ),
+        ],
+      ],
       phoneNumber: [
         '',
-        [Validators.required, Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})')],
+        [
+          Validators.required,
+          Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
+        ],
       ],
       role: [1, [Validators.required]],
       status: [1, [Validators.required]],
@@ -60,9 +71,9 @@ export class AccountComponent implements OnInit {
 
   handleOk() {
     this.submit = true;
-    if(this.formAcc.valid){
+    if (this.formAcc.valid) {
       this.saveAccount();
-    this.isVisible = false;
+      this.isVisible = false;
     }
   }
 
@@ -85,7 +96,6 @@ export class AccountComponent implements OnInit {
       .getAll(this.offset, this.limit)
       .subscribe((res: any) => {
         console.log(res);
-
         this.datas = res.data.accounts.items;
       });
   }
@@ -138,18 +148,17 @@ export class AccountComponent implements OnInit {
 
   addAccount(account: Account) {
     if (this.formAcc.valid) {
-      this.accountService.addAccount(account).subscribe(
-        (res) => {
-          this.getAllAccount();
-          this.toastr.success('Thêm tài khoản thành công!');
-        },
-        (error) => {
-          this.toastr.error(error.error.message);
-        }
-      );
+        this.accountService.addAccount(account).subscribe(
+          (res) => {
+            this.getAllAccount();
+            this.toastr.success('Thêm tài khoản thành công!');
+          },
+          (error) => {
+            this.toastr.error(error.error.message);
+          }
+        );
     }
   }
-
 
   update() {
     if (this.formAcc.valid) {
@@ -182,6 +191,8 @@ export class AccountComponent implements OnInit {
     if (page < 0) page = 0;
     this.offset = page;
     this.accountService.getAll(this.offset, this.limit).subscribe((res) => {
+      console.log(res);
+
       this.datas = res.data.accounts.items;
       this.Page = res.data.accounts;
     });
