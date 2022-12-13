@@ -6,6 +6,7 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { AccountService } from '../admin/account/account.service';
 
@@ -13,7 +14,7 @@ import { AccountService } from '../admin/account/account.service';
   providedIn: 'root',
 })
 export class AdminGuard implements CanActivate {
-  constructor(private router: Router, private accountService: AccountService) {}
+  constructor(private router: Router, private accountService: AccountService, private toastr: ToastrService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -32,7 +33,7 @@ export class AdminGuard implements CanActivate {
       return true;
     }
     // not logged in so redirect to login page with the return url
-    this.router.navigate(['login'], { queryParams: { returnUrl: state.url } });
+    this.toastr.error('Bạn phải có quyền Admin mới vào được trang này!'), { queryParams: { returnUrl: state.url } };
     return false;
   }
 }

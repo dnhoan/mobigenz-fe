@@ -12,6 +12,8 @@ import { ExchangeOrderDetailComponent } from './exchange-order/exchange-order-de
 import { ExchangeOrderComponent } from './exchange-order/exchange-order.component';
 import { IncomeComponent } from './statistical/income/income.component';
 import { OrderStatusComponent } from './statistical/order-status/order-status.component';
+import { AuthGuard } from '../guards/auth.guard';
+import { EmployeeComponent } from './employee/employee.component';
 
 const routes: Routes = [
   {
@@ -20,13 +22,18 @@ const routes: Routes = [
     children: [
       {
         path: 'products',
-        canActivate: [AdminGuard],
+        canActivate: [AuthGuard],
         component: ProductsComponent,
       },
       {
         path: 'customer',
-        canActivate: [AdminGuard],
+        canActivate: [AuthGuard],
         component: CustomerComponent,
+      },
+      {
+        path: 'employee',
+        canActivate: [AdminGuard],
+        component: EmployeeComponent,
       },
       {
         path: 'account',
@@ -35,30 +42,37 @@ const routes: Routes = [
       },
       {
         path: 'createOrder',
+        canActivate: [AuthGuard],
         component: CreateOrderComponent,
       },
       {
         path: 'order/:id',
+        canActivate: [AuthGuard],
         component: CreateOrderComponent,
       },
       {
         path: 'exchangeOrder/:id',
+        canActivate: [AuthGuard],
         component: ExchangeOrderDetailComponent,
       },
       {
         path: 'exchangeOrders',
+        canActivate: [AuthGuard],
         component: ExchangeOrderComponent,
       },
       {
         path: 'orders',
+        canActivate: [AuthGuard],
         component: OrdersComponent,
       },
       {
         path: 'statistic/income',
+        canActivate: [AdminGuard],
         component: IncomeComponent,
       },
       {
         path: 'statistic/orders',
+        canActivate: [AdminGuard],
         component: OrderStatusComponent,
       },
       // {

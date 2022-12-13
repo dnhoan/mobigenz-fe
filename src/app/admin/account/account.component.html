@@ -10,9 +10,9 @@
         (nzOnOk)="handleOk()"
       >
         <ng-container *nzModalContent>
-          <form nz-form [formGroup]="formAcc">
+          <form nz-form class="mt-4" [formGroup]="formAcc">
             <nz-form-item>
-              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
+              <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="email"
                 >Email</nz-form-label
               >
               <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -39,7 +39,7 @@
               </nz-form-control>
             </nz-form-item>
             <nz-form-item *ngIf="!formAcc.value.id">
-              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password"
+              <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="password"
                 >Mật khẩu</nz-form-label
               >
               <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -65,10 +65,12 @@
                   kí tự đặc biệt !
                 </small>
               </nz-form-control>
+
+
             </nz-form-item>
             <nz-form-item>
               <nz-form-label
-                [nzSm]="6"
+                [nzSm]="8"
                 [nzXs]="24"
                 nzRequired
                 nzFor="phoneNumber"
@@ -97,7 +99,7 @@
                 </small>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
+            <!-- <nz-form-item>
               <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status"
                 >Trạng thái</nz-form-label
               >
@@ -116,9 +118,9 @@
               >
                 Bạn phải chọn trạng thái!
               </small>
-            </nz-form-item>
+            </nz-form-item> -->
             <nz-form-item>
-              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="role"
+              <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="role"
                 >Phân quyền</nz-form-label
               >
               <nz-radio-group class="mt-1" formControlName="role" nzName="role">
@@ -184,6 +186,7 @@
         <td>{{ item.email }}</td>
         <td>{{ item.phoneNumber }}</td>
         <td *ngIf="item.roles">{{ item.roles![0].roleName }}</td>
+        <td *ngIf="!item.roles"></td>
         <td *ngIf="item.status">Active</td>
         <td *ngIf="!item.status">InActive</td>
         <td style="text-align: center">

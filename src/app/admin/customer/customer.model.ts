@@ -1,4 +1,4 @@
-import { Account } from '../account/account.model';
+import { Account, Role } from '../account/account.model';
 
 export interface Customer {
   id?: number;

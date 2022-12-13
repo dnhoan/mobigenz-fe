@@ -28,6 +28,7 @@ export class CustomerComponent implements OnInit {
   indexPage = 0;
   isVisible = false;
   submit = false;
+  disable = true;
   constructor(
     private readonly router: Router,
     private customerService: CustomerService,
@@ -103,6 +104,8 @@ export class CustomerComponent implements OnInit {
 
   handleCancel(): void {
     this.isVisible = false;
+    this.getAllCustomer();
+
   }
 
   getAllCustomer() {
@@ -116,6 +119,7 @@ export class CustomerComponent implements OnInit {
   getInfoCustomer(id: any) {
     this.showModal();
     const customerByID = this.datas.find((value) => {
+      console.log(value);
       return value.id == id;
     });
     if (customerByID) {

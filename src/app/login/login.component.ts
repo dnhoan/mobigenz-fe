@@ -164,7 +164,7 @@ export class LoginComponent implements OnInit {
           this.infoUser.getUser();
           if (
             localStorage.getItem('auth-token') != null &&
-            role.includes('Admin')
+            role.includes('Admin') || role.includes('Employee')
           ) {
             this.router.navigate(['/admin']);
             this.toastr.success('Đăng nhập thành công!');
