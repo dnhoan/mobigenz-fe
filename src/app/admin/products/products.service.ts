@@ -60,6 +60,18 @@ export class ProductsService {
       catchError(this.handleError<any>('Error get options', []))
     );
   }
+  deleteProductById(product_id: number): Observable<boolean> {
+    return this.httpClient.delete(`${this.baseUrl}/product/${product_id}`).pipe(
+      map((res: any) => {
+        if (res.statusCode === 200) {
+          this.message.success('Xóa sản phẩm thành công');
+          return res.data.res;
+        }
+        return false;
+      }),
+      catchError(this.handleError<any>('Lỗi xóa sản phẩm', false))
+    );
+  }
   getSpecificationGroups(): Observable<SpecificationGroupDto[]> {
     return this.httpClient.get(`${this.baseUrl}/specificationGroups`).pipe(
       map((res: any) => {
