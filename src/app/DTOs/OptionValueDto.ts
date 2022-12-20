@@ -7,4 +7,5 @@ export interface OptionValueDto {
   mtime?: string;
   status?: number;
   selected: boolean;
+  isDisable?: boolean;
 }

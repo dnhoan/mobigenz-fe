@@ -20,6 +20,8 @@
         <th>Dòng SP</th>
         <th>Tạo lúc</th>
         <th>Cập nhật</th>
+        <th>Giá</th>
+        <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
@@ -44,6 +46,29 @@
           <td>{{ product.productLineDto!.productLineName }}</td>
           <td>{{ product.ctime | date : "hh:mm dd/MM/yyyy" }}</td>
           <td>{{ product.mtime | date : "hh:mm dd/MM/yyyy" }}</td>
+          <td>
+            <p *ngIf="product.minPrice == product.maxPrice">
+              {{ product.minPrice | number }}đ
+            </p>
+            <p *ngIf="product.minPrice != product.maxPrice">
+              {{ product.minPrice | number }}đ -
+              {{ product.maxPrice | number }}đ
+            </p>
+          </td>
+          <td>
+            <nz-space>
+              <a
+                *nzSpaceItem
+                nz-button
+                nzType="link"
+                (click)="openDrawer(product.id)"
+                ><span nz-icon nzType="edit"></span
+              ></a>
+              <a *nzSpaceItem nz-button nzType="text" nzDanger
+                ><span nz-icon nzType="delete"></span
+              ></a>
+            </nz-space>
+          </td>
         </tr>
         <tr [nzExpand]="product.expand!">
           <nz-table
@@ -54,7 +79,7 @@
           >
             <thead>
               <tr>
-                <!-- <th>Ảnh</th> -->
+                <th>Ảnh</th>
                 <th>Phân loại</th>
                 <th>Tồn kho</th>
                 <th>Giá nhập</th>
@@ -64,19 +89,22 @@
             </thead>
             <tbody>
               <tr *ngFor="let productDetail of innerTable.data; let i = index">
-                <!-- <td>
-                <img
-                  [src]="productDetail.image"
-                  width="100"
-                  [alt]="productDetail.sku"
-                />
-              </td> -->
+                <td>
+                  <img
+                    [src]="productDetail.image!"
+                    width="50px"
+                    [alt]="productDetail.sku"
+                  />
+                </td>
                 <td>{{ productDetail.sku }}</td>
                 <td>{{ productDetail.stock }}</td>
-                <td>{{ productDetail.priceSell }}</td>
-                <td>{{ productDetail.priceOrigin }}</td>
+                <td>{{ productDetail.priceOrigin | number }}đ</td>
+                <td>{{ productDetail.priceSell | number }}đ</td>
                 <td>
-                  <a (click)="openModalImei(productDetail, product.id, i)"
+                  <a
+                    nz-button
+                    nzType="link"
+                    (click)="openModalImei(productDetail, product.id, i)"
                     >Nhập hàng</a
                   >
                 </td>

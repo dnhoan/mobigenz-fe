@@ -16,7 +16,17 @@ export const productInit: ProductDto = {
     manufacturerName: '',
   },
   productLineDto: { id: undefined, productLineName: '' },
-  productDetailDtos: [],
+  productDetailDtos: [
+    {
+      image: '',
+      priceOrigin: 0,
+      priceSell: 0,
+      sku: '',
+      stock: 0,
+      imeis: [],
+      price: 0,
+    },
+  ],
   optionDtos: [],
   specificationGroupDtos: [],
   note: '',

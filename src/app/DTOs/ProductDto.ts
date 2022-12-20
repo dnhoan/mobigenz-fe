@@ -24,4 +24,6 @@ export interface ProductDto {
   ctime?: string;
   mtime?: string;
   status?: number;
+  minPrice?: number;
+  maxPrice?: number;
 }

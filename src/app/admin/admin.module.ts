@@ -39,6 +39,7 @@ import { NgxPrinterModule } from 'ngx-printer';
 import { PrinterOrderComponent } from './create-order/printer-order/printer-order.component';
 import { EmployeeComponent } from './employee/employee.component';
 import { ProfileComponent } from './profile/profile.component';
+import { FilterOptinValueNotSelectedPipe } from './pipes/filter-optin-value-not-selected.pipe';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -68,7 +69,8 @@ import { ProfileComponent } from './profile/profile.component';
     ProductVariantsComponent,
     PrinterOrderComponent,
     EmployeeComponent,
-    ProfileComponent
+    ProfileComponent,
+    FilterOptinValueNotSelectedPipe
   ],
   imports: [
     CommonModule,
@@ -86,6 +88,6 @@ import { ProfileComponent } from './profile/profile.component';
       printPreviewOnly: false,
     }),
   ],
-  exports: [FilterOptionValuePipe, FilterSpecificationPipe, GetLengthArrayPipe],
+  exports: [FilterOptionValuePipe, FilterSpecificationPipe, GetLengthArrayPipe, FilterOptinValueNotSelectedPipe],
 })
 export class AdminModule {}

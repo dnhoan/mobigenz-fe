@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { addEntities, getEntity, updateEntities } from '@ngneat/elf-entities';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { finalize, Subscription } from 'rxjs';
 import { ManufacturerDto } from 'src/app/DTOs/ManufacturerDto';
+import { ProductDetailDto } from 'src/app/DTOs/ProductDetailDto';
 import { ProductDto } from 'src/app/DTOs/ProductDto';
 import { ProductLineDto } from 'src/app/DTOs/ProductLineDto';
 import { SpecificationGroupDto } from 'src/app/DTOs/SpecificationGroupDto';
@@ -30,7 +32,8 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private productDetailService: ProductDetailService,
     private httpClient: HttpClient,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private message: NzMessageService
   ) {
     this.modulesDescription = {
       toolbar: [
@@ -178,6 +181,15 @@ export class ProductDetailComponent implements OnInit {
       );
   }
   save() {
+    console.log(this.product);
+    let prices = this.product.productDetailDtos.map(
+      (o: ProductDetailDto) => o.priceSell
+    );
+    console.log(prices);
+
+    this.product.minPrice = Math.min(...prices) | 0;
+    this.product.maxPrice = Math.max(...prices) | 0;
+
     this.productDetailService
       .createProduct(this.product)
       .subscribe((product) => {
@@ -185,7 +197,7 @@ export class ProductDetailComponent implements OnInit {
         productsStore.update(
           this.productId
             ? updateEntities(this.productId, product)
-            : addEntities(product)
+            : addEntities(product, { prepend: true })
         );
       });
   }
@@ -197,10 +209,12 @@ export class ProductDetailComponent implements OnInit {
         .createManufacturer({ id: 0, manufacturerName: value })
         .subscribe((res: any) => {
           if (res) {
-            this.manufacturers.unshift(res);
+            this.manufacturers.unshift({ ...res, productLineDtos: [] });
             input.value = '';
           }
         });
+    } else {
+      this.message.error('Vui lòng nhập giá trị');
     }
   }
   addProductLine(input: HTMLInputElement) {
@@ -218,8 +232,11 @@ export class ProductDetailComponent implements OnInit {
             );
             this.manufacturers[i_manufacturer].productLineDtos?.unshift(res);
             input.value = '';
+            console.log(this.manufacturers);
           }
         });
+    } else {
+      this.message.error('Vui lòng nhập giá trị');
     }
   }
   editorInstance: any;
@@ -266,10 +283,12 @@ export class ProductDetailComponent implements OnInit {
         .createSpecificationGroup(value)
         .subscribe((res: any) => {
           if (res) {
-            this.specificationGroups.unshift(res);
+            this.specificationGroups.unshift({ ...res, specificationDtos: [] });
             input.value = '';
           }
         });
+    } else {
+      this.message.error('Vui lòng nhập giá trị');
     }
   }
   createSpecification(specificationGroupId: number, input: HTMLInputElement) {
@@ -289,6 +308,8 @@ export class ProductDetailComponent implements OnInit {
             input.value = '';
           }
         });
+    } else {
+      this.message.error('Vui lòng nhập giá trị');
     }
     console.log(this.specificationGroups);
   }
