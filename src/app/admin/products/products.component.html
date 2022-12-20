@@ -25,7 +25,10 @@
       </tr>
     </thead>
     <tbody>
-      <ng-template ngFor let-product [ngForOf]="basicTable.data">
+      <!-- <ng-template ngFor let-product [ngForOf]="basicTable.data" > -->
+      <ng-container
+        *ngFor="let product of basicTable.data; let i_product = index"
+      >
         <tr>
           <td style="width: 40px" [(nzExpand)]="product.expand"></td>
           <td>
@@ -64,7 +67,16 @@
                 (click)="openDrawer(product.id)"
                 ><span nz-icon nzType="edit"></span
               ></a>
-              <a *nzSpaceItem nz-button nzType="text" nzDanger
+              <a
+                *nzSpaceItem
+                nz-button
+                nzType="text"
+                nzDanger
+                nz-popconfirm
+                nzPopconfirmTitle="Bạn muốn xóa sản phẩm này không?"
+                nzOkText="Ok"
+                nzCancelText="không"
+                (nzOnConfirm)="deleteProductById(product.id)"
                 ><span nz-icon nzType="delete"></span
               ></a>
             </nz-space>
@@ -111,7 +123,7 @@
               </tr>
             </tbody>
           </nz-table>
-        </tr></ng-template
+        </tr></ng-container
       >
     </tbody>
   </nz-table>

@@ -9,7 +9,7 @@ import {
 } from '@ngneat/elf-entities';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { expand, Observable } from 'rxjs';
+import { expand, Observable, Subscription } from 'rxjs';
 import { ProductDetailDto } from 'src/app/DTOs/ProductDetailDto';
 import { ProductDto } from 'src/app/DTOs/ProductDto';
 import { environment } from 'src/environments/environment';
@@ -26,6 +26,7 @@ import { ProductsService } from './products.service';
 export class ProductsComponent implements OnInit {
   visible = false;
   products: ProductDto[] = [];
+  subProducts!: Subscription;
   constructor(
     private httpClient: HttpClient,
     private productsRepository: ProductsRepository,
@@ -39,10 +40,12 @@ export class ProductsComponent implements OnInit {
     this.productService.getProducts().subscribe((res: any) => {
       this.productsRepository.setProducts(res);
     });
-    productsStore.pipe(selectAllEntities()).subscribe((products: any) => {
-      this.products = products;
-      console.log(this.products);
-    });
+    this.subProducts = productsStore
+      .pipe(selectAllEntities())
+      .subscribe((products: any) => {
+        this.products = products;
+        console.log(this.products);
+      });
   }
   openDrawer(productId: number | string) {
     // productsStore.update(
@@ -90,5 +93,15 @@ export class ProductsComponent implements OnInit {
       nzFooter: [],
     });
     const instance = modal.getContentComponent();
+  }
+  deleteProductById(product_id: any) {
+    this.productService.deleteProductById(product_id).subscribe((res) => {
+      if (res) {
+        productsStore.update(deleteEntities(product_id));
+      }
+    });
+  }
+  ngOnDestroy() {
+    this.subProducts.unsubscribe();
   }
 }
