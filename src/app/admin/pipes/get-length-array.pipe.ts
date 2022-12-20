@@ -1,13 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { OptionDto } from 'src/app/DTOs/OptionDto';
 
 @Pipe({
   name: 'getLengthArray',
 })
 export class GetLengthArrayPipe implements PipeTransform {
-  transform(array: any[]): number {
-    if (array) {
-      return array.length;
-    }
-    return 0;
+  transform(options: OptionDto[], id: number): number {
+    let length = options.find((option) => option.id == id)?.optionValueDtos
+      .length!;
+    return length ? length : 0;
   }
 }

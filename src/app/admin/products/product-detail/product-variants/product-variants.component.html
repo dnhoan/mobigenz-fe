@@ -52,13 +52,13 @@
             <div style="display: flex; justify-content: start; margin: 5px">
               <nz-input-group
                 style="width: 410px"
-                [nzAddOnBefore]="'Phân loại sản phẩm ' + (i_option + 1)"
+                [nzAddOnBefore]="'Giá trị phân loại ' + (i_option + 1)"
               >
                 <nz-select
                   [nzDisabled]="!optionProduct.isChange"
                   nzShowSearch
                   [nzDropdownRender]="renderOptionValue"
-                  nzPlaceHolder="select Product sa line"
+                  nzPlaceHolder="select Product line"
                   [ngModel]="optionValue.id"
                   (ngModelChange)="
                     onChangeOptionValue(
@@ -72,7 +72,10 @@
                   <nz-option
                     *ngFor="
                       let optionValueDto of options
-                        | filterOptionValue: optionProduct.id
+                        | filterOptionValue : optionProduct.id
+                    "
+                    [nzDisabled]="
+                      optionValueDto.isDisable === true ? true : false
                     "
                     [nzLabel]="optionValueDto.optionValueName"
                     [nzValue]="optionValueDto.id"
@@ -109,14 +112,12 @@
             </div>
           </ng-container>
 
+          <!-- (!isEdit || optionProduct.optionValueDtos <= 1)) -->
           <button
             *ngIf="
-              optionProduct.optionValueDtos.length == 0 ||
-              (optionProduct.optionValueDtos.length <
-                (options
-                  | filterOptionValue: optionProduct.id
-                  | getLengthArray) &&
-                (!isEdit || optionProduct.optionValueDtos <= 1))
+              optionProduct.optionValueDtos.length <=
+                (options | filterOptionValue : optionProduct.id).length - 1 &&
+              (!isEdit || optionProduct.optionValueDtos <= 1)
             "
             nz-button
             nzType="dashed"
@@ -149,12 +150,26 @@
         <th>Tên phân loại</th>
         <th>Giá nhập</th>
         <th>Giá bán</th>
-        <th></th>
+        <th *ngIf="!isEdit"></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let data of basicTable.data">
-        <td>ANH</td>
+      <tr *ngFor="let data of basicTable.data; let i = index">
+        <td>
+          <ng-container *ngIf="data.image">
+            <img
+              [src]="data.image"
+              width="50px"
+              [alt]="data.sku"
+              (click)="openModalSelectImage(i)"
+            />
+          </ng-container>
+          <ng-container *ngIf="!data.image">
+            <button nz-button nzType="dashed" (click)="openModalSelectImage(i)">
+              +
+            </button>
+          </ng-container>
+        </td>
         <td>{{ data.sku }}</td>
         <td>
           <nz-input-number
@@ -170,8 +185,45 @@
             [nzStep]="1"
           ></nz-input-number>
         </td>
-        <td><span nz-icon nzType="delete" nzTheme="outline"></span></td>
+        <td *ngIf="!isEdit">
+          <span nz-icon nzType="delete" nzTheme="outline"></span>
+        </td>
       </tr>
     </tbody>
   </nz-table>
 </div>
+<nz-modal
+  [(nzVisible)]="isVisibleSelectImage"
+  nzTitle="Chọn ảnh"
+  [nzFooter]="noFooter"
+>
+  <ng-container *nzModalContent>
+    <div
+      style="
+        display: grid;
+        column-gap: 30px;
+        width: 100px;
+        grid-template-columns: auto auto auto;
+      "
+    >
+      <ng-container *ngFor="let img of product.images">
+        <div
+          style="
+            font-size: 30px;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: dashed 3px red;
+          "
+        >
+          <img [src]="img" width="100" (click)="onSelectImage(img)" />
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</nz-modal>
+<ng-template #noFooter>
+  <button nz-button nzType="default" (click)="closeSelectedImage()">
+    Đóng
+  </button>
+</ng-template>

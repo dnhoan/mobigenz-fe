@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { OptionDto } from 'src/app/DTOs/OptionDto';
 import { OptionValueDto } from 'src/app/DTOs/OptionValueDto';
 import { ProductDetailDto } from 'src/app/DTOs/ProductDetailDto';
 import { ProductDto } from 'src/app/DTOs/ProductDto';
 import { ProductVariantCombinationDto } from 'src/app/DTOs/ProductVariantCombinationDto';
 import { ProductDetailService } from '../product-detail.service';
+import { productStore } from '../product.repository';
 
 @Component({
   selector: 'app-product-variants',
@@ -15,9 +17,13 @@ export class ProductVariantsComponent implements OnInit {
   @Input('product') product!: any;
   @Input('isEdit') isEdit: boolean = false;
   options: OptionDto[] = [];
-  constructor(private productDetailService: ProductDetailService) {}
+  isVisibleSelectImage = false;
+  constructor(
+    private productDetailService: ProductDetailService,
+    private message: NzMessageService
+  ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.productDetailService.getOptions().subscribe((options) => {
       this.options = options;
     });
@@ -89,6 +95,19 @@ export class ProductVariantsComponent implements OnInit {
         }
       );
     else this.mapSku();
+    if (this.product.productDetailDtos.length === 0) {
+      this.product.productDetailDtos = [
+        {
+          image: '',
+          priceOrigin: 0,
+          priceSell: 0,
+          sku: '',
+          stock: 0,
+          imeis: [],
+          price: 0,
+        },
+      ];
+    }
   }
   addOptionValue(i_option: number) {
     let optionValueDto = {
@@ -114,14 +133,13 @@ export class ProductVariantsComponent implements OnInit {
     i_option_value: number,
     option_id: number
   ) {
-    this.options
-      .find((option) => option.id == option_id)
-      ?.optionValueDtos.forEach((optionValue) => {
-        if (optionValue.id == option_value_id) {
-          this.product.optionDtos[i_option].optionValueDtos[i_option_value] =
-            optionValue;
-        }
-      });
+    let optionSelected = this.options.find((option) => option.id == option_id);
+    optionSelected?.optionValueDtos.forEach((optionValue) => {
+      if (optionValue.id == option_value_id) {
+        this.product.optionDtos[i_option].optionValueDtos[i_option_value] =
+          optionValue;
+      }
+    });
 
     if (this.isEdit)
       this.product.productDetailDtos = this.product.productDetailDtos.map(
@@ -141,6 +159,22 @@ export class ProductVariantsComponent implements OnInit {
         }
       );
     else this.mapSku();
+    this.filterOptionValueSelected(i_option, option_id);
+  }
+
+  filterOptionValueSelected(i_option: number, option_id: number) {
+    let option_index = this.options.findIndex(
+      (option) => option.id == option_id
+    );
+
+    this.options[option_index].optionValueDtos = this.options[
+      option_index
+    ].optionValueDtos.map((optionValue) => {
+      let isDisable = this.product.optionDtos[i_option].optionValueDtos.some(
+        (optValue: any) => optValue.id == optionValue.id
+      );
+      return { ...optionValue, isDisable };
+    });
   }
   removeOptionValueProduct(i_option: number, i_option_value: number) {
     this.product.optionDtos[i_option].optionValueDtos.splice(i_option_value, 1);
@@ -158,6 +192,10 @@ export class ProductVariantsComponent implements OnInit {
         }
       );
     else this.mapSku();
+    this.filterOptionValueSelected(
+      i_option,
+      this.product.optionDtos[i_option].id
+    );
   }
   mapSku() {
     this.product.productDetailDtos = [];
@@ -172,6 +210,7 @@ export class ProductVariantsComponent implements OnInit {
           priceSell: 0,
           sku: optionValue.optionValueName,
           image: '',
+          stock: 0,
           productVariantCombinationDtos: [
             {
               optionDto: this.product.optionDtos[0],
@@ -196,6 +235,7 @@ export class ProductVariantsComponent implements OnInit {
               priceSell: 0,
               sku: sku.optionValueName + ', ' + optionValue.optionValueName,
               image: '',
+              stock: 0,
               productVariantCombinationDtos: [
                 {
                   optionDto: this.product.optionDtos[0],
@@ -211,19 +251,33 @@ export class ProductVariantsComponent implements OnInit {
         );
       });
     }
-    console.log(this.product);
+  }
+  current_i_product_detai_select_image = 0;
+  openModalSelectImage(i_product_detail: number) {
+    this.current_i_product_detai_select_image = i_product_detail;
+    this.isVisibleSelectImage = true;
+  }
 
-    console.log(this.product.productDetailDtos);
+  onSelectImage(img: string) {
+    this.product.productDetailDtos[
+      this.current_i_product_detai_select_image
+    ].image = img;
+    this.isVisibleSelectImage = false;
+  }
+  closeSelectedImage() {
+    this.isVisibleSelectImage = false;
   }
   createOption(input: HTMLInputElement) {
     let value = input.value;
     if (value) {
       this.productDetailService.createOption(value).subscribe((res: any) => {
         if (res) {
-          this.options.unshift(res);
+          this.options.unshift({ ...res, optionValueDtos: [] });
           input.value = '';
         }
       });
+    } else {
+      this.message.error('Vui lòng nhập giá trị');
     }
   }
   createOptionValue(option_id: number, input: HTMLInputElement) {
@@ -238,6 +292,8 @@ export class ProductVariantsComponent implements OnInit {
             input.value = '';
           }
         });
+    } else {
+      this.message.error('Vui lòng nhập giá trị');
     }
   }
 }

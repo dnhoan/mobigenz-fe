@@ -90,10 +90,5 @@ export class ProductsComponent implements OnInit {
       nzFooter: [],
     });
     const instance = modal.getContentComponent();
-    modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));
-    // Return a result when closed
-    modal.afterClose.subscribe((result) =>
-      console.log('[afterClose] The result is:', result)
-    );
   }
 }
