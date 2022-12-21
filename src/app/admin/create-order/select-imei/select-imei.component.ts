@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { lastValueFrom } from 'rxjs';
 import { ImeiDto } from 'src/app/DTOs/ImeiDto';
 import { OrderDetailDto } from 'src/app/DTOs/OrderDetailDto';
 import { ProductDetailCartDto } from 'src/app/DTOs/ProductDetailCartDto';
@@ -36,7 +37,7 @@ export class SelectImeiComponent implements OnInit {
         this.listImei = imeis;
       });
   }
-  addToOrder() {
+  async addToOrder() {
     this.productDetail.imeis = this.listImeiSelected;
     orderStore.update((state: any) => {
       let currentOrderDto = state.orderDto;
@@ -47,15 +48,15 @@ export class SelectImeiComponent implements OnInit {
       if (i_exist >= 0) {
         //  thêm imei
         if (this.orderId) {
-          this.imeiService
-            .addImeisToOrderDetail(
+          lastValueFrom(
+            this.imeiService.addImeisToOrderDetail(
               currentOrderDto.orderDetailDtos[i_exist].id,
               this.productDetail.id,
               this.listImeiSelected
             )
-            .subscribe((res) => {
-              this.listImeiSelected = res;
-            });
+          ).then((res) => {
+            this.listImeiSelected = res;
+          });
         }
         let imeiDtoList = currentOrderDto.orderDetailDtos[
           i_exist
@@ -65,6 +66,9 @@ export class SelectImeiComponent implements OnInit {
           amount: imeiDtoList.length,
           imeiDtoList,
         };
+        currentOrderDto.goodsValue = this.calGoodsValue(
+          currentOrderDto.orderDetailDtos
+        );
       } else {
         //  tạo đơn hàng chi tiết và thêm imei
         let newOrderDetail = {
@@ -77,21 +81,25 @@ export class SelectImeiComponent implements OnInit {
           imeiDtoList: this.listImeiSelected,
         } as OrderDetailDto;
         if (this.orderId) {
-          this.orderService
-            .createOrderDetailToOrder(this.orderId, newOrderDetail)
-            .subscribe((res) => {
-              newOrderDetail = res;
-              currentOrderDto.orderDetailDtos.push(newOrderDetail);
-            });
+          lastValueFrom(
+            this.orderService.createOrderDetailToOrder(
+              this.orderId,
+              newOrderDetail
+            )
+          ).then((res) => {
+            newOrderDetail = res;
+            currentOrderDto.orderDetailDtos.push(newOrderDetail);
+            currentOrderDto.goodsValue = this.calGoodsValue(
+              currentOrderDto.orderDetailDtos
+            );
+          });
         } else {
           currentOrderDto.orderDetailDtos.push(newOrderDetail);
+          currentOrderDto.goodsValue = this.calGoodsValue(
+            currentOrderDto.orderDetailDtos
+          );
         }
       }
-      let totalMoney = currentOrderDto.orderDetailDtos.reduce(
-        (a: number, b: OrderDetailDto) => a + b.amount * b.priceSell,
-        0
-      );
-      currentOrderDto.totalMoney = totalMoney;
       currentOrderDto.quantity = currentOrderDto.orderDetailDtos.length;
       return { orderDto: currentOrderDto };
     });
@@ -151,5 +159,10 @@ export class SelectImeiComponent implements OnInit {
           });
       }
     }
+  }
+  calGoodsValue(orderDetailDtos: OrderDetailDto[]) {
+    return orderDetailDtos.reduce((a: any, b: any) => {
+      return a + b.priceSell * b.amount;
+    }, 0);
   }
 }
