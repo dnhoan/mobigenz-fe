@@ -5,6 +5,7 @@ import { NgxPrinterService } from 'ngx-printer';
 import {
   debounceTime,
   distinctUntilChanged,
+  lastValueFrom,
   Observable,
   of,
   Subject,
@@ -162,7 +163,7 @@ export class CreateOrderComponent implements OnInit {
       };
     });
   }
-  removeImei(
+  async removeImei(
     i_imei: number,
     i_order_detail: number,
     imeiId: number,
@@ -171,19 +172,34 @@ export class CreateOrderComponent implements OnInit {
     let orderDetail = this.order.orderDetailDtos[i_order_detail];
     if (orderDetail.imeiDtoList?.length == 1) {
       if (this.isEdit)
-        this.orderService.deleteOrderDetail(orderDetailId).subscribe((res) => {
+        await lastValueFrom(
+          this.orderService.deleteOrderDetail(orderDetailId)
+        ).then((res) => {
           if (res) this.order.orderDetailDtos.splice(i_order_detail, 1);
         });
       else this.order.orderDetailDtos.splice(i_order_detail, 1);
     } else {
       if (this.isEdit)
-        this.imeiService.deleteOrderDetailToImei(imeiId).subscribe((res) => {
+        await lastValueFrom(
+          this.imeiService.deleteOrderDetailToImei(imeiId)
+        ).then((res) => {
           if (res) orderDetail.imeiDtoList?.splice(i_imei, 1);
         });
       else orderDetail.imeiDtoList?.splice(i_imei, 1);
       this.order.orderDetailDtos[i_order_detail] = orderDetail;
+      this.order.orderDetailDtos[i_order_detail].amount =
+        orderDetail.imeiDtoList?.length!;
     }
-    orderStore.update(() => ({ orderDto: this.order }));
+    this.order.goodsValue = this.calGoodsValue(this.order.orderDetailDtos);
+    orderStore.update(() => {
+      return { orderDto: this.order };
+    });
+  }
+  updateGoodValueAndAmount() {}
+  calGoodsValue(orderDetailDtos: OrderDetailDto[]) {
+    return orderDetailDtos.reduce((a: any, b: any) => {
+      return a + b.priceSell * b.amount;
+    }, 0);
   }
   save() {
     this.order.totalMoney = this.order.shipFee! + this.order.goodsValue;
@@ -232,5 +248,8 @@ export class CreateOrderComponent implements OnInit {
   }
   handleCancel() {
     this.isShowConfirmCancelOrder = false;
+  }
+  saveOrderStore() {
+    orderStore.update(() => ({ orderDto: this.order }));
   }
 }
