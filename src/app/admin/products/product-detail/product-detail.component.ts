@@ -181,11 +181,9 @@ export class ProductDetailComponent implements OnInit {
       );
   }
   save() {
-    console.log(this.product);
     let prices = this.product.productDetailDtos.map(
       (o: ProductDetailDto) => o.priceSell
     );
-    console.log(prices);
 
     this.product.minPrice = Math.min(...prices) | 0;
     this.product.maxPrice = Math.max(...prices) | 0;
@@ -312,6 +310,12 @@ export class ProductDetailComponent implements OnInit {
       this.message.error('Vui lòng nhập giá trị');
     }
     console.log(this.specificationGroups);
+  }
+  onChangeProductName(name: string) {
+    this.product.productName = name;
+    this.product.productDetailDtos = this.product.productDetailDtos.map(
+      (p: any) => ({ ...p, productName: name })
+    );
   }
   ngOnDestroy() {
     if (this.productId) this.product$.unsubscribe();

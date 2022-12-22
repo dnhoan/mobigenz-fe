@@ -10,5 +10,6 @@ export interface ProductDetailDto {
   imeis?: ImeiDto[];
   sku: string;
   image: string;
+  productName: string;
   productVariantCombinationDtos?: ProductVariantCombinationDto[];
 }

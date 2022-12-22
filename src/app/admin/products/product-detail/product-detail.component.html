@@ -7,7 +7,8 @@
         id="productName"
         nz-input
         placeholder="Ten san pham"
-        [(ngModel)]="product.productName"
+        [ngModel]="product.productName"
+        (ngModelChange)="onChangeProductName($event)"
       />
     </div>
     <nz-divider></nz-divider>
@@ -181,7 +182,7 @@
                       <nz-option
                         *ngFor="
                           let specification of specificationGroups
-                            | filterSpecification: specificationGroupProduct.id
+                            | filterSpecification : specificationGroupProduct.id
                         "
                         [nzLabel]="specification.specificationName"
                         [nzValue]="specification.id"
