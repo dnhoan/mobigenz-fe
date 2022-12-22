@@ -11,7 +11,6 @@
       >
         <ng-container *nzModalContent>
           <form nz-form [formGroup]="formEmployee">
-
             <nz-form-item>
               <nz-form-label
                 [nzSm]="6"
@@ -32,7 +31,7 @@
                   role="alert"
                   *ngIf="formEmployee.get('employeeCode')?.errors?.['required'] && formEmployee.get('employeeCode')?.touched || submit && formEmployee.get('employeeCode')?.errors?.['required'] "
                 >
-                Mã nhân viên không được để trống!
+                  Mã nhân viên không được để trống!
                 </small>
               </nz-form-control>
             </nz-form-item>
@@ -56,16 +55,12 @@
                   role="alert"
                   *ngIf="formEmployee.get('employeeName')?.errors?.['required'] && formEmployee.get('employeeName')?.touched || submit && formEmployee.get('employeeName')?.errors?.['required'] "
                 >
-                Tên nhân viên không được để trống!
+                  Tên nhân viên không được để trống!
                 </small>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
-              <nz-form-label
-                [nzSm]="6"
-                [nzXs]="24"
-                nzRequired
-                nzFor="address"
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="address"
                 >Địa chỉ</nz-form-label
               >
               <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -80,7 +75,7 @@
                   role="alert"
                   *ngIf="formEmployee.get('address')?.errors?.['required'] && formEmployee.get('address')?.touched || submit && formEmployee.get('address')?.errors?.['required'] "
                 >
-                Địa chỉ không được để trống!
+                  Địa chỉ không được để trống!
                 </small>
               </nz-form-control>
             </nz-form-item>
@@ -111,7 +106,7 @@
                   role="alert"
                   *ngIf="!formEmployee.get('phoneNumber')?.errors?.['required'] && formEmployee.get('phoneNumber')?.errors?.['pattern']"
                 >
-                  Số điện thoại phải là số, bắt đầu từ số 0 và tối đa 10 kí tự!
+                  Số điện thoại chưa đúng định dạng!
                 </small>
               </nz-form-control>
             </nz-form-item>
@@ -180,12 +175,14 @@
                 >CCCD</nz-form-label
               >
               <nz-form-control [nzSm]="14" [nzXs]="24">
-                <input
-                  nz-input
-                  type="text"
-                  formControlName="cmnd"
-                  id="cmnd"
-                />
+                <input nz-input type="text" formControlName="cmnd" id="cmnd" />
+                <small
+                  class="col alert text-danger col-12"
+                  role="alert"
+                  *ngIf="formEmployee.get('cmnd')?.errors?.['pattern']"
+                >
+                CCCD phải là số có 12 kí tự!
+                </small>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item>
@@ -245,6 +242,19 @@
       </nz-modal>
     </div>
     <div>
+      <div>
+        <nz-select
+          nzAllowClear
+          class="selectStatus"
+          nzPlaceHolder="Lọc theo trạng thái"
+          [(ngModel)]="status"
+          (ngModelChange)="findByStatus(status)"
+        >
+          <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+          <nz-option nzValue="1" nzLabel="Đang làm việc"></nz-option>
+          <nz-option nzValue="0" nzLabel="Đã nghỉ việc"></nz-option>
+      </nz-select>
+    </div>
       <form nz-form [formGroup]="formSearch">
         <div nz-row>
           <div>
@@ -261,7 +271,7 @@
               <button
                 class="btnSearch"
                 (click)="timkiem()"
-                style="float: right"
+                style="float: right;margin-left: 10px;"
                 nz-button
                 [nzType]="'primary'"
               >
@@ -270,6 +280,8 @@
             </nz-form-item>
           </div>
         </div>
+
+        <!-- <button nz-button (click)=>LOC</button> -->
       </form>
     </div>
   </div>
@@ -298,9 +310,8 @@
         <td>{{ item.birthday | date : "yyyy/MM/dd" }}</td>
         <td>{{ item.email }}</td>
         <td>{{ item.salary }}</td>
-        <td *ngIf="!item.dayOff"></td>
-        <td >{{ item.dayOff | date : "yyyy/MM/dd" }}</td>
-        <td>{{ item.timeOnboard | date : "yyyy/MM/dd" }}</td>
+        <td>{{ item.dayOff | date : "yyyy/MM/dd" || "" }}</td>
+        <td>{{ item.timeOnboard | date : "yyyy/MM/dd" || "" }}</td>
         <td *ngIf="item.status == 1">Đang làm việc</td>
         <td *ngIf="item.status == 0">Đã nghỉ việc</td>
         <td *ngIf="item.status == null"></td>

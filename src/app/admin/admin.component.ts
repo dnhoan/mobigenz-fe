@@ -4,7 +4,9 @@ import jwtDecode from 'jwt-decode';
 import { ToastrService } from 'ngx-toastr';
 import { InfoService } from '../service/infoUser.service';
 import { SessionService } from '../service/session.service';
+import { Account } from './account/account.model';
 import { AccountService } from './account/account.service';
+import { profileStore } from './profile/profile.repository';
 
 @Component({
   selector: 'app-admin',
@@ -13,6 +15,7 @@ import { AccountService } from './account/account.service';
 })
 export class AdminComponent implements OnInit {
   isCollapsed = false;
+  account: Account | null = null;
 
   constructor(
     private router: Router,
@@ -38,6 +41,8 @@ export class AdminComponent implements OnInit {
     window.localStorage.removeItem('id-account');
     this.router.navigate(['login']);
     this.toast.success('Đăng xuất thành công!');
-    this.infoService.setUser(null);
+    this.infoService.setEmployee(null);
+    profileStore.reset();
+    this.account = null;
   }
 }

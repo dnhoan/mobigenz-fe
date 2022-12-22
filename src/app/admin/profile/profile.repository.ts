@@ -2,13 +2,14 @@ import { createStore, withProps } from '@ngneat/elf';
 import { Injectable } from '@angular/core';
 import { OrderDto } from 'src/app/DTOs/OrderDto';
 import { CustomerDTO } from '../customer/customer.model';
-interface CustomerDrops {
-  customer: CustomerDTO | null;
+import { EmployeeDTO } from '../employee/employee.model';
+interface EmployeeDrops {
+  employee: EmployeeDTO | null;
 }
-export const customerStore = createStore(
-  { name: 'customer' },
-  withProps<CustomerDrops>({
-    customer: null,
+export const profileStore = createStore(
+  { name: 'info' },
+  withProps<EmployeeDrops>({
+    employee: null,
   })
 );
 

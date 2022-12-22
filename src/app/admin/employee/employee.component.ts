@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SearchDTO } from 'src/app/DTOs/SearchDTO';
 import { Employee, EmployeeDTO } from './employee.model';
 import { EmployeeService } from './employee.service';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-Employee',
   templateUrl: './Employee.component.html',
-  styleUrls: ['./Employee.component.scss']
+  styleUrls: ['./Employee.component.scss'],
 })
 export class EmployeeComponent implements OnInit {
-
   formEmployee!: FormGroup;
   formSearch!: FormGroup;
   radioValue = 'A';
@@ -27,20 +28,20 @@ export class EmployeeComponent implements OnInit {
   indexPage = 0;
   isVisible = false;
   submit = false;
+  status!: number;
 
   constructor(
     private readonly router: Router,
     private employeeService: EmployeeService,
     private fb: FormBuilder,
     private toastr: ToastrService
-
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.getAllEmployee();
+    this.pagination(this.offset);
     this.initForm();
+    this.findByStatus(this.status)
   }
-
 
   showModal(): void {
     this.submit = false;
@@ -48,42 +49,53 @@ export class EmployeeComponent implements OnInit {
     this.isVisible = true;
   }
 
-initFormEmployee(){
-  this.formEmployee = this.fb.group({
-    id: null,
-    employeeName: ['', [Validators.required]],
-    employeeCode: ['', [Validators.required]],
-    phoneNumber: [
-      '',
-      [
-        Validators.required,
-        Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
+  initFormEmployee() {
+    this.formEmployee = this.fb.group({
+      id: null,
+      employeeName: ['', [Validators.required]],
+      employeeCode: ['', [Validators.required]],
+      phoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
+        ],
       ],
-    ],
-    address: ['', [Validators.required]],
-    birthday: ['', [Validators.required]],
-    gender: [''],
-    email: ['', [Validators.required, Validators.email]],
-    cmnd: [''],
-    salary: [''],
-    timeOnboard: [''],
-    dayOff: [''],
-    note: [''],
-    status: [1],
-  });
-}
+      address: ['', [Validators.required]],
+      birthday: ['', [Validators.required]],
+      gender: [''],
+      email: ['', [Validators.required, Validators.email]],
+      cmnd: ['',[Validators.pattern('^[0-9]{12}$')]],
+      salary: [''],
+      timeOnboard: [''],
+      dayOff: [''],
+      note: [''],
+      status: [1],
+    });
+  }
 
+  findByStatus(status: any) {
+    if (status == '' || status == null) {
+      this.pagination(this.offset);
+    } else {
+      this.employeeService
+        .getByStatus(this.offset, this.limit, status)
+        .subscribe((res) => {
+          this.datas = res.data.employee.content;
+        });
+    }
+  }
 
   handleOk(): void {
     this.submit = true;
     if (this.formEmployee.valid) {
       this.saveEmployee();
-      this.isVisible = false;
     }
   }
 
   handleCancel(): void {
     this.isVisible = false;
+    this.getAllEmployee();
   }
 
   saveEmployee() {
@@ -108,15 +120,12 @@ initFormEmployee(){
         }
       );
     }
-    this.isVisible = true;
-    return;
   }
 
   getAllEmployee() {
     this.employeeService
       .getAll(this.offset, this.limit)
       .subscribe((res: any) => {
-        console.log(res);
         this.datas = res.data.employee.items;
       });
   }
@@ -124,14 +133,13 @@ initFormEmployee(){
   getInfoEmployee(id: any) {
     this.showModal();
     const employeeByID = this.datas.find((value) => {
-      console.log(value);
-
       return value.id == id;
     });
     if (employeeByID) {
       this.employee = employeeByID;
     }
     this.fillValueForm();
+    this.formEmployee.get('email')?.disable();
   }
 
   initForm() {
@@ -149,11 +157,14 @@ initFormEmployee(){
     let birthdays;
     let timeOnboards;
     let dayOffs;
-    if (this.employee.birthday) birthdays = this.formatDate(this.employee.birthday);
+    if (this.employee.birthday)
+      birthdays = this.formatDate(this.employee.birthday);
     else birthdays = null;
-    if (this.employee.birthday) timeOnboards = this.formatDate(this.employee.birthday);
+    if (this.employee.birthday)
+      timeOnboards = this.formatDate(this.employee.birthday);
     else timeOnboards = null;
-    if (this.employee.birthday) dayOffs = this.formatDate(this.employee.birthday);
+    if (this.employee.birthday)
+      dayOffs = this.formatDate(this.employee.birthday);
     else dayOffs = null;
     this.formEmployee.patchValue({
       id: this.employee.id,
@@ -180,6 +191,7 @@ initFormEmployee(){
         (res) => {
           this.getAllEmployee();
           this.toastr.success('Cập nhật thông tin nhân viên thành công!');
+          this.isVisible = false;
           return;
         },
         (error) => {
@@ -187,7 +199,6 @@ initFormEmployee(){
         }
       );
     }
-    this.isVisible = true;
     return;
   }
 
@@ -206,7 +217,6 @@ initFormEmployee(){
     this.employee.cmnd = this.formEmployee.value.cmnd;
     this.employee.salary = this.formEmployee.value.salary;
     this.employee.timeOnboard = this.formEmployee.value.timeOnboard;
-    this.employee.dayOff = this.formEmployee.value.dayOff;
     this.employee.note = this.formEmployee.value.note;
     this.employee.status = this.formEmployee.value.status;
   }
@@ -217,9 +227,10 @@ initFormEmployee(){
         this.datas.forEach((value) => {
           if (value.id == id) {
             value.status = 0;
-            this.toastr.success('Xóa nhân viên thành công!');
+            value.dayOff = new Date();
             return;
           }
+          this.toastr.success('Xóa nhân viên thành công!');
         });
       },
       (error) => {
@@ -233,8 +244,6 @@ initFormEmployee(){
     this.offset = page;
     this.employeeService.getAll(this.offset, this.limit).subscribe((res) => {
       this.datas = res.data.employee.items;
-      console.log(this.datas);
-
       this.Page = res.data.employee;
     });
   }
@@ -285,7 +294,6 @@ initFormEmployee(){
     return [year, month, day].join('-');
   }
 
-
   reFormatDate(date: Date) {
     var d = new Date(date),
       month = '' + (d.getMonth() + 1),
@@ -295,7 +303,6 @@ initFormEmployee(){
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
 
-    return [year, month, day, ].join('-');
+    return [year, month, day].join('-');
   }
-
 }

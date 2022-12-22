@@ -33,7 +33,6 @@ import { AngularFireModule } from '@angular/fire/compat';
 // import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { LoginComponent } from './login/login.component';
-import { ForgotComponent } from './forgot/forgot.component';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './interceptor/auth-interceptor.js';
 import { OrderDetailComponent } from './admin/orders/order-detail/order-detail.component';
@@ -50,7 +49,7 @@ const configToast: any = {
 };
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, ForgotComponent],
+  declarations: [AppComponent, LoginComponent],
   imports: [
     SharedModule,
     AppRoutingModule,

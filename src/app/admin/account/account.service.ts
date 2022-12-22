@@ -18,6 +18,22 @@ export class AccountService {
     return this.http.post(this.apiAccount + "register", account);
   }
 
+  public getByStatus(
+    offset: number,
+    limit: number,
+    status: number
+  ): Observable<any> {
+    return this.http.get<any>(
+      this.apiAccount +
+        'admin/account/findByStatus?offset=' +
+        offset +
+        '&limit=' +
+        limit +
+        '&status=' +
+        status
+    );
+  }
+
   getAll(offset: any, limit: any): Observable<any> {
     return this.http.get<any>(this.apiAccount + "admin/account/getAll?offset="+ offset + "&limit="+ limit);
   }

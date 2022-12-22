@@ -29,6 +29,8 @@ export class AccountComponent implements OnInit {
   action = true;
   searchDTO: SearchDTO = {};
   submit = false;
+  status!: number;
+  disable = false;
   constructor(
     private readonly router: Router,
     private accountService: AccountService,
@@ -69,11 +71,22 @@ export class AccountComponent implements OnInit {
     this.isVisible = true;
   }
 
+  findByStatus(status: any) {
+    if (status == '' || status == null) {
+      this.pagination(this.offset);
+    } else {
+      this.accountService
+        .getByStatus(this.offset, this.limit, status)
+        .subscribe((res) => {
+          this.datas = res.data.accounts.content;
+        });
+    }
+  }
+
   handleOk() {
     this.submit = true;
     if (this.formAcc.valid) {
       this.saveAccount();
-      this.isVisible = false;
     }
   }
 
@@ -95,7 +108,6 @@ export class AccountComponent implements OnInit {
     this.accountService
       .getAll(this.offset, this.limit)
       .subscribe((res: any) => {
-        console.log(res);
         this.datas = res.data.accounts.items;
       });
   }
@@ -131,6 +143,7 @@ export class AccountComponent implements OnInit {
       this.account = accountByID;
     }
     this.fillValueForm();
+    this.formAcc.get('email')?.disable();
   }
 
   addValueAccount() {
@@ -152,9 +165,11 @@ export class AccountComponent implements OnInit {
           (res) => {
             this.getAllAccount();
             this.toastr.success('Thêm tài khoản thành công!');
+            this.isVisible = false;
           },
           (error) => {
             this.toastr.error(error.error.message);
+            this.isVisible = true;
           }
         );
     }
@@ -167,6 +182,7 @@ export class AccountComponent implements OnInit {
         (res) => {
           this.getAllAccount();
           this.toastr.success('Cập nhật tài khoản thành công!');
+          this.isVisible = false;
           return;
         },
         (error) => {
@@ -191,8 +207,6 @@ export class AccountComponent implements OnInit {
     if (page < 0) page = 0;
     this.offset = page;
     this.accountService.getAll(this.offset, this.limit).subscribe((res) => {
-      console.log(res);
-
       this.datas = res.data.accounts.items;
       this.Page = res.data.accounts;
     });

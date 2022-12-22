@@ -1,127 +1,149 @@
-<button nz-button [nzType]="'primary'" (click)="showModalAddCustomer()">
+<button nz-button [nzType]="'primary'" (click)="showModal('save')">
   <span><span nz-icon nzType="plus" nzTheme="outline"></span></span>
 </button>
 <nz-modal
-  [(nzVisible)]="isShowModalAddCustomer"
+  [(nzVisible)]="isVisible"
   (nzOnCancel)="handleCancel()"
   (nzOnOk)="handleOk()"
 >
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="formCus">
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="customerName"
+        <nz-form-label
+          [nzSm]="6"
+          [nzXs]="24"
+          nzRequired
+          nzFor="customerName"
           >Tên khách hàng</nz-form-label
         >
-        <nz-form-control
-          [nzSm]="14"
-          [nzXs]="24"
-          nzErrorTip="Bạn phải nhập tên khách hàng!"
-        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input
             nz-input
             type="text"
             formControlName="customerName"
             id="customerName"
           />
+          <small
+            class="col alert text-danger col-12"
+            role="alert"
+            *ngIf="formCus.get('customerName')?.errors?.['required'] && formCus.get('customerName')?.touched || submit && formCus.get('customerName')?.errors?.['required'] "
+          >
+            Tên khách hàng không được để trống!
+          </small>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired
+        <nz-form-label
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="phoneNumber"
+          nzRequired
           >Số ĐT</nz-form-label
         >
-        <nz-form-control
-          [nzSm]="14"
-          [nzXs]="24"
-          nzErrorTip="Bạn phải nhập số điện thoại!"
-        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input
             nz-input
             type="text"
             id="phoneNumber"
             formControlName="phoneNumber"
           />
+          <small
+            class="col alert text-danger col-12"
+            role="alert"
+            *ngIf="formCus.get('phoneNumber')?.errors?.['required'] && formCus.get('phoneNumber')?.touched || submit && formCus.get('phoneNumber')?.errors?.['required'] "
+          >
+            Số điện thoại không được để trống!
+          </small>
+          <small
+            class="col alert text-danger"
+            role="alert"
+            *ngIf="!formCus.get('phoneNumber')?.errors?.['required'] && formCus.get('phoneNumber')?.errors?.['pattern']"
+          >
+            Số điện thoại phải là số, bắt đầu từ số 0 và tối đa 10 kí tự!
+          </small>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="birthday" nzRequired
           >Ngày sinh</nz-form-label
         >
-        <nz-form-control
-          [nzSm]="14"
-          [nzXs]="24"
-          nzErrorTip="Bạn phải chọn ngày sinh!"
-        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input
             nz-input
             type="date"
             formControlName="birthday"
             id="birthday"
           />
+          <small
+            class="col alert text-danger col-12"
+            role="alert"
+            *ngIf="formCus.get('birthday')?.errors?.['required'] && formCus.get('birthday')?.touched || submit && formCus.get('birthday')?.errors?.['required'] "
+          >
+            Ngày sinh không được để trống!
+          </small>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="gender"
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="gender"
           >Giới tính</nz-form-label
         >
-        <nz-radio-group class="mt-1" formControlName="gender" nzName="gender">
+        <nz-radio-group
+          class="mt-1"
+          formControlName="gender"
+          nzName="gender"
+        >
           <label nz-radio [nzValue]="1" nzValue="1">Nam</label>
           <label nz-radio [nzValue]="0" nzValue="0">Nữ</label>
         </nz-radio-group>
       </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
+      <nz-form-item
+      *ngIf="action"
+      >
+        <nz-form-label [nzSm]="6"  [nzXs]="24" nzRequired nzFor="email"
           >Email</nz-form-label
         >
-        <nz-form-control
-          [nzSm]="14"
-          [nzXs]="24"
-          nzErrorTip="Bạn phải nhập đúng định dạng email!"
-        >
-          <input nz-input type="email" formControlName="email" id="email" />
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            type="email"
+            formControlName="email"
+            id="email"
+          />
+          <small
+            class="col alert text-danger col-12"
+            role="alert"
+            *ngIf="formCus.get('email')?.errors?.['required'] && formCus.get('email')?.touched || submit && formCus.get('email')?.errors?.['required'] "
+          >
+            Email không được để trống !
+          </small>
+          <small
+            class="col alert text-danger col-12"
+            role="alert"
+            *ngIf="!formCus.get('email')?.errors?.['required'] && formCus.get('email')?.errors?.['email']"
+          >
+            Email phải đúng định dạng !
+          </small>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="customerType"
-          >Loại khách hàng</nz-form-label
-        >
-        <nz-radio-group
-          class="mt-1"
-          formControlName="customerType"
-          nzName="customerType"
-        >
-          <label nz-radio [nzValue]="1" nzValue="1">Công ty</label>
-          <label nz-radio [nzValue]="0" nzValue="0">Cá nhân</label>
-        </nz-radio-group>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label
-          [nzSm]="6"
-          [nzXs]="24"
-          nzRequired
-          nzFor="citizenIdentifyCart"
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="citizenIdentifyCart"
           >CCCD</nz-form-label
         >
-        <nz-form-control
-          [nzSm]="14"
-          [nzXs]="24"
-          nzErrorTip="Bạn phải nhập CCCD!"
-        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
           <input
             nz-input
             type="citizenIdentifyCart"
             formControlName="citizenIdentifyCart"
             id="citizenIdentifyCart"
           />
+          <small
+    class="col alert text-danger col-12"
+    role="alert"
+    *ngIf="formCus.get('citizenIdentifyCart')?.errors?.['pattern']"
+  >
+    CCCD phải là số có 12 kí tự!
+  </small>
         </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status"
-          >Trạng thái</nz-form-label
-        >
-        <nz-radio-group class="mt-1" formControlName="status" nzName="status">
-          <label nz-radio [nzValue]="1" nzValue="1">Active</label>
-          <label nz-radio [nzValue]="0" nzValue="0">InActive</label>
-        </nz-radio-group>
       </nz-form-item>
     </form>
   </ng-container>

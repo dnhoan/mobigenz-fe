@@ -5,11 +5,15 @@ import { environment } from 'src/environments/environment.prod';
 import { Employee } from './employee.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EmployeeService {
   public apiEmployee = `${environment.baseUrl}/`;
   constructor(private http: HttpClient) {}
+
+  getAllEmp(): Observable<any> {
+    return this.http.get<any>(this.apiEmployee + 'admin/employee/getAllEmp');
+  }
 
   getAll(offset: any, limit: any): Observable<any> {
     return this.http.get<any>(
@@ -18,6 +22,22 @@ export class EmployeeService {
         offset +
         '&limit=' +
         limit
+    );
+  }
+
+  public getByStatus(
+    offset: number,
+    limit: number,
+    status: number
+  ): Observable<any> {
+    return this.http.get<any>(
+      this.apiEmployee +
+        'admin/employee/findByStatus?offset=' +
+        offset +
+        '&limit=' +
+        limit +
+        '&status=' +
+        status
     );
   }
 
