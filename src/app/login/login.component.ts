@@ -161,7 +161,7 @@ export class LoginComponent implements OnInit {
           const jwtDecode = this.accountService.getDecodedAccessToken();
           this.tokenService.saveAccount(jwtDecode.sub);
           const role = jwtDecode.auth.split(',');
-          this.infoUser.getUser();
+          this.infoUser.getEmployee();
           if (
             localStorage.getItem('auth-token') != null &&
             role.includes('Admin') || role.includes('Employee')
@@ -171,7 +171,7 @@ export class LoginComponent implements OnInit {
           }
           if (
             localStorage.getItem('auth-token') != null &&
-            role.includes('User')
+            role.includes('Customer')
           ) {
             this.router.navigate(['/login']);
             this.toastr.error('Bạn không có quyền đăng nhập vào trang này!');

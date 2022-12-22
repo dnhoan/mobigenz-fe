@@ -1,27 +1,49 @@
-<form nz-form [formGroup]="formProfile">
-  <ng-container>
+<form nz-form [formGroup]="formProfile" style="margin-top: 10%;">
+  <ng-container >
     <div nz-row class="mt-5">
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="employeeCode"
+            >Mã nhân viên</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input type="text" readonly formControlName="employeeCode" id="employeeCode" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="employeeName"
+            >Tên nhân viên</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input
+              nz-input
+              type="text"
+              formControlName="employeeName"
+              id="employeeName"
+            />
+            <small
+              class="col alert text-danger col-12"
+              role="alert"
+              *ngIf="formProfile.get('employeeName')?.errors?.['required'] && formProfile.get('employeeName')?.touched || submit && formProfile.get('employeeName')?.errors?.['required'] "
+            >
+              Tên nhân viên không được để trống!
+            </small>
+
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <div nz-row>
       <div nz-col nzSpan="12">
         <nz-form-item>
           <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="email"
             >Email</nz-form-label
           >
           <nz-form-control [nzSm]="14" [nzXs]="24">
-            <input nz-input type="email" formControlName="email" id="email" />
-            <small
-              class="col alert text-danger col-12"
-              role="alert"
-              *ngIf="formProfile.get('email')?.errors?.['required'] && formProfile.get('email')?.touched || submit && formProfile.get('email')?.errors?.['required'] "
-            >
-              Email không được để trống !
-            </small>
-            <small
-              class="col alert text-danger col-12"
-              role="alert"
-              *ngIf="!formProfile.get('email')?.errors?.['required'] && formProfile.get('email')?.errors?.['email']"
-            >
-              Email phải đúng định dạng !
-            </small>
+            <input nz-input type="text" readonly formControlName="email" id="email" />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -31,12 +53,7 @@
             >Số ĐT</nz-form-label
           >
           <nz-form-control [nzSm]="14" [nzXs]="24">
-            <input
-              nz-input
-              type="text"
-              formControlName="phoneNumber"
-              id="phoneNumber"
-            />
+            <input nz-input type="text" formControlName="phoneNumber" id="phoneNumber" />
             <small
               class="col alert text-danger col-12"
               role="alert"
@@ -55,42 +72,75 @@
         </nz-form-item>
       </div>
     </div>
-
     <div nz-row>
       <div nz-col nzSpan="12">
         <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="email"
-            >Email</nz-form-label
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="birthday"
+            >Ngày sinh</nz-form-label
           >
           <nz-form-control [nzSm]="14" [nzXs]="24">
-            <input nz-input type="text" formControlName="email" id="email" />
+            <input nz-input type="date" formControlName="birthday" id="birthday" />
             <small
               class="col alert text-danger col-12"
               role="alert"
-              *ngIf="formProfile.get('email')?.errors?.['required'] && formProfile.get('email')?.touched || submit && formProfile.get('email')?.errors?.['required'] "
+              *ngIf="formProfile.get('birthday')?.errors?.['required'] && formProfile.get('birthday')?.touched || submit && formProfile.get('birthday')?.errors?.['required'] "
             >
-              Email không được để trống!
+            Ngày sinh không được để trống!
             </small>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col nzSpan="12">
         <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="role"
-            >Phân quyền</nz-form-label
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="address"
+            >Địa chỉ</nz-form-label
           >
-          <nz-radio-group class="mt-1" formControlName="role" nzName="role">
-            <label nz-radio [nzValue]="1">Admin</label>
-            <label nz-radio [nzValue]="2">User</label>
-          </nz-radio-group>
-          <small
-            class="col alert text-danger col-12"
-            role="alert"
-            *ngIf="formProfile.get('role')?.errors?.required && submit"
-          >
-            Bạn phải chọn quyền!
-          </small>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input type="text" formControlName="address" id="address" />
+          </nz-form-control>
         </nz-form-item>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="cmnd"
+            >CCCD</nz-form-label
+          >
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input type="text" formControlName="cmnd" id="cmnd" />
+            <small
+          class="col alert text-danger col-12"
+          role="alert"
+          *ngIf="!formProfile.get('cmnd')?.errors?.['required'] && formProfile.get('cmnd')?.errors?.['pattern']"
+        >
+          CCCD phải là số có 12 kí tự!
+        </small>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="gender"
+            >Giới tính</nz-form-label
+          >
+          <nz-radio-group
+            class="mt-1"
+            formControlName="gender"
+            nzName="gender"
+          >
+            <label nz-radio [nzValue]="1" nzValue="1">Nam</label>
+            <label nz-radio [nzValue]="0" nzValue="0">Nữ</label>
+          </nz-radio-group>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="12"></div>
+      <div nz-col nzSpan="12">
+        <button nz-button [nzType]="'primary'" (click)="update()" style="float: right;margin-right: 8%;margin-top: 5%;">
+          <span>Cập nhật</span>
+        </button>
       </div>
     </div>
   </ng-container>

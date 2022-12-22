@@ -6,7 +6,9 @@ import { Subscription } from 'rxjs';
 import { InfoService } from 'src/app/service/infoUser.service';
 import { Customer, CustomerDTO } from '../customer/customer.model';
 import { CustomerService } from '../customer/customer.service';
-import { customerStore } from './profile.repository';
+import { Employee, EmployeeDTO } from '../employee/employee.model';
+import { EmployeeService } from '../employee/employee.service';
+import { profileStore } from './profile.repository';
 
 @Component({
   selector: 'app-profile',
@@ -16,30 +18,35 @@ import { customerStore } from './profile.repository';
 export class ProfileComponent implements OnInit {
 
   formProfile!: FormGroup;
-  customer: CustomerDTO = {};
-  subCustomer!: Subscription;
+  employee: EmployeeDTO = {};
+  subEmployee!: Subscription;
   submit = false;
   offset = 0;
   limit = 5;
+  disable = true;
 
   constructor(
     private fb: FormBuilder,
-    private customerService: CustomerService,
+    private employeeService: EmployeeService,
     readonly router: Router,
     private toastr: ToastrService,
     private infoService: InfoService
   ) {}
 
   ngOnDestroy() {
-    this.subCustomer.unsubscribe();
+    this.subEmployee.unsubscribe();
   }
 
   ngOnInit() {
-    this.customerService.getAll(this.offset, this.limit);
+    this.employeeService.getAllEmp();
     this.initForm();
-    this.subCustomer = customerStore.subscribe((res: any) => {
-      if (res.customer) {
-        this.customer = res.customer as CustomerDTO;
+    console.log(profileStore);
+
+    this.subEmployee = profileStore.subscribe((res: any) => {
+      console.log(res);
+
+      if (res.employee) {
+        this.employee = res.employee as EmployeeDTO;
         this.fillValueForm();
       }
     });
@@ -48,7 +55,9 @@ export class ProfileComponent implements OnInit {
   initForm() {
     this.formProfile = this.fb.group({
       id: null,
-      customerName: ['', [Validators.required]],
+      employeeName: ['', [Validators.required]],
+      employeeCode: ['', [Validators.required]],
+      address: ['', [Validators.required]],
       phoneNumber: [
         '',
         [
@@ -59,41 +68,38 @@ export class ProfileComponent implements OnInit {
       birthday: ['', [Validators.required]],
       email: ['', [Validators.required]],
       gender: [''],
-      customerType: [''],
-      citizenIdentifyCart: ['', [Validators.pattern('^[0-9]{12}$')]],
+      cmnd: ['', [Validators.pattern('^[0-9]{12}$')]],
       status: [''],
     });
   }
 
-  saveCustomer(customer: Customer) {
-    this.customerService.addCustomer(customer).subscribe();
-  }
-
   fillValueForm() {
     let bd;
-    if (this.customer.birthday) bd = this.formatDate(this.customer.birthday);
+    if (this.employee.birthday) bd = this.formatDate(this.employee.birthday);
     else bd = null;
     this.formProfile.patchValue({
-      id: this.customer.id,
-      customerName: this.customer.customerName,
-      phoneNumber: this.customer.phoneNumber,
+      id: this.employee.id,
+      employeeName: this.employee.employeeName,
+      employeeCode: this.employee.employeeCode,
       birthday: bd,
-      gender: this.customer.gender,
-      email: this.customer.email,
-      customerType: this.customer.customerType,
-      citizenIdentifyCart: this.customer.citizenIdentifyCart,
-      status: this.customer.status,
+      phoneNumber: this.employee.phoneNumber,
+      address: this.employee.address,
+      gender: this.employee.gender,
+      email: this.employee.email,
+      cmnd: this.employee.cmnd,
+      salary: this.employee.salary,
+      status: this.employee.status,
     });
   }
 
   update() {
     this.submit = true;
     if (this.formProfile.valid) {
-      this.addValueCustomer();
-      this.customerService.updateCustomer(this.customer).subscribe(
+      this.addValueProfile();
+      this.employeeService.updateEmployee(this.employee).subscribe(
         (res) => {
           this.toastr.success('Cập nhật khách hàng thành công!');
-          this.customerService.getAll(this.offset, this.limit);
+          this.employeeService.getAll(this.offset, this.limit);
           return;
         },
         (error) => {
@@ -103,17 +109,17 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  addValueCustomer() {
-    this.customer.id = this.formProfile.value.id;
-    this.customer.customerName = this.formProfile.value.customerName;
-    this.customer.phoneNumber = this.formProfile.value.phoneNumber;
-    this.customer.birthday = this.formProfile.value.birthday;
-    this.customer.gender = this.formProfile.value.gender;
-    this.customer.email = this.formProfile.value.email;
-    this.customer.customerType = this.formProfile.value.customerType;
-    this.customer.citizenIdentifyCart =
-      this.formProfile.value.citizenIdentifyCart;
-    this.customer.status = this.formProfile.value.status;
+  addValueProfile() {
+    this.employee.id = this.formProfile.value.id;
+    this.employee.employeeName = this.formProfile.value.employeeName;
+    this.employee.employeeCode = this.formProfile.value.employeeCode;
+    this.employee.birthday = this.formProfile.value.birthday;
+    this.employee.address = this.formProfile.value.address;
+    this.employee.gender = this.formProfile.value.gender;
+    this.employee.email = this.formProfile.value.email;
+    this.employee.cmnd = this.formProfile.value.cmnd;
+    this.employee.phoneNumber = this.formProfile.value.phoneNumber;
+    this.employee.status = this.formProfile.value.status;
   }
 
   formatDate(date: Date) {

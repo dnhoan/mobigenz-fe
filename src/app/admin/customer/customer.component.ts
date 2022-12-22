@@ -1,11 +1,10 @@
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { CustomerService } from './customer.service';
 import { Component, OnInit } from '@angular/core';
 import { Customer, CustomerDTO } from './customer.model';
 import { Router } from '@angular/router';
 import { SearchDTO } from 'src/app/DTOs/SearchDTO';
 import { ToastrService } from 'ngx-toastr';
-import { error } from 'console';
 
 @Component({
   selector: 'app-customer',
@@ -17,6 +16,7 @@ export class CustomerComponent implements OnInit {
   formSearch!: FormGroup;
   radioValue = 'A';
   customer: Customer = {};
+  action = false;
   datas: Customer[] = [];
   offset = 0;
   limit = 5;
@@ -29,6 +29,7 @@ export class CustomerComponent implements OnInit {
   isVisible = false;
   submit = false;
   disable = true;
+  status!: number;
   constructor(
     private readonly router: Router,
     private customerService: CustomerService,
@@ -39,14 +40,13 @@ export class CustomerComponent implements OnInit {
   ngOnInit(): void {
     this.pagination(this.offset);
     this.initFormSearch();
+    this.findByStatus(this.status)
   }
 
-  // submitForm(): void {
-  //   console.log('submit', this.formCus.value);
-  // }
-
-  showModal(): void {
+  showModal(action: string): void {
     this.submit = false;
+    if (action === 'save') this.action = true;
+    if (action === 'update') this.action = false;
     this.formCus = this.fb.group({
       id: null,
       customerName: ['', [Validators.required]],
@@ -60,19 +60,27 @@ export class CustomerComponent implements OnInit {
       birthday: ['', [Validators.required]],
       gender: [''],
       email: ['', [Validators.required, Validators.email]],
-      customerType: [''],
-      citizenIdentifyCart: [''],
-      ctime: ['', [Validators.required]],
-      status: [1],
+      citizenIdentifyCart: ['', [Validators.pattern('^[0-9]{12}$')]],
     });
     this.isVisible = true;
+  }
+
+  findByStatus(status: any) {
+    if (status == '' || status == null) {
+      this.pagination(this.offset);
+    } else {
+      this.customerService
+        .getByStatus(this.offset, this.limit, status)
+        .subscribe((res) => {
+          this.datas = res.data.customer.content;
+        });
+    }
   }
 
   handleOk(): void {
     this.submit = true;
     if (this.formCus.valid) {
       this.saveCustomer();
-      this.isVisible = false;
     }
   }
 
@@ -98,14 +106,12 @@ export class CustomerComponent implements OnInit {
         }
       );
     }
-    this.isVisible = true;
     return;
   }
 
   handleCancel(): void {
     this.isVisible = false;
     this.getAllCustomer();
-
   }
 
   getAllCustomer() {
@@ -117,22 +123,21 @@ export class CustomerComponent implements OnInit {
   }
 
   getInfoCustomer(id: any) {
-    this.showModal();
+    this.showModal('update');
     const customerByID = this.datas.find((value) => {
-      console.log(value);
       return value.id == id;
     });
     if (customerByID) {
       this.customer = customerByID;
     }
     this.fillValueForm();
+    this.formCus.get('email')?.disable();
   }
 
   initForm() {
     this.initFormCus();
     this.initFormSearch();
   }
-
   initFormCus() {
     this.formCus = this.fb.group({
       customerName: '',
@@ -140,9 +145,7 @@ export class CustomerComponent implements OnInit {
       birthday: '',
       gender: '',
       email: '',
-      customerType: '',
       citizenIdentifyCart: '',
-      status: '',
     });
   }
 
@@ -174,6 +177,7 @@ export class CustomerComponent implements OnInit {
         (res) => {
           this.getAllCustomer();
           this.toastr.success('Cập nhật khách hàng thành công!');
+          this.isVisible = false;
           return;
         },
         (error) => {
@@ -181,7 +185,6 @@ export class CustomerComponent implements OnInit {
         }
       );
     }
-    this.isVisible = true;
     return;
   }
 
@@ -195,10 +198,8 @@ export class CustomerComponent implements OnInit {
     this.customer.birthday = this.formCus.value.birthday;
     this.customer.gender = this.formCus.value.gender;
     this.customer.email = this.formCus.value.email;
-    this.customer.customerType = this.formCus.value.customerType;
     this.customer.citizenIdentifyCart = this.formCus.value.citizenIdentifyCart;
     this.customer.ctime = this.formCus.value.ctime;
-    this.customer.status = this.formCus.value.status;
   }
 
   deleteCustomer(id: any) {
@@ -223,8 +224,6 @@ export class CustomerComponent implements OnInit {
     this.offset = page;
     this.customerService.getAll(this.offset, this.limit).subscribe((res) => {
       this.datas = res.data.customers.items;
-      console.log(this.datas);
-
       this.Page = res.data.customers;
     });
   }
@@ -275,7 +274,6 @@ export class CustomerComponent implements OnInit {
     return [year, month, day].join('-');
   }
 
-
   reFormatDate(date: Date) {
     var d = new Date(date),
       month = '' + (d.getMonth() + 1),
@@ -285,6 +283,6 @@ export class CustomerComponent implements OnInit {
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
 
-    return [year, month, day, ].join('-');
+    return [year, month, day].join('-');
   }
 }

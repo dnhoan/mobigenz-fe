@@ -1,35 +1,46 @@
 import { Injectable } from '@angular/core';
 import { SessionService } from './session.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Subject } from 'rxjs';
 import { CustomerService } from '../admin/customer/customer.service';
 import { AccountService } from '../admin/account/account.service';
+import { EmployeeDTO } from '../admin/employee/employee.model';
+import { EmployeeService } from '../admin/employee/employee.service';
+import { HttpClient } from '@angular/common/http';
+import { profileStore } from '../admin/profile/profile.repository';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InfoService {
-  public user = new BehaviorSubject<any>(null);
-
+  employee$ = new Subject<EmployeeDTO>();
+  currentEmployee!: EmployeeDTO;
   constructor(
-    private customerService: CustomerService,
+    private http: HttpClient
+    ,
+    private employeeService: EmployeeService,
     private accountService: AccountService
   ) {}
 
-  setUser(cusUrl: any) {
-    this.user.next(cusUrl);
+  setEmployee(employeeUrl: any) {
+    this.employee$.next(employeeUrl);
   }
 
-  getUser() {
+  async getEmployee() {
     let decode = this.accountService.getDecodedAccessToken();
+    console.log(decode.sub);
     if (decode) {
-      this.accountService.getAccountByEmail(decode.sub).subscribe(
-        (value) => {
-          this.user.next(value.data.account);
-        },
-        (Error) => {
-          this.user.next(null);
-        }
+      let value = await lastValueFrom(
+        this.employeeService.getEmployeeByEmail(decode.sub)
       );
+      console.log(value);
+
+      profileStore.update(() => ({
+        employee: value.data.employee,
+      }));
+      this.currentEmployee = value.data.employee;
+      this.employee$.next(value.data.employee);
+      console.log(this.employee$);
+
     }
   }
 }

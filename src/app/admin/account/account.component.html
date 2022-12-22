@@ -11,7 +11,7 @@
       >
         <ng-container *nzModalContent>
           <form nz-form class="mt-4" [formGroup]="formAcc">
-            <nz-form-item>
+            <nz-form-item >
               <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="email"
                 >Email</nz-form-label
               >
@@ -125,7 +125,8 @@
               >
               <nz-radio-group class="mt-1" formControlName="role" nzName="role">
                 <label nz-radio [nzValue]="1">Admin</label>
-                <label nz-radio [nzValue]="2">User</label>
+                <label nz-radio [nzValue]="2">Employee</label>
+                <label nz-radio [nzValue]="3">Customer</label>
               </nz-radio-group>
               <small
                 class="col alert text-danger col-12"
@@ -140,6 +141,19 @@
       </nz-modal>
     </div>
     <div>
+      <div>
+        <nz-select
+          nzAllowClear
+          class="selectStatus"
+          nzPlaceHolder="Lọc theo trạng thái"
+          [(ngModel)]="status"
+          (ngModelChange)="findByStatus(status)"
+        >
+          <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+          <nz-option nzValue="1" nzLabel="Active"></nz-option>
+          <nz-option nzValue="0" nzLabel="InActive"></nz-option>
+      </nz-select>
+    </div>
       <form nz-form [formGroup]="formSearch">
         <div>
           <div>
