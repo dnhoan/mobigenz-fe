@@ -1,7 +1,7 @@
 <div class="bg-white mt-4 p-3">
   <div class="d-flex justify-content-between">
     <div>
-      <button nz-button [nzType]="'primary'" (click)="showModal('save')">
+      <button nz-button [nzType]="'primary'" (click)="showModal()">
         <span>Thêm mới</span>
       </button>
       <nz-modal
@@ -100,7 +100,6 @@
               </nz-radio-group>
             </nz-form-item>
             <nz-form-item
-            *ngIf="action"
             >
               <nz-form-label [nzSm]="6"  [nzXs]="24" nzRequired nzFor="email"
                 >Email</nz-form-label

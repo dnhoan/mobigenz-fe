@@ -186,6 +186,7 @@ export class EmployeeComponent implements OnInit {
 
   update() {
     if (this.formEmployee.valid) {
+      this.formEmployee.get('email')?.enable();
       this.addValueEmployee();
       this.employeeService.updateEmployee(this.employee).subscribe(
         (res) => {
@@ -195,6 +196,7 @@ export class EmployeeComponent implements OnInit {
           return;
         },
         (error) => {
+          this.formEmployee.get('email')?.disable();
           this.toastr.error(error.error.message);
         }
       );
