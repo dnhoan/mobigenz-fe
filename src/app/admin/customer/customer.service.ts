@@ -21,6 +21,22 @@ export class CustomerService {
     );
   }
 
+  public getByStatus(
+    offset: number,
+    limit: number,
+    status: number
+  ): Observable<any> {
+    return this.http.get<any>(
+      this.apiCustomer +
+        'admin/customers/findByStatus?offset=' +
+        offset +
+        '&limit=' +
+        limit +
+        '&status=' +
+        status
+    );
+  }
+
   public getPageCustomer(
     offset: number,
     limit: number,

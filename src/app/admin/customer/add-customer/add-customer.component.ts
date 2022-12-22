@@ -5,6 +5,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ORDER_STATUS } from 'src/app/constants';
 import { orderStore } from '../../create-order/order.repository';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-customer',
@@ -14,12 +15,15 @@ import { orderStore } from '../../create-order/order.repository';
 export class AddCustomerComponent implements OnInit {
   customer!: Customer;
   formCus!: FormGroup;
-  isShowModalAddCustomer = false;
+  submit = false;
+  action = false;
+  isVisible = false;
   constructor(
     private fb: FormBuilder,
     private readonly router: Router,
     private activedRoute: ActivatedRoute,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -40,8 +44,26 @@ export class AddCustomerComponent implements OnInit {
       status: [1, Validators.required],
     });
   }
-  showModalAddCustomer() {
-    this.isShowModalAddCustomer = true;
+  showModal(action: string): void {
+    this.submit = false;
+    if (action === 'save') this.action = true;
+    if (action === 'update') this.action = false;
+    this.formCus = this.fb.group({
+      id: null,
+      customerName: ['', [Validators.required]],
+      phoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})'),
+        ],
+      ],
+      birthday: ['', [Validators.required]],
+      gender: [''],
+      email: ['', [Validators.required, Validators.email]],
+      citizenIdentifyCart: ['', [Validators.pattern('^[0-9]{12}$')]],
+    });
+    this.isVisible = true;
   }
   handleOk(): void {
     this.customer = {
@@ -49,16 +71,17 @@ export class AddCustomerComponent implements OnInit {
     };
     this.customerService.addCustomer(this.customer).subscribe((res: any) => {
       if (res) {
-        console.log(res);
+        this.toastr.success('Thêm khách hàng thành công!');
+        this.isVisible = false;
         orderStore.update((state) => ({
           orderDto: { ...state.orderDto, customerDTO: res.data.customers },
         }));
-        this.isShowModalAddCustomer = false;
+        this.isVisible = false;
       }
     });
   }
   handleCancel(): void {
-    this.isShowModalAddCustomer = false;
+    this.isVisible = false;
   }
   initFormCus() {
     this.formCus = this.fb.group({

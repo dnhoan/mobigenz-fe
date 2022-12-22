@@ -14,6 +14,7 @@ import { IncomeComponent } from './statistical/income/income.component';
 import { OrderStatusComponent } from './statistical/order-status/order-status.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { EmployeeComponent } from './employee/employee.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -74,6 +75,11 @@ const routes: Routes = [
         path: 'statistic/orders',
         canActivate: [AdminGuard],
         component: OrderStatusComponent,
+      },
+      {
+        path: 'profile',
+        canActivate: [AuthGuard],
+        component: ProfileComponent,
       },
       // {
       //   path: 'customer/addCustomer',
