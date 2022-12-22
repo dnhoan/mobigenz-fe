@@ -43,10 +43,10 @@ export class CustomerComponent implements OnInit {
     this.findByStatus(this.status)
   }
 
-  showModal(action: string): void {
+  showModal(): void {
     this.submit = false;
-    if (action === 'save') this.action = true;
-    if (action === 'update') this.action = false;
+    // if (action === 'save') this.action = true;
+    // if (action === 'update') this.action = false;
     this.formCus = this.fb.group({
       id: null,
       customerName: ['', [Validators.required]],
@@ -123,7 +123,7 @@ export class CustomerComponent implements OnInit {
   }
 
   getInfoCustomer(id: any) {
-    this.showModal('update');
+    this.showModal();
     const customerByID = this.datas.find((value) => {
       return value.id == id;
     });
@@ -172,6 +172,7 @@ export class CustomerComponent implements OnInit {
 
   update() {
     if (this.formCus.valid) {
+      this.formCus.get('email')?.enable();
       this.addValueCustomer();
       this.customerService.updateCustomer(this.customer).subscribe(
         (res) => {
@@ -181,6 +182,7 @@ export class CustomerComponent implements OnInit {
           return;
         },
         (error) => {
+          this.formCus.get('email')?.disable();
           this.toastr.error(error.error.message);
         }
       );

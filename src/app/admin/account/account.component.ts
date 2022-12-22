@@ -177,6 +177,7 @@ export class AccountComponent implements OnInit {
 
   update() {
     if (this.formAcc.valid) {
+      this.formAcc.get('email')?.enable();
       this.addValueAccount();
       this.accountService.updateAccount(this.account).subscribe(
         (res) => {
@@ -186,6 +187,7 @@ export class AccountComponent implements OnInit {
           return;
         },
         (error) => {
+          this.formAcc.get('email')?.disable();
           this.toastr.error(error.error.message);
         }
       );
