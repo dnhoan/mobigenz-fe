@@ -28,12 +28,17 @@ export class IncomeComponent implements OnInit {
   onChange(result: Date): void {
     console.log('onChange: ', result);
     switch (this.mode) {
-      case 'week':
-        let s_date = new Date(result.setDate(result.getDate())).toUTCString();
-        let e_date = new Date(
-          result.setDate(result.getDate() + 6)
-        ).toUTCString();
-        console.log(s_date, ' ', e_date);
+      case 'date':
+        // Starting Monday not Sunday
+        let dates: Date[] = [];
+        result.setDate(result.getDate() - result.getDay() + 1);
+        for (var i = 0; i < 7; i++) {
+          dates.push(new Date(result));
+          result.setDate(result.getDate() + 1);
+        }
+        let week = getISOWeek(result);
+        console.log('week ', week);
+        console.log('dates ', dates);
         break;
       case 'year':
         this.getStatisticIncomeByMonth(this.date.getFullYear());

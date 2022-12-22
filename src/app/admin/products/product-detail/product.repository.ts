@@ -25,6 +25,7 @@ export const productInit: ProductDto = {
       stock: 0,
       imeis: [],
       price: 0,
+      productName: '',
     },
   ],
   optionDtos: [],

@@ -211,6 +211,7 @@ export class ProductVariantsComponent implements OnInit {
           sku: optionValue.optionValueName,
           image: '',
           stock: 0,
+          productName: this.product.productName,
           productVariantCombinationDtos: [
             {
               optionDto: this.product.optionDtos[0],
@@ -236,6 +237,7 @@ export class ProductVariantsComponent implements OnInit {
               sku: sku.optionValueName + ', ' + optionValue.optionValueName,
               image: '',
               stock: 0,
+              productName: this.product.productName,
               productVariantCombinationDtos: [
                 {
                   optionDto: this.product.optionDtos[0],
