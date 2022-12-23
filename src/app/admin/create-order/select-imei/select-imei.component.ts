@@ -20,7 +20,7 @@ export class SelectImeiComponent implements OnInit {
   @Input('currentImei') currentImei!: ImeiDto;
   @Input('orderId') orderId!: number;
   @Input('isExchange') isExchange: boolean = false;
-  listImei: ImeiDto[] = [];
+  @Input('listImei') listImei: ImeiDto[] = [];
   listImeiSelected: ImeiDto[] = [];
   constructor(
     private imeiService: ImeiService,
@@ -31,11 +31,11 @@ export class SelectImeiComponent implements OnInit {
     this.modal.destroy({ data: 'this the result data' });
   }
   ngOnInit(): void {
-    this.imeiService
-      .getImeisInStockByProductDetailId(this.productDetail.id!)
-      .subscribe((imeis) => {
-        this.listImei = imeis;
-      });
+    // this.imeiService
+    //   .getImeisInStockByProductDetailId(this.productDetail.id!)
+    //   .subscribe((imeis) => {
+    //     this.listImei = imeis;
+    //   });
   }
   async addToOrder() {
     this.productDetail.imeis = this.listImeiSelected;
@@ -100,6 +100,10 @@ export class SelectImeiComponent implements OnInit {
           );
         }
       }
+      this.listImei = this.listImei.filter(
+        (i) => !this.listImeiSelected.some((imei) => imei.imei == i.imei)
+      );
+      this.listImeiSelected = [];
       currentOrderDto.quantity = currentOrderDto.orderDetailDtos.length;
       return { orderDto: currentOrderDto };
     });
