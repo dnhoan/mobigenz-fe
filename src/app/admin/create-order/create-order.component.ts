@@ -14,6 +14,7 @@ import {
   switchMap,
 } from 'rxjs';
 import { ORDER_STATUS } from 'src/app/constants';
+import { ImeiDto } from 'src/app/DTOs/ImeiDto';
 import { OptionValueDto } from 'src/app/DTOs/OptionValueDto';
 import { OrderDetailDto } from 'src/app/DTOs/OrderDetailDto';
 import { OrderDto } from 'src/app/DTOs/OrderDto';
@@ -104,40 +105,59 @@ export class CreateOrderComponent implements OnInit {
       i_optionValue
     ].selected = !currentSelected;
   }
-  openModalSelectImei(product: ProductDto) {
+  async openModalSelectImei(product: ProductDto) {
     let optionValuesSelected = product.optionDtos?.map((option) => {
       return option.optionValueDtos.find((optionValue) => optionValue.selected);
     }) as OptionValueDto[];
-    let productDetail = {};
-    product.productDetailDtos.forEach((proDetail) => {
-      if (
-        proDetail.productVariantCombinationDtos!.every(
-          (productVariantCombinationDto, i) =>
-            optionValuesSelected[i].id ==
-            productVariantCombinationDto.optionValueDto?.id
-        )
-      ) {
-        productDetail = proDetail;
-        console.log(productDetail);
-      }
-    });
+    let productDetail: any = {};
 
-    const modal = this.modal.create({
-      nzTitle: 'Chọn Imei',
-      nzContent: SelectImeiComponent,
-      nzViewContainerRef: this.viewContainerRef,
-      nzComponentParams: {
-        productDetail,
-        orderId: this.order.id,
-      },
-      nzFooter: [],
-    });
-    const instance = modal.getContentComponent();
-    modal.afterOpen.subscribe(() => console.log('[afterOpen] emitted!'));
-    // Return a result when closed
-    modal.afterClose.subscribe((result) =>
-      console.log('[afterClose] The result is:', result)
-    );
+    if (optionValuesSelected.every((o) => o != undefined)) {
+      product.productDetailDtos.forEach((proDetail) => {
+        if (
+          proDetail.productVariantCombinationDtos!.every(
+            (productVariantCombinationDto, i) =>
+              optionValuesSelected[i].id ==
+              productVariantCombinationDto.optionValueDto?.id
+          )
+        ) {
+          productDetail = proDetail;
+        }
+      });
+
+      if (productDetail.stock! > 0) {
+        let listImei: ImeiDto[] = [];
+        let imeisSelected: ImeiDto[] = [];
+        this.order.orderDetailDtos.forEach((orderDetail) => {
+          imeisSelected = imeisSelected.concat(
+            orderDetail.imeiDtoList ? orderDetail.imeiDtoList : []
+          );
+        });
+        await lastValueFrom(
+          this.imeiService.getImeisInStockByProductDetailId(productDetail.id!)
+        ).then((imeis) => {
+          listImei = imeis.filter(
+            (i) => !imeisSelected.some((imei) => imei.imei == i.imei)
+          );
+        });
+
+        const modal = this.modal.create({
+          nzTitle: 'Chọn Imei',
+          nzContent: SelectImeiComponent,
+          nzViewContainerRef: this.viewContainerRef,
+          nzComponentParams: {
+            productDetail,
+            orderId: this.order.id,
+            listImei,
+          },
+          nzFooter: [],
+        });
+        const instance = modal.getContentComponent();
+      } else {
+        this.message.error('Sản phẩm này hết hàng');
+      }
+    } else {
+      this.message.error('Vui lòng chọn phân loại sản phẩm');
+    }
   }
   openModelAddImei(orderDetail: OrderDetailDto) {
     const modal = this.modal.create({
@@ -206,7 +226,9 @@ export class CreateOrderComponent implements OnInit {
   save() {
     this.order.totalMoney = this.order.shipFee! + this.order.goodsValue;
     this.order.orderStatus =
-      this.order.checkout == this.order.totalMoney ? 4 : 0;
+      this.order.checkout == this.order.totalMoney && this.order.delivery == 0
+        ? 4
+        : this.order.orderStatus;
     this.orderService.saveOrder(this.order).subscribe((res) => {
       this.order = res;
       if (!this.isEdit) this.router.navigate(['/admin/orders']);
