@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { catchError, map, Observable, of } from 'rxjs';
@@ -174,6 +174,39 @@ export class OrdersService {
       }),
       catchError(this.handleError<any>('Lỗi gọi danh sách đơn hàng', []))
     );
+  }
+
+  getFeeShip(address: string) {
+    let arr = address.split(', ');
+    let district = arr[arr.length - 2];
+    let province = arr[arr.length - 1];
+    let data = {
+      package_type: 'express',
+      pick_province: 'Hà Nội',
+      pick_district: 'Quận Từ Liêm',
+      province,
+      district,
+      address,
+      weight: 500,
+      value: 0,
+      tags: [14],
+      transport: 'road',
+    };
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${environment.token_ghtk}`,
+    });
+    return this.httpClient
+      .post(`${environment.apiGHTK}`, data, { headers })
+      .pipe(
+        map((res: any) => {
+          if (res.success) {
+            return res.fee.ship_fee_only;
+          }
+          return 0;
+        }),
+        catchError(this.handleError<any>('Lỗi tính phí giao dịch', 0))
+      );
   }
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
