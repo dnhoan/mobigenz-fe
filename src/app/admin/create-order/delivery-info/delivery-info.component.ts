@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { OrdersService } from '../../orders/orders.service';
 import { orderStore } from '../order.repository';
 
 @Component({
@@ -9,14 +10,37 @@ import { orderStore } from '../order.repository';
 export class DeliveryInfoComponent implements OnInit {
   @Input('address') address: string = '';
   @Input('delivery') delivery: number = 0;
-  constructor() {}
+  constructor(private orderService: OrdersService) {}
 
   ngOnInit(): void {}
   changeDelivery() {
-    orderStore.update((state: any) => {
-      return {
-        orderDto: { ...state.orderDto, delivery: this.delivery },
-      };
+    if (this.delivery == 1) {
+      this.getShipFee();
+    } else {
+      orderStore.update((state: any) => {
+        return {
+          orderDto: {
+            ...state.orderDto,
+            delivery: this.delivery,
+            shipFee: 0,
+          },
+        };
+      });
+    }
+  }
+  getShipFee() {
+    this.orderService.getFeeShip(this.address).subscribe((res) => {
+      if (res) {
+        orderStore.update((state: any) => {
+          return {
+            orderDto: {
+              ...state.orderDto,
+              delivery: this.delivery,
+              shipFee: res,
+            },
+          };
+        });
+      }
     });
   }
 }

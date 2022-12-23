@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NgxPrinterService } from 'ngx-printer';
 import {
@@ -51,7 +52,8 @@ export class CreateOrderComponent implements OnInit {
     private imeiService: ImeiService,
     private router: Router,
     public commonService: CommonService,
-    private printerService: NgxPrinterService
+    private printerService: NgxPrinterService,
+    private message: NzMessageService
   ) {}
 
   ngOnInit(): void {
@@ -211,17 +213,34 @@ export class CreateOrderComponent implements OnInit {
     });
   }
   onIndexChange(event: any) {
-    if (
-      (event == -1 && event != this.order.orderStatus) ||
-      event > this.order.orderStatus
-    ) {
-      if (event == -1) {
-        this.isShowConfirmCancelOrder = true;
-      } else {
+    let currentStatus = this.order.orderStatus;
+    switch (true) {
+      case event == -2 && currentStatus == 4:
         this.updateStatus(this.order.id, event);
-      }
+        break;
+      case event == -1:
+        this.isShowConfirmCancelOrder = true;
+        break;
+      case event == 1 && currentStatus == 0:
+        this.updateStatus(this.order.id, event);
+        break;
+      case event == 2 && currentStatus == 1:
+        this.updateStatus(this.order.id, event);
+        break;
+      case event == 3 && currentStatus == 2:
+        this.updateStatus(this.order.id, event);
+        break;
+      case event == 4 &&
+        (currentStatus == 3 ||
+          (currentStatus == 1 && this.order.delivery == 0)):
+        this.updateStatus(this.order.id, event);
+        break;
+      default:
+        this.message.error('Không thể chuyển trạng thái');
+        break;
     }
   }
+
   updateStatus(orderId: number, newStatus: number, note?: string) {
     this.orderService
       .updateOrderStatus(orderId, newStatus, note)

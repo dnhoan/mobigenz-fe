@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { OrdersService } from '../../orders/orders.service';
 import { orderStore } from '../order.repository';
 
 export interface Address {
@@ -30,7 +31,7 @@ export class AddressComponent implements OnInit {
   isLoadingProvince = false;
   isLoadingDistrict = false;
   isLoadingWart = false;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private orderService: OrdersService) {}
 
   ngOnInit() {
     this.isLoadingProvince = true;
@@ -89,10 +90,16 @@ export class AddressComponent implements OnInit {
       this.districtSelected.name +
       ', ' +
       this.provinceSelected.name;
-
-    orderStore.update((state) => ({
-      orderDto: { ...state.orderDto, address: this.address, delivery: 1 },
-    }));
+    this.orderService.getFeeShip(this.address).subscribe((res) => {
+      orderStore.update((state) => ({
+        orderDto: {
+          ...state.orderDto,
+          address: this.address,
+          delivery: 1,
+          shipFee: res,
+        },
+      }));
+    });
   }
   changeAddress(detail: string) {}
 }

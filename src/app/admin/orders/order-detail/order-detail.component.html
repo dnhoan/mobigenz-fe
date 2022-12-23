@@ -2,7 +2,13 @@
   <nz-steps [nzCurrent]="currentOrder.orderStatus">
     <ng-container *ngFor="let orderStatus of commonService.orderStatuses">
       <nz-step
-        (click)="onIndexChange(orderStatus.status)"
+        nz-popconfirm
+        nzPopconfirmTitle="Bạn có muốn chuyển trạng thái đơn hàng sang {{
+          orderStatus.statusName
+        }} không?"
+        nzIcon="iconTpl"
+        nzPopconfirmPlacement="bottom"
+        (nzOnConfirm)="onIndexChange(orderStatus.status)"
         style="cursor: pointer"
         [nzTitle]="orderStatus.statusName"
         [nzStatus]="
@@ -17,8 +23,8 @@
         "
         [nzIcon]="orderStatus.icon"
       ></nz-step>
-    </ng-container>
-  </nz-steps>
+    </ng-container> </nz-steps
+  ><ng-template #iconTpl> </ng-template>
 </div>
 <div class="rounded-3 mb-3">
   <div class="d-flex">
@@ -31,6 +37,14 @@
       <p>
         {{ currentOrder.ctime | date : "dd/MM/yyyy HH:mm" }}
       </p>
+    </div>
+    <div class="border-end m-3 pe-3">
+      <p><b>Tổng tiền hàng</b></p>
+      <p>{{ currentOrder.goodsValue | number }}đ</p>
+    </div>
+    <div class="border-end m-3 pe-3">
+      <p><b>Phí vận chuyển</b></p>
+      <p>{{ currentOrder.shipFee | number }}đ</p>
     </div>
     <div class="border-end m-3 pe-3">
       <p><b>Tổng tiền</b></p>
