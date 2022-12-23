@@ -23,6 +23,7 @@ export const orderInit = {
   customerDTO: {},
   orderDetailDtos: [],
   note: '',
+  purchaseType: 0,
 };
 export const orderStore = createStore(
   { name: 'order' },

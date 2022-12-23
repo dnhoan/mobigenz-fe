@@ -7,6 +7,7 @@ export interface StatisticIncome {
   thang: number;
   dt_store: number;
   dt_online: number;
+  ngay: number;
 }
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,24 @@ export class StatisticIncomeService {
   getStatisticIncomeByYear(year: number): Observable<StatisticIncome[]> {
     return this.httpClient
       .get(`${this.baseUrl}/statisticIncome/year/${year}`)
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 200) {
+            return res.data.statisticIncomes;
+          }
+          return false;
+        }),
+        catchError(this.handleError<any>('Error báo cáo', false))
+      );
+  }
+  getStatisticIncomeByDay(
+    s_date: string,
+    e_date: string
+  ): Observable<StatisticIncome[]> {
+    return this.httpClient
+      .get(
+        `${this.baseUrl}/statisticIncome/date?s_date=${s_date}&e_date=${e_date}`
+      )
       .pipe(
         map((res: any) => {
           if (res.statusCode === 200) {

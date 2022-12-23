@@ -115,8 +115,9 @@
           <!-- (!isEdit || optionProduct.optionValueDtos <= 1)) -->
           <button
             *ngIf="
-              optionProduct.optionValueDtos.length <=
-                (options | filterOptionValue : optionProduct.id).length - 1 &&
+              (optionProduct.optionValueDtos.length <=
+                (options | filterOptionValue : optionProduct.id).length - 1 ||
+                optionProduct.optionValueDtos.length == 0) &&
               (!isEdit || optionProduct.optionValueDtos <= 1)
             "
             nz-button
