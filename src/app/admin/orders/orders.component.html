@@ -1,14 +1,38 @@
 <div class="mt-4 bg-white">
-  <div class="d-flex justify-content-between p-3 row">
-    <nz-input-group class="col-4" [nzSuffix]="suffixIconSearch">
-      <input
-        type="text"
-        nz-input
-        placeholder="input search text"
-      /> </nz-input-group
-    ><ng-template #suffixIconSearch>
-      <span nz-icon nzType="search"></span>
-    </ng-template>
+  <div class="d-flex justify-content-start p-3 row">
+    <div style="width: 200px">
+      <nz-select
+        style="width: 100%"
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Lọc đơn hàng"
+        [(ngModel)]="orderStatusSelected"
+        (ngModelChange)="changeStatusOrder()"
+      >
+        <nz-option
+          *ngFor="let status of commonService.orderStatuses"
+          [nzLabel]="status.statusName"
+          [nzValue]="status.status"
+        ></nz-option>
+      </nz-select>
+    </div>
+    <div style="width: 500px">
+      <nz-input-group
+        style="width: 100%"
+        class="col-4"
+        [nzSuffix]="suffixIconSearch"
+      >
+        <input
+          type="text"
+          nz-input
+          [(ngModel)]="term"
+          placeholder="input search text"
+          (keyup.enter)="search()"
+        /> </nz-input-group
+      ><ng-template #suffixIconSearch>
+        <span nz-icon nzType="search"></span>
+      </ng-template>
+    </div>
   </div>
   <nz-table #basicTable [nzData]="orders">
     <thead>
@@ -30,9 +54,9 @@
     <tbody>
       <tr *ngFor="let order of basicTable.data">
         <td>
-          <a nz-button nzType="link" (click)="showOrderDetail(order)">{{
-            order.id
-          }}</a>
+          <a nz-button nzType="link" (click)="showOrderDetail(order)"
+            >HD{{ order.id }}</a
+          >
         </td>
         <td>{{ order.ctime | date : "dd/MM/yyyy HH:mm " }}</td>
         <td>{{ order.recipientName }}</td>

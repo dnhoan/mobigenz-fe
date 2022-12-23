@@ -321,4 +321,7 @@ export class ProductDetailComponent implements OnInit {
     if (this.productId) this.product$.unsubscribe();
     productStore.update((state) => ({ ...productInit }));
   }
+  removeImage(i: number) {
+    this.product.images.splice(i, 1);
+  }
 }

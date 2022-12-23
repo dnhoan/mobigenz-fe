@@ -30,9 +30,9 @@
     <tbody>
       <tr *ngFor="let order of basicTable.data">
         <td>
-          <a nz-button nzType="link" (click)="showOrderDetail(order)">{{
-            order.id
-          }}</a>
+          <a nz-button nzType="link" (click)="showOrderDetail(order)"
+            >HD{{ order.id }}</a
+          >
         </td>
         <td>{{ order.ctime | date : "dd/MM/yyyy HH:mm " }}</td>
         <td>{{ order.recipientName }}</td>

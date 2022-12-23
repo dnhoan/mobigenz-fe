@@ -149,6 +149,21 @@ export class OrdersService {
         catchError(this.handleError<any>('Lỗi gọi danh sách đơn hàng', []))
       );
   }
+  searchOrders(term: string, order_status?: number) {
+    return this.httpClient
+      .get(
+        `${environment.baseUrl}/admin/searchOrders?term=${term}&order_status=${order_status}`
+      )
+      .pipe(
+        map((res: any) => {
+          if (res.statusCode === 200) {
+            return res.data.orders;
+          }
+          return [];
+        }),
+        catchError(this.handleError<any>('Lỗi gọi danh sách đơn hàng', []))
+      );
+  }
   getOrderById(id: any) {
     return this.httpClient.get(`${environment.baseUrl}/admin/order/${id}`).pipe(
       map((res: any) => {

@@ -13,6 +13,8 @@ import { OrdersService } from './orders.service';
 })
 export class OrdersComponent implements OnInit {
   orders: OrderDto[] = [];
+  orderStatusSelected: number = 999;
+  term: string = '';
   constructor(
     private ordersService: OrdersService,
     private router: Router,
@@ -22,9 +24,23 @@ export class OrdersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ordersService.getOrders('').subscribe((res) => {
-      this.orders = res;
-    });
+    this.searchOrders();
+  }
+  changeStatusOrder() {
+    if (this.orderStatusSelected == null) {
+      this.orderStatusSelected = 999;
+    }
+    this.searchOrders();
+  }
+  search() {
+    this.searchOrders();
+  }
+  searchOrders() {
+    this.ordersService
+      .searchOrders(this.term, this.orderStatusSelected)
+      .subscribe((res) => {
+        this.orders = res;
+      });
   }
   showOrderDetail(order: OrderDto) {
     const modal = this.modal.create({
