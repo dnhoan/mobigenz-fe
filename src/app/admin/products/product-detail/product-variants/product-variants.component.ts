@@ -202,7 +202,6 @@ export class ProductVariantsComponent implements OnInit {
     let sku1: any[] = [];
     let sku2: any[] = [];
     if (this.product.optionDtos.length) {
-      console.log('add option');
       this.product.optionDtos[0].optionValueDtos.forEach((optionValue: any) => {
         sku1.push(optionValue);
         this.product.productDetailDtos.push({

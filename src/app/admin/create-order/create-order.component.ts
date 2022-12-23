@@ -203,12 +203,12 @@ export class CreateOrderComponent implements OnInit {
   }
   save() {
     this.order.totalMoney = this.order.shipFee! + this.order.goodsValue;
+    this.order.orderStatus =
+      this.order.checkout == this.order.totalMoney ? 4 : 0;
     this.orderService.saveOrder(this.order).subscribe((res) => {
-      console.log(res);
       this.order = res;
       if (!this.isEdit) this.router.navigate(['/admin/orders']);
     });
-    console.log(this.order);
   }
   onIndexChange(event: any) {
     if (

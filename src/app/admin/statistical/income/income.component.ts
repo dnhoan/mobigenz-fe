@@ -23,28 +23,35 @@ export class IncomeComponent implements OnInit {
   date!: Date;
   dataReport: StatisticIncome[] = [];
   stackedOptions: any;
-
+  dates: Date[] = [];
   constructor(private statisticIncomeService: StatisticIncomeService) {}
   onChange(result: Date): void {
     console.log('onChange: ', result);
     switch (this.mode) {
       case 'date':
-        // Starting Monday not Sunday
-        let dates: Date[] = [];
+        this.dates = [];
         result.setDate(result.getDate() - result.getDay() + 1);
         for (var i = 0; i < 7; i++) {
-          dates.push(new Date(result));
+          this.dates.push(new Date(result));
           result.setDate(result.getDate() + 1);
         }
-        let week = getISOWeek(result);
-        console.log('week ', week);
-        console.log('dates ', dates);
+        console.log(this.dates);
+
+        this.getStatisticIncomeByDay();
         break;
       case 'year':
         this.getStatisticIncomeByMonth(this.date.getFullYear());
         break;
       case 'month':
-        console.log(result.getMonth());
+        let month = result.getMonth() + 1;
+        this.date.setDate(1);
+        this.dates = [];
+        while (this.date.getMonth() + 1 == month) {
+          console.log(this.date);
+          this.dates.push(new Date(this.date));
+          this.date.setDate(this.date.getDate() + 1);
+        }
+        this.getStatisticIncomeByDay();
         break;
     }
   }
@@ -134,11 +141,63 @@ export class IncomeComponent implements OnInit {
             color: '#ebedef',
           },
         },
-      },
+      }, //hfg
     };
     console.log(this.stackedData);
   }
 
+  getStatisticIncomeByDay() {
+    let s_date = this.dates[0].toLocaleDateString();
+    let e_date = this.dates[this.dates.length - 1].toLocaleDateString();
+    this.dataReport = [];
+    this.stackedData = {};
+    this.statisticIncomeService
+      .getStatisticIncomeByDay(s_date, e_date)
+      .subscribe((res) => {
+        if (res.length) {
+          let statisticIncomes = res;
+          let j = 0;
+          for (let i = 0; i < this.dates.length; i++) {
+            console.log(this.dates[i].getDate());
+
+            if (
+              j < res.length &&
+              statisticIncomes[j].ngay == this.dates[i].getDate()
+            ) {
+              this.dataReport.push({ ...statisticIncomes[j] });
+              j++;
+            } else {
+              this.dataReport.push({
+                thang: 0,
+                dt_store: 0,
+                dt_online: 0,
+                ngay: this.dates[i].getDate(),
+              });
+            }
+          }
+          this.stackedData = {
+            labels:
+              this.mode == 'week'
+                ? this.dates.map((data) => data.toDateString())
+                : this.dates.map((data) => data.toLocaleDateString()),
+            datasets: [
+              {
+                type: 'bar',
+                label: 'DT Cửa hàng',
+                backgroundColor: '#42A5F5',
+                data: this.dataReport.map((data) => data.dt_store),
+              },
+              {
+                type: 'bar',
+                label: 'DT Online',
+                backgroundColor: '#FFA726',
+                data: this.dataReport.map((data) => data.dt_online),
+              },
+            ],
+          };
+        }
+      });
+  }
   getStatisticIncomeByMonth(year: number) {
     this.dataReport = [];
     this.stackedData = {};
@@ -155,7 +214,12 @@ export class IncomeComponent implements OnInit {
               this.dataReport.push(statisticIncomes[j]);
               j++;
             } else {
-              this.dataReport.push({ thang: i, dt_store: 0, dt_online: 0 });
+              this.dataReport.push({
+                thang: i,
+                dt_store: 0,
+                dt_online: 0,
+                ngay: 0,
+              });
             }
           }
           this.stackedData = {
@@ -177,5 +241,8 @@ export class IncomeComponent implements OnInit {
           };
         }
       });
+  }
+  getFirstDayOfMonth(year: number, month: number) {
+    return new Date(year, month, 1);
   }
 }

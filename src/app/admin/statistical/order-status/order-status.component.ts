@@ -30,9 +30,7 @@ export class OrderStatusComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           this.data = {
-            labels: this.commonService.orderStatuses
-              .sort((a, b) => a.status - b.status)
-              .map((o) => o.statusName),
+            labels: this.commonService.orderStatuses.map((o) => o.statusName),
             datasets: [
               {
                 data: res,
