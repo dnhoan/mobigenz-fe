@@ -141,7 +141,7 @@ export class IncomeComponent implements OnInit {
             color: '#ebedef',
           },
         },
-      },
+      }, //hfg
     };
     console.log(this.stackedData);
   }
